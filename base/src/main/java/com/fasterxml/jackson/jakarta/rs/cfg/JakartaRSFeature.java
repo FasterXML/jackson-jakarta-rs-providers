@@ -55,7 +55,7 @@ public enum JakartaRSFeature implements ConfigFeature
      * has explicitly configured mapper or not; if disabled, static configuration will
      * take precedence.
      * Note that if this feature is enabled, it typically makes sense to also disable
-     * {@link JaxRSFeature#CACHE_ENDPOINT_READERS} and {@link JaxRSFeature#CACHE_ENDPOINT_WRITERS}
+     * {@link JakartaRSFeature#CACHE_ENDPOINT_READERS} and {@link JakartaRSFeature#CACHE_ENDPOINT_WRITERS}
      * since caching would prevent lookups.
      *<p>
      * Feature is disabled by default.

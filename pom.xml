@@ -16,8 +16,8 @@
 
   <modules>
     <module>base</module>
-<!--
     <module>cbor</module>
+<!--
     <module>json</module>
     <module>smile</module>
     <module>xml</module>
