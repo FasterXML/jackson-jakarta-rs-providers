@@ -2,7 +2,6 @@ package com.fasterxml.jackson.jakarta.rs.cbor.dw;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -12,7 +11,9 @@ import org.eclipse.jetty.server.Server;
 import org.junit.Assert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+
+import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
+
 import com.fasterxml.jackson.jakarta.rs.cbor.CBORMediaTypes;
 
 public abstract class SimpleEndpointTestBase extends ResourceTestBase
@@ -75,7 +76,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testSimpleObject() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper(new CBORFactory());
+        final ObjectMapper mapper = new CBORMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
         final URL url = new URL("http://localhost:"+TEST_PORT+"/point");
@@ -99,7 +100,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testCustomMediaTypeWithCborExtension() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper(new CBORFactory());
+        final ObjectMapper mapper = new CBORMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
         final URL url = new URL("http://localhost:" + TEST_PORT + "/point/custom");

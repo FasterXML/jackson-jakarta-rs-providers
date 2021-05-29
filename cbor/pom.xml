@@ -51,13 +51,6 @@
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
     </dependency>
-
-    <!-- And for testing, logging -->
-    <dependency>
-      <groupId>ch.qos.logback </groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

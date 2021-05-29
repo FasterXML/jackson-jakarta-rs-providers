@@ -71,10 +71,10 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
         Server server = new Server(port);
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         server.setHandler(contexts);
-        ServletHolder jaxrs = new ServletHolder(servletContainerClass());
-        jaxrs.setInitParameter("javax.ws.rs.Application", appClass.getName());
+        ServletHolder servlets = new ServletHolder(servletContainerClass());
+        servlets.setInitParameter("jakarta.ws.rs.Application", appClass.getName());
         final ServletContextHandler mainHandler = new ServletContextHandler(contexts, "/", true, false);
-        mainHandler.addServlet(jaxrs, "/*");
+        mainHandler.addServlet(servlets, "/*");
 
         if (filterClass != null) {
             mainHandler.addFilter(filterClass, "/*", java.util.EnumSet.allOf(DispatcherType.class));

@@ -91,6 +91,8 @@
     </dependency>
 
     <dependency>
+      <!-- For testing, Jersey and its Deps:
+        -->
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-server</artifactId>
       <version>${version.jersey}</version>
@@ -111,6 +113,22 @@
       <artifactId>jersey-container-servlet</artifactId>
       <version>${version.jersey}</version>
       <scope>test</scope>
+    </dependency>
+    <!-- 29-May-2021, tatu: With Jersey 3/Jetty 11, will require this addition,
+        too, as per:
+https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injectionmanagerfactory-not-found
+      -->
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>${version.jersey}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- And to get some test output in case of problems... -->
+    <dependency>
+      <groupId>ch.qos.logback </groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
     </dependency>
 
   </dependencies>
