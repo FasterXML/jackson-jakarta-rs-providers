@@ -2,6 +2,7 @@ package com.fasterxml.jackson.jakarta.rs.cbor.dw;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -77,11 +78,16 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         final ObjectMapper mapper = new ObjectMapper(new CBORFactory());
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
+        final URL url = new URL("http://localhost:"+TEST_PORT+"/point");
 
         try {
-            InputStream in = new URL("http://localhost:"+TEST_PORT+"/point").openStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            _verifyResponse(conn);
+            try (InputStream in = conn.getInputStream()) {
+                p = mapper.readValue(in, Point.class);
+            }
+        } catch (Exception e) {
+            p = null;
         } finally {
             server.stop();
         }
@@ -96,14 +102,15 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         final ObjectMapper mapper = new ObjectMapper(new CBORFactory());
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
+        final URL url = new URL("http://localhost:" + TEST_PORT + "/point/custom");
 
         try {
-            final URL url = new URL("http://localhost:" + TEST_PORT + "/point/custom");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Accept", "application/vnd.com.example.v1+cbor");
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
+            _verifyResponse(conn);
+            try (InputStream in = conn.getInputStream()) {
+                p = mapper.readValue(in, Point.class);
+            }
         } finally {
             server.stop();
         }
@@ -114,15 +121,34 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     }
 
     // [Issue#34] Verify that Untouchables act the way as they should
-    @SuppressWarnings("resource")
     public void testUntouchables() throws Exception
     {
         Server server = startServer(TEST_PORT, SimpleRawApp.class);
+        final URL url = new URL("http://localhost:"+TEST_PORT+"/raw/bytes");
         try {
-            InputStream in = new URL("http://localhost:"+TEST_PORT+"/raw/bytes").openStream();
-            Assert.assertArrayEquals(UNTOUCHABLE_RESPONSE, readAll(in));
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            _verifyResponse(conn);
+            try (InputStream in = url.openStream()) {
+                Assert.assertArrayEquals(UNTOUCHABLE_RESPONSE, readAll(in));
+            }
         } finally {
             server.stop();
+        }
+    }
+
+    protected void _verifyResponse(HttpURLConnection conn) throws IOException {
+        int status = conn.getResponseCode();
+        if (status >= 200 && status <= 299) {
+            return;
+        }
+        // But otherwise, try to get fail...
+        try {
+            byte[] failBytes = readAll(conn.getErrorStream());
+            fail("Call failed with status code "+status+", problem: ("+failBytes.length+" bytes) "
+                    +asUTF8(failBytes, 2000));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read error content for status code "
+                    +status+": "+e, e);
         }
     }
 }

@@ -14,12 +14,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.fasterxml.jackson.jakarta.rs.cbor.JacksonCBORProvider;
-import com.fasterxml.jackson.jakarta.rs.cbor.JaxrsTestBase;
+import com.fasterxml.jackson.jakarta.rs.cbor.JakartaRSTestBase;
 
 /**
  * Intermediate base for tests that run actual full JAX-RS resource.
  */
-public abstract class ResourceTestBase extends JaxrsTestBase
+public abstract class ResourceTestBase extends JakartaRSTestBase
 {
     protected static abstract class CBORApplication extends Application
     {

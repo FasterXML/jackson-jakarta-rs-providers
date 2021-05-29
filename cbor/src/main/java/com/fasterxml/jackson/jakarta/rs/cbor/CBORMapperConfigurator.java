@@ -35,9 +35,8 @@ public class CBORMapperConfigurator
      */
     @Override
     public synchronized ObjectMapper getConfiguredMapper() {
-        /* important: should NOT call mapper(); needs to return null
-         * if no instance has been passed or constructed
-         */
+        // important: should NOT call mapper(); needs to return null
+        // if no instance has been passed or constructed
         return _mapper;
     }
 
@@ -104,7 +103,7 @@ public class CBORMapperConfigurator
                 if (_jaxbIntrospectorClass == null) {
                     _jaxbIntrospectorClass = JakartaXmlBindAnnotationIntrospector.class;
                 }
-                return _jaxbIntrospectorClass.newInstance();
+                return _jaxbIntrospectorClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to instantiate JaxbAnnotationIntrospector: "+e.getMessage(), e);
             }

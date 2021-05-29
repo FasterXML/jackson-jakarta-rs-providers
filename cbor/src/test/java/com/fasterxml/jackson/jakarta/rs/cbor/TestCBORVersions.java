@@ -3,7 +3,7 @@ package com.fasterxml.jackson.jakarta.rs.cbor;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.Versioned;
 
-public class TestCBORVersions extends JaxrsTestBase
+public class TestCBORVersions extends JakartaRSTestBase
 {
     public void testMapperVersions()
     {

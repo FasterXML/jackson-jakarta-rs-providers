@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 /**
  * Unit test to check [JACKSON-540]
  */
-public class TestCanDeserialize extends JaxrsTestBase
+public class TestCanDeserialize extends JakartaRSTestBase
 {
     static class Bean {
         public int x;

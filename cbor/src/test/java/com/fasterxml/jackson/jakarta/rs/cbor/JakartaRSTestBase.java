@@ -3,13 +3,14 @@ package com.fasterxml.jackson.jakarta.rs.cbor;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.junit.Assert;
 
 import com.fasterxml.jackson.core.*;
 
-public abstract class JaxrsTestBase
+public abstract class JakartaRSTestBase
     extends junit.framework.TestCase
 {
     /*
@@ -87,19 +88,22 @@ public abstract class JaxrsTestBase
     /**********************************************************
      */
 
-    public String quote(String str) {
+    public String q(String str) {
         return '"'+str+'"';
     }
 
-    protected String aposToQuotes(String json) {
+    protected String a2q(String json) {
         return json.replace("'", "\"");
     }
-    
-    protected String readUTF8(InputStream in) throws IOException
-    {
-        return new String(readAll(in), "UTF-8");
+
+    protected String readUTF8(InputStream in) throws IOException {
+        return readUTF8(in, Integer.MAX_VALUE);
     }
-    
+
+    protected String readUTF8(InputStream in, int maxLen) throws IOException {
+        return asUTF8(readAll(in), maxLen);
+    }
+
     protected byte[] readAll(InputStream in) throws IOException
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream(100);
@@ -111,5 +115,17 @@ public abstract class JaxrsTestBase
         }
         in.close();
         return bytes.toByteArray();
+    }
+
+    protected String asUTF8(byte[] input) {
+        return asUTF8(input, Integer.MAX_VALUE);
+    }
+
+    protected String asUTF8(byte[] input, int maxLen) {
+        final String str = new String(input, StandardCharsets.UTF_8);
+        if (str.length() < maxLen) {
+            return str;
+        }
+        return str.substring(0, maxLen) + "[TRUNCATED...]";
     }
 }
