@@ -6,21 +6,23 @@
     <artifactId>jackson-base</artifactId>
     <version>2.13.0-SNAPSHOT</version>
   </parent>
-  <groupId>com.fasterxml.jackson.jaxrs</groupId>
-  <artifactId>jackson-jaxrs-providers</artifactId>
+  <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+  <artifactId>jackson-jakarta-rs-providers</artifactId>
   <name>Jackson modules: Jakarta-RS</name>
   <version>2.13.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <description>Parent for Jackson Jakarta-RS (jakarta.ws.ws) providers
+  <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
 
   <modules>
     <module>base</module>
+<!--
     <module>cbor</module>
     <module>json</module>
     <module>smile</module>
     <module>xml</module>
     <module>yaml</module>
+-->
   </modules>
   <url>http://github.com/FasterXML/jackson-jakarta-rs-providers</url>    
   <scm>
@@ -36,7 +38,7 @@
     <version.jetty>11.0.3</version.jetty>
 
     <!-- Needed to enable jax-rs 2.0 usage under OSGi -->
-    <jakarta.rs.version>[3.0.0,4.0)</jakarta.rs.version>
+    <jakarta.ws.rs.version>[3.0.0,4.0)</jakarta.ws.rs.version>
   </properties>
 
   <dependencyManagement>
@@ -55,11 +57,11 @@
       by container (and app should definitely have direct dep too, when using annotations)
        -->
     <dependency>
-      <groupId>javax.rs</groupId>
+      <groupId>jakarta.ws.rs</groupId>
       <!-- 05-Apr-2014, tatu: JAX-RS 2.x has different artifact-id, "javax.ws.rs-api"
         -->
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>2.1.1</version>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>3.0.0</version>
       <scope>provided</scope>
     </dependency>
 
