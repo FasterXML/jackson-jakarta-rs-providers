@@ -1,4 +1,4 @@
-package com.fasterxml.jackson.jakarta.rs.cbor;
+package com.fasterxml.jackson.jakarta.rs.smile;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
@@ -6,12 +6,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
  * JSON content type provider automatically configured to use both Jackson
  * and Jakarta XmlBind annotations (in that order of priority).
- * Otherwise functionally same as {@link JacksonCBORProvider}.
+ * Otherwise functionally same as {@link JacksonSmileProvider}.
  *<p>
  * Typical usage pattern is to just instantiate instance of this
  * provider for Jakarta-RS and use as is: this will use both Jackson and
@@ -25,7 +26,7 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 @Provider
 @Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" variants
 @Produces(MediaType.WILDCARD)
-public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
+public class JacksonXmlBindSmileProvider extends JacksonSmileProvider
 {
     /**
      * Default annotation sets to use, if not explicitly defined during
@@ -40,7 +41,7 @@ public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
      * Default constructor, usually used when provider is automatically
      * configured to be used with JAX-RS implementation.
      */
-    public JacksonXmlBindCBORProvider()
+    public JacksonXmlBindSmileProvider()
     {
         this(null, DEFAULT_ANNOTATIONS);
     }
@@ -49,7 +50,7 @@ public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
      * @param annotationsToUse Annotation set(s) to use for configuring
      * data binding
      */
-    public JacksonXmlBindCBORProvider(Annotations... annotationsToUse)
+    public JacksonXmlBindSmileProvider(Annotations... annotationsToUse)
     {
         this(null, annotationsToUse);
     }
@@ -59,7 +60,7 @@ public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      */
-    public JacksonXmlBindCBORProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
+    public JacksonXmlBindSmileProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
     {
         super(mapper, annotationsToUse);
     }

@@ -1,26 +1,26 @@
-package com.fasterxml.jackson.jakarta.rs.cbor;
+package com.fasterxml.jackson.jakarta.rs.smile;
 
 import java.util.*;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+
+import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
+
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 import com.fasterxml.jackson.jakarta.rs.cfg.MapperConfiguratorBase;
-
-import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 /**
  * Helper class used to encapsulate details of configuring an
  * {@link ObjectMapper} instance to be used for data binding, as
  * well as accessing it.
  */
-public class CBORMapperConfigurator
-    extends MapperConfiguratorBase<CBORMapperConfigurator, ObjectMapper>
+public class SmileMapperConfigurator
+    extends MapperConfiguratorBase<SmileMapperConfigurator, ObjectMapper>
 {
-    public CBORMapperConfigurator(ObjectMapper mapper, Annotations[] defAnnotations)
-    {
+    public SmileMapperConfigurator(ObjectMapper mapper, Annotations[] defAnnotations) {
         super(mapper, defAnnotations);
     }
 
@@ -37,7 +37,7 @@ public class CBORMapperConfigurator
     @Override
     public synchronized ObjectMapper getDefaultMapper() {
         if (_defaultMapper == null) {
-            _defaultMapper = new ObjectMapper(new CBORFactory());
+            _defaultMapper = new SmileMapper();
             _setAnnotations(_defaultMapper, _defaultAnnotationsToUse);
         }
         return _defaultMapper;
@@ -58,7 +58,7 @@ public class CBORMapperConfigurator
     protected ObjectMapper mapper()
     {
         if (_mapper == null) {
-            _mapper = new ObjectMapper(new CBORFactory());
+            _mapper = new SmileMapper();
             _setAnnotations(_mapper, _defaultAnnotationsToUse);
         }
         return _mapper;

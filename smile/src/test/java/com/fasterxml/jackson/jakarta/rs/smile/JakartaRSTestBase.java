@@ -1,4 +1,4 @@
-package com.fasterxml.jackson.jakarta.rs.cbor;
+package com.fasterxml.jackson.jakarta.rs.smile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,9 +12,9 @@ public abstract class JakartaRSTestBase
     extends junit.framework.TestCase
 {
     /*
-    /**********************************************************************
+    /**********************************************************
     /* Additional assertion methods
-    /**********************************************************************
+    /**********************************************************
      */
 
     protected void assertType(Object ob, Class<?> expType)
@@ -47,9 +47,9 @@ public abstract class JakartaRSTestBase
     }
 
     /*
-    /**********************************************************************
+    /**********************************************************
     /* Other helper methods
-    /**********************************************************************
+    /**********************************************************
      */
 
     public String q(String str) {

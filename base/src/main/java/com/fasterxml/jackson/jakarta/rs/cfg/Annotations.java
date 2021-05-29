@@ -3,8 +3,6 @@ package com.fasterxml.jackson.jakarta.rs.cfg;
 /**
  * Enumeration that defines standard annotation sets available for configuring
  * data binding aspects.
- * 
- * @since 2.2 (earlier located in actual datatype-specific modules)
  */
 public enum Annotations {
     /**
@@ -14,10 +12,10 @@ public enum Annotations {
     JACKSON,
 
     /**
-     * Standard JAXB annotations, used in a way that approximates expected
-     * definitions (since JAXB defines XML aspects, not all features map
+     * Standard Jakarta XmlBind annotations, used in a way that approximates expected
+     * definitions (since XmlBind defines XML aspects, not all features map
      * well to JSON handling)
      */
-    JAXB
+    JAKARTA_XML_BIND // note: before jakarta known as "JAXB"
     ;
 }

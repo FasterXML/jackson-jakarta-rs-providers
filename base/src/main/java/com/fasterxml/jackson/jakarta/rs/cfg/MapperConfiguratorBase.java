@@ -34,17 +34,17 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
      * to {@link #setAnnotationsToUse}
      */
     protected Annotations[] _defaultAnnotationsToUse;
-    
+
     /**
-     * To support optional dependency to Jackson JAXB annotations module
+     * To support optional dependency to Jackson Jakarta XmlBind annotations module
      * (needed iff JAXB annotations are used for configuration)
      */
-    protected Class<? extends AnnotationIntrospector> _jaxbIntrospectorClass;
-    
+    protected Class<? extends AnnotationIntrospector> _xmlBindIntrospectorClass;
+
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Construction
-    /**********************************************************
+    /**********************************************************************
      */
     
     public MapperConfiguratorBase(MAPPER mapper, Annotations[] defaultAnnotations)
@@ -74,11 +74,11 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     protected abstract MAPPER mapper();
 
     protected abstract AnnotationIntrospector _resolveIntrospectors(Annotations[] annotationsToUse);
-    
+
     /*
-    /***********************************************************
+    /**********************************************************************
     /* Configuration methods
-    /***********************************************************
+    /**********************************************************************
      */
 
     public synchronized final void setMapper(MAPPER m) {
@@ -106,9 +106,9 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     }
 
     /*
-    /***********************************************************
+    /**********************************************************************
     /* Helper methods for sub-classes
-    /***********************************************************
+    /**********************************************************************
      */
 
     protected final void _setAnnotations(ObjectMapper mapper, Annotations[] annotationsToUse)
