@@ -16,11 +16,10 @@
 
   <modules>
     <module>base</module>
-    <module>smile</module>
     <module>cbor</module>
-<!--
     <module>json</module>
     <module>smile</module>
+<!--
     <module>xml</module>
     <module>yaml</module>
 -->

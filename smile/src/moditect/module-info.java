@@ -1,7 +1,7 @@
 // Originally generated using Moditect maven plugin, last mod 14-Oct-2020
-module com.fasterxml.jackson.jaxrs.smile {
-    exports com.fasterxml.jackson.jaxrs.smile;
-    // [jaxrs-providers#119]: CXF, RESTEasy, OpenAPI require reflective access
+module com.fasterxml.jackson.jakarta.rs.smile {
+    exports com.fasterxml.jackson.jakarta.rs.smile;
+    // CXF, RESTEasy, OpenAPI require reflective access
     opens com.fasterxml.jackson.jakarta.rs.smile;
 
     requires com.fasterxml.jackson.core;
