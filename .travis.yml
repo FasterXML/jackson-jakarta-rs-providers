@@ -12,7 +12,7 @@ jdk:
 branches:
   only:
     - master
-    - "2.13"
+    - "3.0"
 
 # !!! 29-May-2021, tatu: TODO: implement
 
