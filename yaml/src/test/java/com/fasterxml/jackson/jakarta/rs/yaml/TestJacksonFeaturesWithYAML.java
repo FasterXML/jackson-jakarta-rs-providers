@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import jakarta.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
-
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -108,7 +108,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
                     MediaType.APPLICATION_JSON_TYPE, null,
                     new ByteArrayInputStream("---\nBean:\n  foobar: 3\n".getBytes("UTF-8")));
             fail("Should have caught an exception");
-        } catch (JsonMappingException e) {
+        } catch (DatabindException e) {
             verifyException(e, "Unrecognized field");
         }
     }

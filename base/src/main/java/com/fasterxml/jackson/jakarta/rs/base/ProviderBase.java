@@ -13,9 +13,15 @@ import com.fasterxml.jackson.core.*;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
 import com.fasterxml.jackson.jakarta.rs.base.util.ClassKey;
 import com.fasterxml.jackson.jakarta.rs.base.util.LRUMap;
 import com.fasterxml.jackson.jakarta.rs.cfg.*;
+import com.fasterxml.jackson.jakarta.rs.cfg.AnnotationBundleKey;
+import com.fasterxml.jackson.jakarta.rs.cfg.ObjectWriterInjector;
+import com.fasterxml.jackson.jakarta.rs.cfg.ObjectWriterModifier;
+import com.fasterxml.jackson.jakarta.rs.cfg.ObjectReaderInjector;
+import com.fasterxml.jackson.jakarta.rs.cfg.ObjectReaderModifier;
 
 public abstract class ProviderBase<
     THIS extends ProviderBase<THIS, MAPPER, EP_CONFIG, MAPPER_CONFIG>,
@@ -101,22 +107,6 @@ public abstract class ProviderBase<
     protected HashMap<ClassKey,Boolean> _cfgCustomUntouchables;
 
     /**
-     * Whether we want to actually check that Jackson has
-     * a serializer for given type. Since this should generally
-     * be the case (due to auto-discovery) and since the call
-     * to check availability can be bit expensive, defaults to false.
-     */
-    protected boolean _cfgCheckCanSerialize = false;
-
-    /**
-     * Whether we want to actually check that Jackson has
-     * a deserializer for given type. Since this should generally
-     * be the case (due to auto-discovery) and since the call
-     * to check availability can be bit expensive, defaults to false.
-     */
-    protected boolean _cfgCheckCanDeserialize = false;
-
-    /**
      * Feature flags set.
      */
     protected int _jakartaRSFeatures;
@@ -191,20 +181,6 @@ public abstract class ProviderBase<
      */
 
     /**
-     * Method for defining whether actual detection for existence of
-     * a deserializer for type should be done when {@link #isReadable}
-     * is called.
-     */
-    public void checkCanDeserialize(boolean state) { _cfgCheckCanDeserialize = state; }
-
-    /**
-     * Method for defining whether actual detection for existence of
-     * a serializer for type should be done when {@link #isWriteable}
-     * is called.
-     */
-    public void checkCanSerialize(boolean state) { _cfgCheckCanSerialize = state; }
-
-    /**
      * Method for marking specified type as "untouchable", meaning that provider
      * will not try to read or write values of this type (or its subtypes).
      * 
@@ -232,19 +208,19 @@ public abstract class ProviderBase<
         }
         _cfgCustomUntouchables.put(new ClassKey(type), Boolean.FALSE);
     }
-    
+
     /**
-     * Method for configuring which annotation sets to use (including none).
-     * Annotation sets are defined in order decreasing precedence; that is,
-     * first one has the priority over following ones.
+     * Method for overriding {@link AnnotationIntrospector} to use instead of
+     * default {@code JacksonAnnotationIntrospector}: often used to add
+     * JAXB-backed introspector.
      * 
-     * @param annotationsToUse Ordered list of annotation sets to use; if null,
-     *    default
+     * @param aiOverride AnnotationIntrospector to configure mapper to use
+     *    ({@code null} to leave it as default one)
      */
-    public void setAnnotationsToUse(Annotations[] annotationsToUse) {
-        _mapperConfig.setAnnotationsToUse(annotationsToUse);
+    public void setAnnotationsToUse(AnnotationIntrospector aiOverride) {
+        _mapperConfig.setAnnotationIntrospector(aiOverride);
     }
-    
+
     /**
      * Method that can be used to directly define {@link ObjectMapper} to use
      * for serialization and deserialization; if null, will use the standard
@@ -355,38 +331,6 @@ public abstract class ProviderBase<
         _mapperConfig.configure(f, false);
         return _this();
     }
-    
-    // // // JsonParser/JsonGenerator
-    
-    public THIS enable(JsonParser.Feature f) {
-        _mapperConfig.configure(f, true);
-        return _this();
-    }
-
-    public THIS enable(JsonGenerator.Feature f) {
-        _mapperConfig.configure(f, true);
-        return _this();
-    }
-
-    public THIS disable(JsonParser.Feature f) {
-        _mapperConfig.configure(f, false);
-        return _this();
-    }
-
-    public THIS disable(JsonGenerator.Feature f) {
-        _mapperConfig.configure(f, false);
-        return _this();
-    }
-
-    public THIS configure(JsonParser.Feature f, boolean state) {
-        _mapperConfig.configure(f, state);
-        return _this();
-    }
-
-    public THIS configure(JsonGenerator.Feature f, boolean state) {
-        _mapperConfig.configure(f, state);
-        return _this();
-    }
 
     /*
     /**********************************************************************
@@ -477,9 +421,8 @@ public abstract class ProviderBase<
     @Override
     public long getSize(Object value, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
     {
-        /* In general figuring output size requires actual writing; usually not
-         * worth it to write everything twice.
-         */
+        // In general figuring output size requires actual writing; usually not
+        // worth it to write everything twice.
         return -1;
     }
     
@@ -489,10 +432,11 @@ public abstract class ProviderBase<
      * this provider.
      * Implementation will first check that expected media type is
      * expected one (by call to {@link #hasMatchingMediaType}); then verify
-     * that type is not one of "untouchable" types (types we will never
-     * automatically handle), and finally that there is a serializer
-     * for type (iff {@link #checkCanSerialize} has been called with
-     * true argument -- otherwise assumption is there will be a handler)
+     * that type is not one of "untouchable" types.
+     *<p>
+     * NOTE: in 2.x also checked (if configured) for "canSerialize()", but
+     * with 3.x that is not done since there that detection never worked
+     * in a useful manner.
      */
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
@@ -516,12 +460,16 @@ public abstract class ProviderBase<
                 return false;
             }
         }
-        // Also: if we really want to verify that we can deserialize, we'll check:
+        // 29-Jan-2018, tatu: Mapper does not really know, a priori, much about what might not
+        //   be something it can serialize. Jackson 2.x did have `canSerialize()` method which didn't
+        //   do much good; 3.x does not.
+        /*
         if (_cfgCheckCanSerialize) {
             if (!locateMapper(type, mediaType).canSerialize(type)) {
                 return false;
             }
         }
+        */
         return true;
     }
 
@@ -532,7 +480,7 @@ public abstract class ProviderBase<
     public void writeTo(Object value, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType,
             MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) 
-        throws IOException
+        throws JacksonException
     {
         EP_CONFIG endpoint = _endpointForWriting(value, type, genericType, annotations,
                 mediaType, httpHeaders);
@@ -544,66 +492,50 @@ public abstract class ProviderBase<
 
         // Where can we find desired encoding? Within HTTP headers?
         JsonEncoding enc = findEncoding(mediaType, httpHeaders);
-        JsonGenerator g = _createGenerator(writer, entityStream, enc);
-        boolean ok = false;
+        JavaType rootType = null;
 
-        try {
-            // Want indentation?
-            if (writer.isEnabled(SerializationFeature.INDENT_OUTPUT)) {
-                g.useDefaultPrettyPrinter();
-            }
-            JavaType rootType = null;
+        if ((genericType != null) && (value != null)) {
+            // 10-Jan-2011, tatu: as per [JACKSON-456], it's not safe to just force root
+            //    type since it prevents polymorphic type serialization. Since we really
+            //    just need this for generics, let's only use generic type if it's truly generic.
 
-            if ((genericType != null) && (value != null)) {
-                // 10-Jan-2011, tatu: as per [JACKSON-456], it's not safe to just force root
-                //    type since it prevents polymorphic type serialization. Since we really
-                //    just need this for generics, let's only use generic type if it's truly generic.
+            if (!(genericType instanceof Class<?>)) { // generic types are other impls of 'java.lang.reflect.Type'
+                // This is still not exactly right; should root type be further
+                // specialized with 'value.getClass()'? Let's see how well this works before
+                // trying to come up with more complete solution.
 
-                if (!(genericType instanceof Class<?>)) { // generic types are other impls of 'java.lang.reflect.Type'
-                    // This is still not exactly right; should root type be further
-                    // specialized with 'value.getClass()'? Let's see how well this works before
-                    // trying to come up with more complete solution.
+                // 18-Mar-2015, tatu: As per [#60], there is now a problem with non-polymorphic lists,
+                //    since forcing of type will then force use of content serializer, which is
+                //    generally not the intent. Fix may require addition of functionality in databind
 
-                    // 18-Mar-2015, tatu: As per [#60], there is now a problem with non-polymorphic lists,
-                    //    since forcing of type will then force use of content serializer, which is
-                    //    generally not the intent. Fix may require addition of functionality in databind
-
-                    TypeFactory typeFactory = writer.getTypeFactory();
-                    JavaType baseType = typeFactory.constructType(genericType);
-                    rootType = typeFactory.constructSpecializedType(baseType, type);
-                    /* 26-Feb-2011, tatu: To help with [JACKSON-518], we better recognize cases where
-                     *    type degenerates back into "Object.class" (as is the case with plain TypeVariable,
-                     *    for example), and not use that.
-                     */
-                    if (rootType.getRawClass() == Object.class) {
-                        rootType = null;
-                    }
+                TypeFactory typeFactory = writer.typeFactory();
+                JavaType baseType = typeFactory.constructType(genericType);
+                rootType = typeFactory.constructSpecializedType(baseType, type);
+                // 26-Feb-2011, tatu: To help with [JACKSON-518], we better recognize cases where
+                //    type degenerates back into "Object.class" (as is the case with plain TypeVariable,
+                //    for example), and not use that.
+                if (rootType.getRawClass() == Object.class) {
+                    rootType = null;
                 }
             }
+        }
 
-            // Most of the configuration now handled through EndpointConfig, ObjectWriter
-            // but we may need to force root type:
-            if (rootType != null) {
-                writer = writer.forType(rootType);
-            }
-            value = endpoint.modifyBeforeWrite(value);
+        // Most of the configuration now handled through EndpointConfig, ObjectWriter
+        // but we may need to force root type:
+        if (rootType != null) {
+            writer = writer.forType(rootType);
+        }
+        // Some end points decorate value: for JSON we may want JSONP wrapping for example
+        value = endpoint.modifyBeforeWrite(value);
 
-            // [Issue#32]: allow modification by filter-injectible thing
-            ObjectWriterModifier mod = ObjectWriterInjector.getAndClear();
-            if (mod != null) {
-                writer = mod.modify(endpoint, httpHeaders, value, writer, g);
-            }
+        // [jaxrs-providers#32]: allow modification by filter-injectible thing
+        ObjectWriterModifier mod = ObjectWriterInjector.getAndClear();
+        if (mod != null) {
+            writer = mod.modify(endpoint, httpHeaders, value, writer);
+        }
 
+        try (JsonGenerator g = _createGenerator(writer, entityStream, enc)) {
             writer.writeValue(g, value);
-            ok = true;
-        } finally {
-            if (ok) {
-                g.close();
-            } else {
-                try {
-                    g.close();
-                } catch (Exception e) { }
-            }
         }
     }
 
@@ -623,7 +555,7 @@ public abstract class ProviderBase<
     protected void _modifyHeaders(Object value, Class<?> type, Type genericType, Annotation[] annotations,
             MultivaluedMap<String,Object> httpHeaders,
             EP_CONFIG endpoint)
-        throws IOException
+        throws JacksonException
     {
         // Add "nosniff" header?
         if (isEnabled(JakartaRSFeature.ADD_NO_SNIFF_HEADER)) {
@@ -636,19 +568,16 @@ public abstract class ProviderBase<
      * contents into given raw {@link OutputStream}.
      */
     protected JsonGenerator _createGenerator(ObjectWriter writer, OutputStream rawStream, JsonEncoding enc)
-        throws IOException
+        throws JacksonException
     {
-        JsonGenerator g = writer.getFactory().createGenerator(rawStream, enc);
-        // Important: we are NOT to close the underlying stream after
-        // mapping, so we need to instruct generator
-        g.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        return g;
+        // Note: disabling of AUTO_CLOSE_TARGET should have happened earlier
+        return writer.createGenerator(rawStream, enc);
     }
 
     protected EP_CONFIG _endpointForWriting(Object value, Class<?> type, Type genericType,
             Annotation[] annotations, MediaType mediaType, MultivaluedMap<String,Object> httpHeaders)
     {
-        // 29-Jun-2016, tatu: Allow skipping caching
+        // 29-Jun-2016, tatu: allow skipping caching
         if (!isEnabled(JakartaRSFeature.CACHE_ENDPOINT_WRITERS)) {
             return _configForWriting(locateMapper(type, mediaType), annotations, _defaultWriteView);
         }
@@ -684,9 +613,11 @@ public abstract class ProviderBase<
      * a JSON type (via call to {@link #hasMatchingMediaType});
      * then verify
      * that type is not one of "untouchable" types (types we will never
-     * automatically handle), and finally that there is a deserializer
-     * for type (iff {@link #checkCanDeserialize} has been called with
-     * true argument -- otherwise assumption is there will be a handler)
+     * automatically handle).
+     *<p>
+     * NOTE: in 2.x also checked (if configured) for "canDeserialize()", but
+     * with 3.x that is not done since there that detection never worked
+     * in a useful manner.
      */
     @Override
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
@@ -710,6 +641,10 @@ public abstract class ProviderBase<
                 return false;
             }
         }
+        // 29-Jan-2018, tatu: Mapper does not really know, a priori, much about what might not
+        //   be something it can serialize. Jackson 2.x did have `canSerialize()` method which didn't
+        //   do much good; 3.x does not.
+        /*
         // Finally: if we really want to verify that we can serialize, we'll check:
         if (_cfgCheckCanDeserialize) {
             if (_isSpecialReadable(type)) {
@@ -720,6 +655,7 @@ public abstract class ProviderBase<
                 return false;
             }
         }
+        */
         return true;
     }
 
@@ -730,7 +666,8 @@ public abstract class ProviderBase<
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String,String> httpHeaders,
             InputStream entityStream) 
-        throws IOException
+        throws JacksonException,
+            NoContentException
     {
         EP_CONFIG endpoint = _endpointForReading(type, genericType, annotations,
                 mediaType, httpHeaders);
@@ -749,10 +686,10 @@ public abstract class ProviderBase<
         if (rawType == JsonParser.class) {
             return p;
         }
-        final TypeFactory tf = reader.getTypeFactory();
+        final TypeFactory tf = reader.typeFactory();
         final JavaType resolvedType = tf.constructType(genericType);
 
-        // 09-Jul-2015, tatu: Handle MappingIterator too
+        // 09-Jul-2015, tatu: As per [jaxrs-providers#69], handle MappingIterator too
         boolean multiValued = (rawType == MappingIterator.class);
         
         if (multiValued) {
@@ -764,7 +701,7 @@ public abstract class ProviderBase<
             reader = reader.forType(resolvedType);
         }
 
-        // [Issue#32]: allow modification by filter-injectable thing
+        // Allow modification by filter-injectable thing
         ObjectReaderModifier mod = ObjectReaderInjector.getAndClear();
         if (mod != null) {
             reader = mod.modify(endpoint, httpHeaders, resolvedType, reader, p);
@@ -783,13 +720,11 @@ public abstract class ProviderBase<
      * content.
      */
     protected JsonParser _createParser(ObjectReader reader, InputStream rawStream)
-        throws IOException
+        throws JacksonException
     {
-        JsonParser p = reader.getFactory().createParser(rawStream);
-        // Important: we are NOT to close the underlying stream after
-        // mapping, so we need to instruct parser:
-        p.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-        return p;
+        // Note: disabling of AUTO_CLOSE_SOURCE should have happened earlier
+        // so can just construct and return parser as-is
+        return reader.createParser(rawStream);
     }
 
     /**
@@ -800,7 +735,7 @@ public abstract class ProviderBase<
     protected EP_CONFIG _endpointForReading(Class<Object> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String,String> httpHeaders)
     {
-        // 29-Jun-2016, tatu: Allow skipping caching
+        // Allow skipping caching
         if (!isEnabled(JakartaRSFeature.CACHE_ENDPOINT_READERS)) {
             return _configForReading(locateMapper(type, mediaType), annotations, _defaultReadView);
         }
@@ -865,11 +800,11 @@ public abstract class ProviderBase<
      */
     public MAPPER locateMapper(Class<?> type, MediaType mediaType)
     {
-        // 29-Jun-2016, tatu: May want to do provider lookup first
+        // 29-Jun-2016, tatu: As per [jaxrs-providers#86] may want to do provider lookup first
         if (isEnabled(JakartaRSFeature.DYNAMIC_OBJECT_MAPPER_LOOKUP)) {
             MAPPER m = _locateMapperViaProvider(type, mediaType);
             if (m == null) {
-                m = _mapperConfig.getConfiguredMapper();
+                m = (MAPPER) _mapperConfig.getConfiguredMapper();
                 if (m == null) {
                     m = _mapperConfig.getDefaultMapper();
                 }
@@ -895,8 +830,6 @@ public abstract class ProviderBase<
     /**
      * Overridable helper method used to allow handling of somewhat special
      * types for reading
-     * 
-     * @since 2.2
      */
     protected boolean _isSpecialReadable(Class<?> type) {
         return JsonParser.class == type;
@@ -922,7 +855,7 @@ public abstract class ProviderBase<
         return _untouchables.contains(typeKey);
     }
 
-    protected IOException _createNoContentException() {
+    protected NoContentException _createNoContentException() {
         return new NoContentException(NO_CONTENT_MESSAGE);
     }
 

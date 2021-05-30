@@ -12,8 +12,6 @@ package com.fasterxml.jackson.jakarta.rs.base.util;
  *<p>
  * Note: since class is not strictly immutable, caller must
  * know what it is doing, if changing field values.
- *
- * @since 2.2
  */
 public final class ClassKey
     implements Comparable<ClassKey>
@@ -75,9 +73,8 @@ public final class ClassKey
         if (o.getClass() != getClass()) return false;
         ClassKey other = (ClassKey) o;
 
-        /* Is it possible to have different Class object for same name + class loader combo?
-         * Let's assume answer is no: if this is wrong, will need to uncomment following functionality
-         */
+        // Is it possible to have different Class object for same name + class loader combo?
+        // Let's assume answer is no: if this is wrong, will need to uncomment following functionality
         /*
         return (other._className.equals(_className))
             && (other._class.getClassLoader() == _class.getClassLoader());

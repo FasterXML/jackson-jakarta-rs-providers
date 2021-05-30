@@ -1,15 +1,10 @@
 package com.fasterxml.jackson.jakarta.rs.cfg;
 
-import java.io.IOException;
-
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 
-/**
- * @since 2.3
- */
 public abstract class ObjectWriterModifier
 {
     /**
@@ -20,6 +15,6 @@ public abstract class ObjectWriterModifier
      */
     public abstract ObjectWriter modify(EndpointConfigBase<?> endpoint,
             MultivaluedMap<String,Object> responseHeaders,
-            Object valueToWrite, ObjectWriter w, JsonGenerator g)
-        throws IOException;
+            Object valueToWrite, ObjectWriter w)
+        throws JacksonException;
 }
