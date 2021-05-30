@@ -5,11 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.fasterxml.jackson.databind.*;
 
 /**
- * Based on ideas from [Issue#32], this class allows "overriding" of {@link ObjectWriter}
- * that JAX-RS Resource will use; usually this is done from a Servlet or JAX-RS filter
- * before execution reaches resource.
- * 
- * @since 2.3
+ * This class allows "overriding" of {@link ObjectWriter}
+ * that Jakarta-RS Resource will use; usually this is done from a Servlet
+ * or Jakarta-RS filter before execution reaches resource.
  */
 public class ObjectWriterInjector
 {

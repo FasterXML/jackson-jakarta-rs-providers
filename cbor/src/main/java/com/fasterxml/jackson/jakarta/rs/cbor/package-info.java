@@ -1,5 +1,5 @@
 /**
- * Jackson-based JAX-RS provider that can automatically
+ * Jackson-based Jakarta-RS provider that can automatically
  * serialize and deserialize resources for 
  * Compact Binary Object Representation (CBOR) content type (MediaType).
  *<p>
@@ -13,7 +13,7 @@
  *    provider configured to use Jackson annotations
  *  </li>
  * <li>{@link com.fasterxml.jackson.jakarta.rs.cbor.JacksonXmlBindCBORProvider} is extension
- *    of the basic provider, configured to additionally use JAXB annotations,
+ *    of the basic provider, configured to additionally use Jakarta XmlBind annotations,
  *    in addition to (or in addition of, if so configured) Jackson annotations.
  *  </li>
  * </ul>

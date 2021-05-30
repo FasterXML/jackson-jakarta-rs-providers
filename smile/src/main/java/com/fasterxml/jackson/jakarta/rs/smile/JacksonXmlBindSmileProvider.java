@@ -31,7 +31,7 @@ public class JacksonXmlBindSmileProvider extends JacksonSmileProvider
     /**
      * Default annotation sets to use, if not explicitly defined during
      * construction: use Jackson annotations if found; if not, use
-     * JAXB annotations as fallback.
+     * XmlBind annotations as fallback.
      */
     public final static Annotations[] DEFAULT_ANNOTATIONS = {
         Annotations.JACKSON, Annotations.JAKARTA_XML_BIND
@@ -39,7 +39,7 @@ public class JacksonXmlBindSmileProvider extends JacksonSmileProvider
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with JAX-RS implementation.
+     * configured to be used with Jakarta-RS implementation.
      */
     public JacksonXmlBindSmileProvider()
     {

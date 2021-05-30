@@ -37,7 +37,7 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
 
     /**
      * To support optional dependency to Jackson Jakarta XmlBind annotations module
-     * (needed iff JAXB annotations are used for configuration)
+     * (needed iff Jakarta XmlBind annotations are used for configuration)
      */
     protected Class<? extends AnnotationIntrospector> _xmlBindIntrospectorClass;
 
@@ -54,9 +54,9 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     }
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Abstract methods to implement
-    /***********************************************************
+    /**********************************************************************
      */
     
     /**

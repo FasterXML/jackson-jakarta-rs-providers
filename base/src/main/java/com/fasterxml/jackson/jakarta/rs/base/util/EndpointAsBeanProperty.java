@@ -10,20 +10,20 @@ import com.fasterxml.jackson.databind.introspect.AnnotationMap;
 
 /**
  * {@link BeanProperty} implementation used for passing annotations
- * from JAX-RS endpoint into Jackson. This tries to imitate behavior
+ * from Jakarta-RS endpoint into Jackson. This tries to imitate behavior
  * one would get if actual resource method was used as POJO property;
- * ideally this would be how implementation works but due JAX-RS API
+ * ideally this would be how implementation works but due Jakarta-RS API
  * limitations, we are only given annotations associated, and that
  * has to do.
  *<p>
- * NOTE: not yet used by JAX-RS provider, directly, as of Jackson 2.9
+ * NOTE: not yet used by Jakarta-RS provider, directly, as of Jackson 2.13
  */
 public class EndpointAsBeanProperty
     extends BeanProperty.Std
 {
     private static final long serialVersionUID = 1L;
 
-    public final static PropertyName ENDPOINT_NAME = new PropertyName("JAX-RS/endpoint");
+    public final static PropertyName ENDPOINT_NAME = new PropertyName("Jakarta-RS/endpoint");
 
     private final static AnnotationMap NO_ANNOTATIONS = new AnnotationMap();
 

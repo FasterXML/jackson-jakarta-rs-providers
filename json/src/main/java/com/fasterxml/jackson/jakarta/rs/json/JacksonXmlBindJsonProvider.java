@@ -11,15 +11,15 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
  * JSON content type provider automatically configured to use both Jackson
- * and JAXB annotations (in that order of priority). Otherwise functionally
+ * and Jakarta XmlBind annotations (in that order of priority). Otherwise functionally
  * same as {@link JacksonJsonProvider}.
  *<p>
  * Typical usage pattern is to just instantiate instance of this
- * provider for JAX-RS and use as is: this will use both Jackson and
- * JAXB annotations (with Jackson annotations having priority).
+ * provider for Jakarta-RS and use as is: this will use both Jackson and
+ * Jakarta XmlBind annotations (with Jackson annotations having priority).
  *<p>
  * Note: class annotations are duplicated from super class, since it
- * is not clear whether JAX-RS implementations are required to
+ * is not clear whether Jakarta-RS implementations are required to
  * check settings of super-classes. It is important to keep annotations
  * in sync if changed.
  */
@@ -31,7 +31,7 @@ public class JacksonXmlBindJsonProvider extends JacksonJsonProvider
     /**
      * Default annotation sets to use, if not explicitly defined during
      * construction: use Jackson annotations if found; if not, use
-     * JAXB annotations as fallback.
+     * XmlBind annotations as fallback.
      */
     public final static Annotations[] DEFAULT_ANNOTATIONS = {
         Annotations.JACKSON, Annotations.JAKARTA_XML_BIND
@@ -39,7 +39,7 @@ public class JacksonXmlBindJsonProvider extends JacksonJsonProvider
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with JAX-RS implementation.
+     * configured to be used with Jakarta-RS implementation.
      */
     public JacksonXmlBindJsonProvider()
     {

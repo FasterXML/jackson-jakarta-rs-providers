@@ -5,12 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/* Note: applicable to annotations to allow bundling (if support added
- * to JAX-RS bundle itself), as well as methods to indicate that return
+/**
+ * Note: applicable to annotations to allow bundling (if support added
+ * to Jakarta-RS bundle itself), as well as methods to indicate that return
  * type is to be wrapped.
  * Other types are not allowed, since there is no current usage for those;
  * input can't be wrapped (so no need for parameters); fields are not
- * exposed through JAX-RS; and we do not allow 'default wrapping' for
+ * exposed through Jakarta-RS; and we do not allow 'default wrapping' for
  * types.
  *<p>
  * Note on properties: if either {@link #prefix()} or {@link #suffix()}

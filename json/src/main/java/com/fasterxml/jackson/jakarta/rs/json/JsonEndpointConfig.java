@@ -12,7 +12,7 @@ import com.fasterxml.jackson.jakarta.rs.json.annotation.JSONP;
 
 /**
  * Container class for figuring out annotation-based configuration
- * for JAX-RS end points.
+ * for Jakarta-RS end points.
  */
 public class JsonEndpointConfig
     extends EndpointConfigBase<JsonEndpointConfig>

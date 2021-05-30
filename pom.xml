@@ -19,10 +19,8 @@
     <module>cbor</module>
     <module>json</module>
     <module>smile</module>
-<!--
-    <module>xml</module>
     <module>yaml</module>
--->
+    <module>xml</module>
   </modules>
   <url>http://github.com/FasterXML/jackson-jakarta-rs-providers</url>    
   <scm>

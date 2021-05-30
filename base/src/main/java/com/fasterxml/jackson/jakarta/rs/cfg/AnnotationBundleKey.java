@@ -6,9 +6,7 @@ import java.lang.annotation.Annotation;
  * Helper class used to allow efficient caching of information,
  * given a sequence of Annotations.
  * This is mostly used for reusing introspected information on
- * JAX-RS end points.
- *
- * @since 2.2
+ * Jakarta-RS end points.
  */
 public final class AnnotationBundleKey
 {

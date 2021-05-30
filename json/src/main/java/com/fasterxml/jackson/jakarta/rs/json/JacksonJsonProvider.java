@@ -12,7 +12,7 @@ import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
- * Basic implementation of JAX-RS abstractions ({@link MessageBodyReader},
+ * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
  * {@link MessageBodyWriter}) needed for binding
  * JSON ("application/json") content to and from Java Objects ("POJO"s).
  *<p>
@@ -21,13 +21,13 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * <ul>
  *  <li>By explicitly passing mapper to use in constructor
  *  <li>By explictly setting mapper to use by {@link #setMapper}
- *  <li>By defining JAX-RS <code>Provider</code> that returns {@link ObjectMapper}s.
+ *  <li>By defining Jakarta-RS <code>Provider</code> that returns {@link ObjectMapper}s.
  *  <li>By doing none of above, in which case a default mapper instance is
  *     constructed (and configured if configuration methods are called)
  * </ul>
  * The last method ("do nothing specific") is often good enough; explicit passing
  * of Mapper is simple and explicit; and Provider-based method may make sense
- * with Depedency Injection frameworks, or if Mapper has to be configured differently
+ * with Dependency Injection frameworks, or if Mapper has to be configured differently
  * for different media types.
  *<p>
  * Note that the default mapper instance will be automatically created if
@@ -35,9 +35,9 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * is called: if so, Provider-based introspection is <b>NOT</b> used, but the
  * resulting Mapper is used as configured.
  *<p>
- * Note: version 1.3 added a sub-class ({@link JacksonXmlBindJsonProvider}) which
- * is configured by default to use both Jackson and JAXB annotations for configuration
- * (base class when used as-is defaults to using just Jackson annotations)
+ * There is also ({@link JacksonXmlBindJsonProvider}) which
+ * is configured by default to use both Jackson and Jakarta XmlBin annotations
+ * for configuration (base class when used as-is defaults to using just Jackson annotations)
  *
  * @author Tatu Saloranta
  */
@@ -98,7 +98,7 @@ public class JacksonJsonProvider
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with JAX-RS implementation.
+     * configured to be used with Jakarta-RS implementation.
      */
     public JacksonJsonProvider() {
         this(null, BASIC_ANNOTATIONS);

@@ -16,7 +16,7 @@ import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
- * Basic implementation of JAX-RS abstractions ({@link MessageBodyReader},
+ * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
  * {@link MessageBodyWriter}) needed for binding
  * Smile ("application/x-jackson-smile") content to and from Java Objects ("POJO"s).
  *<p>
@@ -25,13 +25,13 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * <ul>
  *  <li>By explicitly passing mapper to use in constructor
  *  <li>By explictly setting mapper to use by {@link #setMapper}
- *  <li>By defining JAX-RS <code>Provider</code> that returns {@link ObjectMapper}s.
+ *  <li>By defining Jakarta-RS <code>Provider</code> that returns {@link ObjectMapper}s.
  *  <li>By doing none of above, in which case a default mapper instance is
  *     constructed (and configured if configuration methods are called)
  * </ul>
  * The last method ("do nothing specific") is often good enough; explicit passing
  * of Mapper is simple and explicit; and Provider-based method may make sense
- * with Depedency Injection frameworks, or if Mapper has to be configured differently
+ * with Dependency Injection frameworks, or if Mapper has to be configured differently
  * for different media types.
  *<p>
  * Note that the default mapper instance will be automatically created if
@@ -40,7 +40,7 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * resulting Mapper is used as configured.
  *<p>
  * Note that there is also a sub-class -- ({@link JacksonXmlBindSmileProvider}) -- that
- * is configured by default to use both Jackson and JAXB annotations for configuration
+ * is configured by default to use both Jackson and Jakarta XmlBind annotations for configuration
  * (base class when used as-is defaults to using just Jackson annotations)
  *
  * @author Tatu Saloranta
@@ -86,7 +86,7 @@ extends ProviderBase<JacksonSmileProvider,
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with JAX-RS implementation.
+     * configured to be used with Jakarta-RS implementation.
      */
     public JacksonSmileProvider() {
         this(null, BASIC_ANNOTATIONS);
@@ -111,7 +111,7 @@ extends ProviderBase<JacksonSmileProvider,
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      * 
-     * @param annotationsToUse Sets of annotations (Jackson, JAXB) that provider should
+     * @param annotationsToUse Sets of annotations (Jackson, XmlBind) that provider should
      *   support
      */
     public JacksonSmileProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
@@ -167,9 +167,9 @@ extends ProviderBase<JacksonSmileProvider,
      * and deserialization. If an instance has been explicitly defined by
      * {@link #setMapper} (or non-null instance passed in constructor), that
      * will be used. 
-     * If not, will try to locate it using standard JAX-RS
+     * If not, will try to locate it using standard Jakarta-RS
      * {@link ContextResolver} mechanism, if it has been properly configured
-     * to access it (by JAX-RS runtime).
+     * to access it (by Jakarta-RS runtime).
      * Finally, if no mapper is found, will return a default unconfigured
      * {@link ObjectMapper} instance (one constructed with default constructor
      * and not modified in any way)

@@ -11,15 +11,12 @@ import com.fasterxml.jackson.jakarta.rs.annotation.JacksonFeatures;
 
 /**
  * Container class for figuring out annotation-based configuration
- * for JAX-RS end points.
+ * for Jakarta-RS end points.
  */
 public abstract class EndpointConfigBase<THIS extends EndpointConfigBase<THIS>>
 {
     // // General configuration
 
-    /**
-     * @since 2.6
-     */
     protected final MapperConfig<?> _config;
 
     protected Class<?> _activeView;

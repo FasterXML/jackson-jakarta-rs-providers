@@ -9,7 +9,7 @@ import com.fasterxml.jackson.jakarta.rs.cfg.EndpointConfigBase;
 
 /**
  * Container class for figuring out annotation-based configuration
- * for JAX-RS end points.
+ * for Jakarta-RS end points.
  */
 public class SmileEndpointConfig
     extends EndpointConfigBase<SmileEndpointConfig>

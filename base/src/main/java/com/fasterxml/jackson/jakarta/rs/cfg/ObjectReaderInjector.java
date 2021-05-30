@@ -5,14 +5,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.fasterxml.jackson.databind.*;
 
 /**
- * Based on ideas from [Issue#32], this class allows registering a
+ * This class allows registering a
  * modifier ({@link ObjectReaderModifier}) that can be used to
  * reconfigure {@link ObjectReader}
- * that JAX-RS Resource will use for reading input into Java Objects.
- * Usually this class is accessed from a Servlet or JAX-RS filter
+ * that Jakarta-RS Resource will use for reading input into Java Objects.
+ * Usually this class is accessed from a Servlet or Jakarta-RS filter
  * before execution reaches resource.
- * 
- * @since 2.3
  */
 public class ObjectReaderInjector
 {
