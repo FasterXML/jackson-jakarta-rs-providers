@@ -15,12 +15,6 @@ import com.fasterxml.jackson.jakarta.rs.cfg.EndpointConfigBase;
 public class YAMLEndpointConfig
         extends EndpointConfigBase<YAMLEndpointConfig>
 {
-    /*
-    /**********************************************************
-    /* Construction
-    /**********************************************************
-     */
-
     protected YAMLEndpointConfig(MapperConfig<?> config) {
         super(config);
     }
@@ -37,7 +31,7 @@ public class YAMLEndpointConfig
         return new YAMLEndpointConfig(writer.getConfig())
                 .add(annotations, true)
                 .initWriter(writer)
-                ;
+        ;
     }
 
     @Override

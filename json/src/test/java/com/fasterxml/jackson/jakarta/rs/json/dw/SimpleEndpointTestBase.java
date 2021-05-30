@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 public abstract class SimpleEndpointTestBase extends ResourceTestBase
@@ -356,7 +356,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testStandardJson() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new JsonMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
 
@@ -375,7 +375,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testAcceptJavascriptType() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new JsonMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         URL urlJS = new URL("http://localhost:"+TEST_PORT+"/point/javascript");
         URL urlJsonX = new URL("http://localhost:"+TEST_PORT+"/point/jsonx");
@@ -451,7 +451,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testMappingIterator() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new JsonMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
 
@@ -535,7 +535,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public void testDynamicTypingSingle() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new JsonMapper();
         Server server = startServer(TEST_PORT, SimpleDynamicTypingApp.class);
         ExtendedPoint p;
 
@@ -556,7 +556,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     // for [#60], problems with non-polymorphic Lists
     public void testDynamicTypingList() throws Exception
     {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new JsonMapper();
         Server server = startServer(TEST_PORT, SimpleDynamicTypingApp.class);
         List<ExtendedPoint> l;
 

@@ -60,7 +60,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
             prov.writeTo(bean, bean.getClass(), bean.getClass(), new Annotation[] { feats },
                     MediaType.APPLICATION_JSON_TYPE, null, out);
         } catch (Exception e) {
-            throw unwrap(e);
+            throw _unwrap(e);
         }
 
         assertEquals("---\nBean:\n  a: 3\n", out.toString("UTF-8"));
@@ -112,5 +112,11 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
             verifyException(e, "Unrecognized field");
         }
     }
-    
+
+    protected Exception _unwrap(Exception e) {
+        while (e.getCause() instanceof Exception) {
+            e = (Exception) e.getCause();
+        }
+        return e;
+    }
 }

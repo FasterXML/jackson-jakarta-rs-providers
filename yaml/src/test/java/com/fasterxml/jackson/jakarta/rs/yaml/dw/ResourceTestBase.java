@@ -48,19 +48,19 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
             super(resource, new JacksonYAMLProvider());
         }
     }
-    
+
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Abstract and overridable config methods
-    /**********************************************************
+    /**********************************************************************
      */
 
     protected abstract Class<? extends Servlet> servletContainerClass();
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Starting actual JAX-RS container
-    /**********************************************************
+    /**********************************************************************
      */
     
     protected Server startServer(int port, Class<? extends Application> appClass) {
@@ -74,7 +74,7 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         server.setHandler(contexts);
         ServletHolder servlets = new ServletHolder(servletContainerClass());
-        servlets.setInitParameter("servlets.ws.rs.Application", appClass.getName());
+        servlets.setInitParameter("jakarta.ws.rs.Application", appClass.getName());
         final ServletContextHandler mainHandler = new ServletContextHandler(contexts, "/", true, false);
         mainHandler.addServlet(servlets, "/*");
 

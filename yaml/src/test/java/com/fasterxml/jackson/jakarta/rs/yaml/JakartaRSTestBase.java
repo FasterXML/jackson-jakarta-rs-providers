@@ -3,6 +3,7 @@ package com.fasterxml.jackson.jakarta.rs.yaml;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import jakarta.ws.rs.core.MediaType;
@@ -59,6 +60,18 @@ public abstract class JakartaRSTestBase
         return '"'+str+'"';
     }
 
+    protected String a2q(String json) {
+        return json.replace("'", "\"");
+    }
+
+    protected String readUTF8(InputStream in) throws IOException {
+        return readUTF8(in, Integer.MAX_VALUE);
+    }
+
+    protected String readUTF8(InputStream in, int maxLen) throws IOException {
+        return asUTF8(readAll(in), maxLen);
+    }
+
     protected byte[] readAll(InputStream in) throws IOException
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream(100);
@@ -72,10 +85,15 @@ public abstract class JakartaRSTestBase
         return bytes.toByteArray();
     }
 
-    protected Exception unwrap(Exception e) {
-        while (e.getCause() instanceof Exception) {
-            e = (Exception) e.getCause();
+    protected String asUTF8(byte[] input) {
+        return asUTF8(input, Integer.MAX_VALUE);
+    }
+
+    protected String asUTF8(byte[] input, int maxLen) {
+        final String str = new String(input, StandardCharsets.UTF_8);
+        if (str.length() < maxLen) {
+            return str;
         }
-        return e;
+        return str.substring(0, maxLen) + "[TRUNCATED...]";
     }
 }

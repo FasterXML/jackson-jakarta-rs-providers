@@ -26,8 +26,8 @@ import com.fasterxml.jackson.jakarta.rs.smile.SmileMediaTypes;
 
 public abstract class SimpleEndpointTestBase extends ResourceTestBase
 {
-    final static int TEST_PORT = 6011;
-    
+    final private static int TEST_PORT = 6011;
+
     static class Point {
         public int x, y;
 
@@ -111,13 +111,11 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
         String yaml = null;
+        final URL url = new URL("http://localhost:" + TEST_PORT + "/point");
 
         try {
-            URL url = new URL("http://localhost:" + TEST_PORT + "/point");
-            InputStream in = url.openStream();
-            byte[] bytes = readAll(in);
-            in.close();
-            yaml = new String(bytes, "UTF-8");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            yaml = _verifyAndReadResponse(conn);
             p = mapper.readValue(yaml, Point.class);
         } finally {
             server.stop();
@@ -263,4 +261,22 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             server.stop();
         }
     }
+
+    protected String _verifyAndReadResponse(HttpURLConnection conn) throws IOException {
+        int status = conn.getResponseCode();
+        if (status >= 200 && status <= 299) {
+            return readUTF8(conn.getInputStream());
+        }
+        // But otherwise, try to get fail...
+        try {
+            byte[] failBytes = readAll(conn.getErrorStream());
+            fail("Call failed with status code "+status+", problem: ("+failBytes.length+" bytes) "
+                    +asUTF8(failBytes, 2000));
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read error content for status code "
+                    +status+": "+e, e);
+        }
+    }
+
 }
