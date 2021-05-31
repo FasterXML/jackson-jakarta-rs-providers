@@ -65,6 +65,18 @@ In addition there are format-specific annotations that may be used:
 * JSON has:
     * `com.fasterxml.jackson.jakarta.rs.json.annotation.JSONP` to define `JSONP` wrapping for serialized result
 
+## Support
+
+### Community support
+
+Jackson components are supported by the Jackson community through mailing lists, Gitter forum, Github issues. See [Participation, Contributing](../../../jackson#participation-contributing) for full details.
+
+### Enterprise support
+
+Support may be added via Tidelift Subscription model, if there is enough interest.
+
+-----
+
 ## Other
 
 For documentation, downloads links, check out [Wiki](../../wiki)
