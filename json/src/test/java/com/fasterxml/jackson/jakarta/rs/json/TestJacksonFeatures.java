@@ -9,8 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import com.fasterxml.jackson.jakarta.rs.annotation.JacksonFeatures;
 
@@ -102,8 +102,8 @@ public class TestJacksonFeatures extends JakartaRSTestBase
                     MediaType.APPLICATION_JSON_TYPE, null,
                     new ByteArrayInputStream("{ \"foobar\" : 3 }".getBytes("UTF-8")));
             fail("Should have caught an exception");
-        } catch (JsonMappingException e) {
-            verifyException(e, "Unrecognized field");
+        } catch (UnrecognizedPropertyException e) {
+            verifyException(e, "Unrecognized property");
         }
     }
     

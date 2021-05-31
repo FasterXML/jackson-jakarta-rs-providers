@@ -199,26 +199,4 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
         // anything else?
         return mapperBuilder;
     }
-
-    /*
-    protected AnnotationIntrospector _resolveIntrospectors(Annotations[] annotationsToUse)
-    {
-        // Let's ensure there are no dups there first, filter out nulls
-        ArrayList<AnnotationIntrospector> intr = new ArrayList<AnnotationIntrospector>();
-        for (Annotations a : annotationsToUse) {
-            if (a != null) {
-                intr.add(_resolveIntrospector(a));
-            }
-        }
-        int count = intr.size();
-        if (count == 0) {
-            return AnnotationIntrospector.nopInstance();
-        }
-        AnnotationIntrospector curr = intr.get(0);
-        for (int i = 1, len = intr.size(); i < len; ++i) {
-            curr = AnnotationIntrospector.pair(curr, intr.get(i));
-        }
-        return curr;
-    }
-    */
 }

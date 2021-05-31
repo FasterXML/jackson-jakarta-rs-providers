@@ -5,8 +5,11 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.Provider;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+
+import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
+
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 /**
  * JSON content type provider automatically configured to use both Jackson
@@ -28,39 +31,31 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
 {
     /**
-     * Default annotation sets to use, if not explicitly defined during
-     * construction: use Jackson annotations if found; if not, use
-     * XmlBind annotations as fallback.
-     */
-    public final static Annotations[] DEFAULT_ANNOTATIONS = {
-        Annotations.JACKSON, Annotations.JAKARTA_XML_BIND
-    };
-
-    /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with Jakarta-RS implementation.
+     * configured to be used with JAX-RS implementation.
      */
     public JacksonXmlBindCBORProvider()
     {
-        this(null, DEFAULT_ANNOTATIONS);
+        this(null, JaxbHolder.get());
     }
 
-    /**
-     * @param annotationsToUse Annotation set(s) to use for configuring
-     * data binding
-     */
-    public JacksonXmlBindCBORProvider(Annotations... annotationsToUse)
-    {
-        this(null, annotationsToUse);
-    }
-    
     /**
      * Constructor to use when a custom mapper (usually components
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      */
-    public JacksonXmlBindCBORProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
+    public JacksonXmlBindCBORProvider(CBORMapper mapper,
+            AnnotationIntrospector aiOverride)
     {
-        super(mapper, annotationsToUse);
+        super(mapper, aiOverride);
     }
+
+    // Silly class to encapsulate reference to JAXB introspector class so that
+    // loading of parent class does not require it; only happens if and when
+    // introspector needed
+    private static class JaxbHolder {
+        public static AnnotationIntrospector get() {
+            return new JakartaXmlBindAnnotationIntrospector();
+        }
+    }   
 }

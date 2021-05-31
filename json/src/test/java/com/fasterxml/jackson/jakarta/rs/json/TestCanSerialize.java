@@ -5,12 +5,12 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import com.fasterxml.jackson.databind.DefaultTyping;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
-/**
- * Unit test to check [JACKSON-540]
- */
+import com.fasterxml.jackson.jakarta.rs.json.testutil.NoCheckSubTypeValidator;
+
 public class TestCanSerialize extends JakartaRSTestBase
 {
     static class Simple {
@@ -23,8 +23,8 @@ public class TestCanSerialize extends JakartaRSTestBase
     public void testCanSerialize() throws IOException
     {
         ObjectMapper mapper = JsonMapper.builder()
-                .activateDefaultTyping(new NoCheckSubTypeValidator(),
-                        ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY)
+                .activateDefaultTyping(NoCheckSubTypeValidator.instance,
+                        DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY)
                 .build();
     
         // construct test object
@@ -34,10 +34,6 @@ public class TestCanSerialize extends JakartaRSTestBase
     
         Simple s = new Simple();
         s.setList(l);
-
-        // this is fine:
-        boolean can = mapper.canSerialize(Simple.class);
-        assertTrue(can);
 
         // but with problem of [JACKSON-540], we get nasty surprise here...
         String json = mapper.writeValueAsString(s);

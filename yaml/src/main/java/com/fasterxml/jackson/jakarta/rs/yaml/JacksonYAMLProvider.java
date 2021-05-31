@@ -11,14 +11,16 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.*;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.core.exc.WrappedIOException;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
-import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -55,20 +57,12 @@ public class JacksonYAMLProvider
         extends ProviderBase<JacksonYAMLProvider,
         YAMLMapper,
         YAMLEndpointConfig,
-        YAMLMapperConfigurator> {
-    /**
-     * Default annotation sets to use, if not explicitly defined during
-     * construction: only Jackson annotations are used for the base
-     * class. Sub-classes can use other settings.
-     */
-    public final static Annotations[] BASIC_ANNOTATIONS = {
-            Annotations.JACKSON
-    };
-    
+        YAMLMapperConfigurator>
+{
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Context configuration
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
@@ -80,29 +74,21 @@ public class JacksonYAMLProvider
     protected Providers _providers;
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Construction
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with Jakarta-RS implementation.
+     * configured to be used with JAX-RS implementation.
      */
     public JacksonYAMLProvider() {
-        this(null, BASIC_ANNOTATIONS);
-    }
-
-    /**
-     * @param annotationsToUse Annotation set(s) to use for configuring
-     *                         data binding
-     */
-    public JacksonYAMLProvider(Annotations... annotationsToUse) {
-        this(null, annotationsToUse);
+        this(null, null);
     }
 
     public JacksonYAMLProvider(YAMLMapper mapper) {
-        this(mapper, BASIC_ANNOTATIONS);
+        this(mapper, null);
     }
 
     /**
@@ -110,11 +96,11 @@ public class JacksonYAMLProvider
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      *
-     * @param annotationsToUse Sets of annotations (Jackson, XmlBind) that provider should
-     *                         support
+     * @param aiOverride AnnotationIntrospector to override default with, if any
      */
-    public JacksonYAMLProvider(YAMLMapper mapper, Annotations[] annotationsToUse) {
-        super(new YAMLMapperConfigurator(mapper, annotationsToUse));
+    public JacksonYAMLProvider(YAMLMapper mapper,
+            AnnotationIntrospector aiOverride) {
+        super(new YAMLMapperConfigurator(mapper, aiOverride));
     }
 
     /**
@@ -127,20 +113,20 @@ public class JacksonYAMLProvider
     }
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Abstract method impls
-    /**********************************************************
+    /**********************************************************************
      */
 
     @Override
     protected YAMLEndpointConfig _configForReading(ObjectReader reader,
-                                                  Annotation[] annotations) {
+            Annotation[] annotations) {
         return YAMLEndpointConfig.forReading(reader, annotations);
     }
 
     @Override
     protected YAMLEndpointConfig _configForWriting(ObjectWriter writer,
-                                                  Annotation[] annotations) {
+            Annotation[] annotations) {
         return YAMLEndpointConfig.forWriting(writer, annotations);
     }
 
@@ -175,9 +161,9 @@ public class JacksonYAMLProvider
      * and deserialization. If an instance has been explicitly defined by
      * {@link #setMapper} (or non-null instance passed in constructor), that
      * will be used.
-     * If not, will try to locate it using standard Jakarta-RS
+     * If not, will try to locate it using standard JAX-RS
      * {@link ContextResolver} mechanism, if it has been properly configured
-     * to access it (by Jakarta-RS runtime).
+     * to access it (by JAX-RS runtime).
      * Finally, if no mapper is found, will return a default unconfigured
      * {@link ObjectMapper} instance (one constructed with default constructor
      * and not modified in any way)
@@ -198,11 +184,10 @@ public class JacksonYAMLProvider
             // If not, maybe we can get one configured via context?
             if (_providers != null) {
                 ContextResolver<YAMLMapper> resolver = _providers.getContextResolver(YAMLMapper.class, mediaType);
-                /* Above should work as is, but due to this bug
-                 *   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
-                 * in Jersey, it doesn't. But this works until resolution of
-                 * the issue:
-                 */
+                // Above should work as is, but due to this bug
+                //   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
+                // in Jersey, it doesn't. But this works until resolution of
+                // the issue:
                 if (resolver == null) {
                     resolver = _providers.getContextResolver(YAMLMapper.class, null);
                 }
@@ -219,21 +204,26 @@ public class JacksonYAMLProvider
     }
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Overrides
-    /**********************************************************
+    /**********************************************************************
      */
 
     @Override
     protected JsonParser _createParser(ObjectReader reader, InputStream rawStream)
-            throws IOException {
+        throws JacksonException
+    {
         // Fix for [Issue#4]: note, can not try to advance parser, XML parser complains
-        PushbackInputStream wrappedStream = new PushbackInputStream(rawStream);
-        int firstByte = wrappedStream.read();
-        if (firstByte == -1) {
-            return null;
+        try {
+            PushbackInputStream wrappedStream = new PushbackInputStream(rawStream);
+            int firstByte = wrappedStream.read();
+            if (firstByte == -1) {
+                return null;
+            }
+            wrappedStream.unread(firstByte);
+            return reader.createParser(wrappedStream);
+        } catch (IOException e) {
+            throw WrappedIOException.construct(e);
         }
-        wrappedStream.unread(firstByte);
-        return reader.getFactory().createParser(wrappedStream);
     }
 }

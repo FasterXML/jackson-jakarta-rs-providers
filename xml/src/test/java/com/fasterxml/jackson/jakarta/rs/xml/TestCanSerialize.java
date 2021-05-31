@@ -1,44 +1,33 @@
 package com.fasterxml.jackson.jakarta.rs.xml;
 
 import java.io.*;
-import java.util.*;
+import java.lang.annotation.Annotation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import jakarta.ws.rs.core.MediaType;
 
-/**
- * Unit test to check [JACKSON-540]
- */
 public class TestCanSerialize extends JakartaRSTestBase
 {
-    static class Simple {
-        protected List<String> list;
-
-        public List<String> getList( ) { return list; }
-        public void setList(List<String> l) { list = l; }
+    static class Bean {
+        public int x;
+    }
+    
+    public void testCanDeserialize() throws IOException
+    {
+        JacksonXMLProvider prov = new JacksonXMLProvider();
+        String XML = "<Bean><x>3</x></Bean>";
+        InputStream stream = new ByteArrayInputStream(XML.getBytes());
+        Bean b = (Bean) prov.readFrom(Object.class, Bean.class, new Annotation[0],
+                MediaType.APPLICATION_XML_TYPE, null, stream);
+        assertNotNull(b);
+        assertEquals(3, b.x);
     }
 
-    public void testCanSerialize() throws IOException
+    // [Issue#4]: exception for no content
+    public void testCanDeserializeEmpty() throws IOException
     {
-        ObjectMapper mapper = new JsonMapper();
-    
-        // construct test object
-        List<String> l = new ArrayList<String>();
-        l.add("foo");
-        l.add("bar");
-    
-        Simple s = new Simple();
-        s.setList(l);
-
-        // this is fine:
-        boolean can = mapper.canSerialize(Simple.class);
-        assertTrue(can);
-
-        // but with problem of [JACKSON-540], we get nasty surprise here...
-        String json = mapper.writeValueAsString(s);
-        
-        Simple result = mapper.readValue(json, Simple.class);
-        assertNotNull(result.list);
-        assertEquals(2, result.list.size());
+        JacksonXMLProvider prov = new JacksonXMLProvider();
+        Bean b = (Bean) prov.readFrom(Object.class, Bean.class, new Annotation[0],
+                MediaType.APPLICATION_XML_TYPE, null, new ByteArrayInputStream(new byte[0]));
+        assertNull(b);
     }
 }

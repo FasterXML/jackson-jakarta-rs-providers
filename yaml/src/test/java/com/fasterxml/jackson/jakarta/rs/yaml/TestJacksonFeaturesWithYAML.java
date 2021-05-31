@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 import jakarta.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
-import com.fasterxml.jackson.databind.DatabindException;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import com.fasterxml.jackson.jakarta.rs.annotation.JacksonFeatures;
 
@@ -41,12 +41,11 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
     public void writeConfig2() { }
     
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Test methods
-    /**********************************************************
+    /**********************************************************************
      */
 
-    // [Issue-2], serialization
     public void testWriteConfigs() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
@@ -83,8 +82,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
 
         assertEquals("---\nBean:\n  a: 3\n", out.toString("UTF-8"));
     }
-    
-    // [Issue-2], deserialization
+
     public void testReadConfigs() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
@@ -108,8 +106,8 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
                     MediaType.APPLICATION_JSON_TYPE, null,
                     new ByteArrayInputStream("---\nBean:\n  foobar: 3\n".getBytes("UTF-8")));
             fail("Should have caught an exception");
-        } catch (DatabindException e) {
-            verifyException(e, "Unrecognized field");
+        } catch (UnrecognizedPropertyException e) {
+            verifyException(e, "Unrecognized property \"Bean\"");
         }
     }
 

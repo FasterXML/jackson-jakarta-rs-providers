@@ -9,8 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import com.fasterxml.jackson.jakarta.rs.annotation.JacksonFeatures;
 
@@ -40,12 +40,11 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
     public void writeConfig2() { }
     
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Test methods
-    /**********************************************************
+    /**********************************************************************
      */
 
-    // [Issue-2], serialization
     public void testWriteConfigs() throws Exception
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();
@@ -55,18 +54,15 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
         JacksonFeatures feats = m.getAnnotation(JacksonFeatures.class);
         assertNotNull(feats); // just a sanity check
 
-        /* 09-Oct-2013, tatu: As of 2.3, XML backend does NOT add extra wrapping
-         *   any more: it is only added to JSON where it is needed; but not
-         *   to XML which always basically uses wrapping.
-         */
+        // 09-Oct-2013, tatu: As of 2.3, XML backend does NOT add extra wrapping
+        //   any more: it is only added to JSON where it is needed; but not
+        //   to XML which always basically uses wrapping.
         try {
             prov.writeTo(bean, bean.getClass(), bean.getClass(), new Annotation[] { feats },
                     MediaType.APPLICATION_JSON_TYPE, null, out);
         } catch (Exception e) {
-            throw unwrap(e);
+            throw _unwrap(e);
         }
-
-        //
         assertEquals("<Bean><a>3</a></Bean>", out.toString("UTF-8"));
 
         // but without, not:
@@ -88,8 +84,7 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
         // as per above, no extra wrapping for XML, in 2.3:
         assertEquals("<Bean><a>3</a></Bean>", out.toString("UTF-8"));
     }
-    
-    // [Issue-2], deserialization
+
     public void testReadConfigs() throws Exception
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();
@@ -113,9 +108,15 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
                     MediaType.APPLICATION_JSON_TYPE, null,
                     new ByteArrayInputStream("<Bean><foobar>3</foobar></Bean>".getBytes("UTF-8")));
             fail("Should have caught an exception");
-        } catch (JsonMappingException e) {
-            verifyException(e, "Unrecognized field");
+        } catch (UnrecognizedPropertyException e) {
+            verifyException(e, "Unrecognized property \"foobar\"");
         }
     }
-    
+
+    protected Exception _unwrap(Exception e) {
+        while (e.getCause() instanceof Exception) {
+            e = (Exception) e.getCause();
+        }
+        return e;
+    }
 }

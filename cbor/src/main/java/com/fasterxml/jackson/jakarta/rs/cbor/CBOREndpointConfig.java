@@ -13,12 +13,6 @@ import com.fasterxml.jackson.jakarta.rs.cfg.EndpointConfigBase;
 public class CBOREndpointConfig
     extends EndpointConfigBase<CBOREndpointConfig>
 {
-    /*
-    /**********************************************************
-    /* Construction
-    /**********************************************************
-     */
-
     protected CBOREndpointConfig(MapperConfig<?> config) {
         super(config);
     }

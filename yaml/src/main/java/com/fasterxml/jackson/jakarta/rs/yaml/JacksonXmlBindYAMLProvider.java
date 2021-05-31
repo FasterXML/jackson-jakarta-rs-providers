@@ -1,12 +1,15 @@
 package com.fasterxml.jackson.jakarta.rs.yaml;
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.Provider;
+
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 /**
  * JSON content type provider automatically configured to use both Jackson
@@ -28,39 +31,28 @@ import jakarta.ws.rs.ext.Provider;
 public class JacksonXmlBindYAMLProvider extends JacksonYAMLProvider
 {
     /**
-     * Default annotation sets to use, if not explicitly defined during
-     * construction: use Jackson annotations if found; if not, use
-     * XmlBind annotations as fallback.
-     */
-    public final static Annotations[] DEFAULT_ANNOTATIONS = {
-        Annotations.JACKSON, Annotations.JAKARTA_XML_BIND
-    };
-
-    /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with Jakarta-RS implementation.
+     * configured to be used with JAX-RS implementation.
      */
-    public JacksonXmlBindYAMLProvider()
-    {
-        this(null, DEFAULT_ANNOTATIONS);
+    public JacksonXmlBindYAMLProvider() {
+        this(null, JaxbHolder.get());
     }
 
-    /**
-     * @param annotationsToUse Annotation set(s) to use for configuring
-     *    data binding
-     */
-    public JacksonXmlBindYAMLProvider(Annotations... annotationsToUse)
-    {
-        this(null, annotationsToUse);
-    }
-    
     /**
      * Constructor to use when a custom mapper (usually components
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      */
-    public JacksonXmlBindYAMLProvider(YAMLMapper mapper, Annotations[] annotationsToUse)
-    {
-        super(mapper, annotationsToUse);
+    public JacksonXmlBindYAMLProvider(YAMLMapper mapper, AnnotationIntrospector aiOverride) {
+        super(mapper, aiOverride);
+    }
+
+    // Silly class to encapsulate reference to JAXB introspector class so that
+    // loading of parent class does not require it; only happens if and when
+    // introspector needed
+    private static class JaxbHolder {
+        public static AnnotationIntrospector get() {
+            return new JakartaXmlBindAnnotationIntrospector();
+        }
     }
 }

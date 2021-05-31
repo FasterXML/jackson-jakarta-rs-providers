@@ -382,6 +382,9 @@ public abstract class ProviderBase<
         } else {
             r = mapper.reader();
         }
+        // 25-Jan-2020, tatu: Important: JAX-RS expects that the InputStream
+        //   is NOT closed by parser so...
+        r = r.without(StreamReadFeature.AUTO_CLOSE_SOURCE);
         return _configForReading(r, annotations);
     }
 
@@ -395,6 +398,9 @@ public abstract class ProviderBase<
         } else {
             w = mapper.writer();
         }
+        // 25-Jan-2020, tatu: Important: JAX-RS expects that the OutputStream
+        //   is NOT closed by generator so...
+        w = w.without(StreamWriteFeature.AUTO_CLOSE_TARGET);
         return _configForWriting(w, annotations);
     }
 

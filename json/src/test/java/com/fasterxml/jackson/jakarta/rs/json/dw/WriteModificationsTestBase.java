@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.MultivaluedMap;
 
 import org.eclipse.jetty.server.Server;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import com.fasterxml.jackson.jakarta.rs.cfg.EndpointConfigBase;
@@ -86,23 +85,22 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
         @Override
         public ObjectWriter modify(EndpointConfigBase<?> endpoint,
                 MultivaluedMap<String, Object> httpHeaders,
-                Object valueToWrite, ObjectWriter w, JsonGenerator g)
-            throws IOException
+                Object valueToWrite, ObjectWriter w)
         {
             if (_indent != null) {
                 if (_indent.booleanValue()) {
-                    g.useDefaultPrettyPrinter();
+                    w = w.withDefaultPrettyPrinter();
                 }
             } else {
                 if (doIndent) {
-                    g.useDefaultPrettyPrinter();
+                    w = w.withDefaultPrettyPrinter();
                 }
             }
             return w;
         }
     }
 
-    public static class InjectingFilter implements jakarta.servlet.Filter
+    public static class InjectingFilter implements Filter
     {
         @Override
         public void init(FilterConfig filterConfig) throws ServletException { }
@@ -120,11 +118,47 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
     }
     
     /*
-    /**********************************************************
-    /* Test methods
-    /**********************************************************
+    /**********************************************************************
+    /* Test methods, baseline
+    /**********************************************************************
      */
 
+    public void testNoIndentWithFilter() throws Exception
+    {
+        // We need a filter to inject modifier that enables
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class,
+                InjectingFilter.class);
+        final URL url = new URL("http://localhost:"+TEST_PORT+"/point");
+
+        try {
+            IndentingModifier.doIndent = false;
+            String json = readUTF8(url.openStream());
+            assertEquals(a2q("{'x':1,'y':2}"), json);
+        } finally {
+            server.stop();
+        }
+    }
+    
+    public void testNoIndentWithResource() throws Exception
+    {
+        // We need a filter to inject modifier that enables
+        Server server = startServer(TEST_PORT2, SimpleIndentingApp.class);
+        final String URL_BASE = "http://localhost:"+TEST_PORT2+"/point";
+
+        try {
+            String json = readUTF8(new URL(URL_BASE).openStream());
+            assertEquals(a2q("{'x':1,'y':2}"), json);
+        } finally {
+            server.stop();
+        }
+    }
+
+    /*
+    /**********************************************************************
+    /* Test methods, indenting
+    /**********************************************************************
+     */
+    
     /**
      * Test in which writer/generator modification is handled by
      * changing state from Servlet Filter.
@@ -137,14 +171,8 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
         final URL url = new URL("http://localhost:"+TEST_PORT+"/point");
 
         try {
-            // First, without indent:
-            IndentingModifier.doIndent = false;
-            String json = readUTF8(url.openStream());
-            assertEquals(a2q("{'x':1,'y':2}"), json);
-    
-            // and then with indentation
             IndentingModifier.doIndent = true;
-            json = readUTF8(url.openStream());
+            String json = readUTF8(url.openStream());
             assertEquals(a2q("{\n  'x' : 1,\n  'y' : 2\n}"), json);
         } finally {
             server.stop();
@@ -162,12 +190,7 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
         final String URL_BASE = "http://localhost:"+TEST_PORT2+"/point";
 
         try {
-            // First, without indent:
-            String json = readUTF8(new URL(URL_BASE).openStream());
-            assertEquals(a2q("{'x':1,'y':2}"), json);
-    
-            // and then with indentation
-            json = readUTF8(new URL(URL_BASE + "?indent=true").openStream());
+            String json = readUTF8(new URL(URL_BASE + "?indent=true").openStream());
             assertEquals(a2q("{\n  'x' : 1,\n  'y' : 2\n}"), json);
         } finally {
             server.stop();

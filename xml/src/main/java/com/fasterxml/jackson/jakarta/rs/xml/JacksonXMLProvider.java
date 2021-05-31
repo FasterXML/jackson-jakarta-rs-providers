@@ -9,10 +9,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.*;
 
 import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.exc.WrappedIOException;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlAnnotationIntrospector;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
-import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * mapper to use can be configured in multiple ways:
  * <ul>
  *  <li>By explicitly passing mapper to use in constructor
- *  <li>By explictly setting mapper to use by {@link #setMapper}
+ *  <li>By explicitly setting mapper to use by {@link #setMapper}
  *  <li>By defining Jakarta-RS <code>Provider</code> that returns {@link XmlMapper}s.
  *  <li>By doing none of above, in which case a default mapper instance is
  *     constructed (and configured if configuration methods are called)
@@ -54,19 +55,10 @@ public class JacksonXMLProvider
         XMLMapperConfigurator
 >
 {
-    /**
-     * Default annotation sets to use, if not explicitly defined during
-     * construction: only Jackson annotations are used for the base
-     * class. Sub-classes can use other settings.
-     */
-    public final static Annotations[] BASIC_ANNOTATIONS = {
-        Annotations.JACKSON
-    };
-    
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Context configuration
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
@@ -78,42 +70,28 @@ public class JacksonXMLProvider
     protected Providers _providers;
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Construction
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with Jakarta-RS implementation.
+     * configured to be used with JAX-RS implementation.
      */
     public JacksonXMLProvider() {
-        this(null, BASIC_ANNOTATIONS);
+        this(null, new JacksonXmlAnnotationIntrospector());
     }
 
-    /**
-     * @param annotationsToUse Annotation set(s) to use for configuring
-     *    data binding
-     */
-    public JacksonXMLProvider(Annotations... annotationsToUse)
-    {
-        this(null, annotationsToUse);
-    }
-
-    public JacksonXMLProvider(XmlMapper mapper) {
-        this(mapper, BASIC_ANNOTATIONS);
-    }
-    
     /**
      * Constructor to use when a custom mapper (usually components
      * like serializer/deserializer factories that have been configured)
      * is to be used.
      * 
-     * @param annotationsToUse Sets of annotations (Jackson, XmlBind) that provider should
-     *   support
+     * @param aiOverride AnnotationIntrospector to override default with, if any
      */
-    public JacksonXMLProvider(XmlMapper mapper, Annotations[] annotationsToUse) {
-        super(new XMLMapperConfigurator(mapper, annotationsToUse));
+    public JacksonXMLProvider(XmlMapper mapper, AnnotationIntrospector aiOverride) {
+        super(new XMLMapperConfigurator(mapper, aiOverride));
     }
 
     /**
@@ -126,9 +104,9 @@ public class JacksonXMLProvider
     }
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Abstract method impls
-    /**********************************************************
+    /**********************************************************************
      */
 
     @Override
@@ -175,9 +153,9 @@ public class JacksonXMLProvider
      * and deserialization. If an instance has been explicitly defined by
      * {@link #setMapper} (or non-null instance passed in constructor), that
      * will be used. 
-     * If not, will try to locate it using standard Jakarta-RS
+     * If not, will try to locate it using standard JAX-RS
      * {@link ContextResolver} mechanism, if it has been properly configured
-     * to access it (by Jakarta-RS runtime).
+     * to access it (by JAX-RS runtime).
      * Finally, if no mapper is found, will return a default unconfigured
      * {@link ObjectMapper} instance (one constructed with default constructor
      * and not modified in any way)
@@ -194,16 +172,14 @@ public class JacksonXMLProvider
     public XmlMapper _locateMapperViaProvider(Class<?> type, MediaType mediaType)
     {
         // First: were we configured with a specific instance?
-        XmlMapper m = _mapperConfig.getConfiguredMapper();
+        XmlMapper m = (XmlMapper) _mapperConfig.getConfiguredMapper();
         if (m == null) {
             // If not, maybe we can get one configured via context?
             if (_providers != null) {
                 ContextResolver<XmlMapper> resolver = _providers.getContextResolver(XmlMapper.class, mediaType);
-                /* Above should work as is, but due to this bug
-                 *   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
-                 * in Jersey, it doesn't. But this works until resolution of
-                 * the issue:
-                 */
+                // Above should work as is, but due to this bug
+                //   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
+                // in Jersey, it doesn't. But this works until resolution of the issue:
                 if (resolver == null) {
                     resolver = _providers.getContextResolver(XmlMapper.class, null);
                 }
@@ -220,22 +196,25 @@ public class JacksonXMLProvider
     }
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Overrides
-    /**********************************************************
+    /**********************************************************************
      */
 
     @Override
     protected JsonParser _createParser(ObjectReader reader, InputStream rawStream)
-        throws IOException
     {
         // Fix for [Issue#4]: note, can not try to advance parser, XML parser complains
-        PushbackInputStream wrappedStream = new PushbackInputStream(rawStream);
-        int firstByte = wrappedStream.read(); 
-        if (firstByte == -1) {
-            return null;
+        try {
+            PushbackInputStream wrappedStream = new PushbackInputStream(rawStream);
+            int firstByte = wrappedStream.read(); 
+            if (firstByte == -1) {
+                return null;
+            }
+            wrappedStream.unread(firstByte);
+            return reader.createParser(wrappedStream);
+        } catch (IOException e) {
+            throw WrappedIOException.construct(e);
         }
-        wrappedStream.unread(firstByte);
-        return reader.getFactory().createParser(wrappedStream);
     }
 }

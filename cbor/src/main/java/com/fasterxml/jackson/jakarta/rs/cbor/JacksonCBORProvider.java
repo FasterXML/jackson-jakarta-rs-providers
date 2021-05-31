@@ -7,11 +7,12 @@ import jakarta.ws.rs.core.*;
 import jakarta.ws.rs.ext.*;
 
 import com.fasterxml.jackson.core.*;
+
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+
+import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
 
 import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
-import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -48,24 +49,15 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 @Produces(MediaType.WILDCARD)
 public class JacksonCBORProvider
 extends ProviderBase<JacksonCBORProvider,
-    ObjectMapper,
+    CBORMapper,
     CBOREndpointConfig,
     CBORMapperConfigurator
 >
 {
-    /**
-     * Default annotation sets to use, if not explicitly defined during
-     * construction: only Jackson annotations are used for the base
-     * class. Sub-classes can use other settings.
-     */
-    public final static Annotations[] BASIC_ANNOTATIONS = {
-        Annotations.JACKSON
-    };
-
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Context configuration
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
@@ -77,44 +69,35 @@ extends ProviderBase<JacksonCBORProvider,
     protected Providers _providers;
 
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Construction
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
      * Default constructor, usually used when provider is automatically
-     * configured to be used with Jakarta-RS implementation.
+     * configured to be used with JAX-RS implementation.
      */
     public JacksonCBORProvider() {
-        this(null, BASIC_ANNOTATIONS);
+        this(null, null);
     }
 
-    /**
-     * @param annotationsToUse Annotation set(s) to use for configuring
-     *    data binding
-     */
-    public JacksonCBORProvider(Annotations... annotationsToUse)
+    public JacksonCBORProvider(CBORMapper mapper)
     {
-        this(null, annotationsToUse);
+        this(mapper, null);
     }
 
-    public JacksonCBORProvider(ObjectMapper mapper)
-    {
-        this(mapper, BASIC_ANNOTATIONS);
-    }
-    
     /**
      * Constructor to use when a custom mapper (usually components
      * like serializer/deserializer factories that have been configured)
      * is to be used.
-     * 
-     * @param annotationsToUse Sets of annotations (Jackson, XmlBind) that provider should
-     *   support
+     *
+     * @param aiOverride AnnotationIntrospector to override default with, if any
      */
-    public JacksonCBORProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
+    public JacksonCBORProvider(CBORMapper mapper,
+            AnnotationIntrospector aiOverride)
     {
-        super(new CBORMapperConfigurator(mapper, annotationsToUse));
+        super(new CBORMapperConfigurator(mapper, aiOverride));
     }
 
     /**
@@ -125,11 +108,11 @@ extends ProviderBase<JacksonCBORProvider,
     public Version version() {
         return PackageVersion.VERSION;
     }
-    
+
     /*
-    /**********************************************************
+    /**********************************************************************
     /* Abstract method impls
-    /**********************************************************
+    /**********************************************************************
      */
 
     /**
@@ -152,7 +135,7 @@ extends ProviderBase<JacksonCBORProvider,
             // Ok: there are also "xxx+smile" subtypes, which count as well
             String subtype = mediaType.getSubtype();
             return CBORMediaTypes.APPLICATION_JACKSON_CBOR_TYPE.getSubtype().equalsIgnoreCase(subtype) || 
-            		"cbor".equalsIgnoreCase(subtype) || subtype.endsWith("+cbor");
+                    "cbor".equalsIgnoreCase(subtype) || subtype.endsWith("+cbor");
         }
         /* Not sure if this can happen; but it seems reasonable
          * that we can at least produce smile without media type?
@@ -165,9 +148,9 @@ extends ProviderBase<JacksonCBORProvider,
      * and deserialization. If an instance has been explicitly defined by
      * {@link #setMapper} (or non-null instance passed in constructor), that
      * will be used. 
-     * If not, will try to locate it using standard Jakarta-RS
+     * If not, will try to locate it using standard JAX-RS
      * {@link ContextResolver} mechanism, if it has been properly configured
-     * to access it (by Jakarta-RS runtime).
+     * to access it (by JAX-RS runtime).
      * Finally, if no mapper is found, will return a default unconfigured
      * {@link ObjectMapper} instance (one constructed with default constructor
      * and not modified in any way)
@@ -181,27 +164,29 @@ extends ProviderBase<JacksonCBORProvider,
      *   but will be passed to {@link ContextResolver} as is.
      */
     @Override
-    protected ObjectMapper _locateMapperViaProvider(Class<?> type, MediaType mediaType)
+    protected CBORMapper _locateMapperViaProvider(Class<?> type, MediaType mediaType)
     {
-        if (_providers != null) {
-            ContextResolver<ObjectMapper> resolver = _providers.getContextResolver(ObjectMapper.class, mediaType);
-            /* Above should work as is, but due to this bug
-             *   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
-             * in Jersey, it doesn't. But this works until resolution of
-             * the issue:
-             */
-            if (resolver == null) {
-                resolver = _providers.getContextResolver(ObjectMapper.class, null);
-            }
-            if (resolver != null) {
-                ObjectMapper mapper = resolver.getContext(type);
-                // 07-Feb-2014, tatu: just in case, ensure we have correct type
-                if (mapper.getFactory() instanceof CBORFactory) {
-                    return mapper;
+        CBORMapper m = _mapperConfig.getConfiguredMapper();
+        if (m == null) {
+            if (_providers != null) {
+                ContextResolver<CBORMapper> resolver = _providers.getContextResolver(CBORMapper.class, mediaType);
+                // Above should work as is, but due to this bug
+                //   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
+                // in Jersey, it doesn't. But this works until resolution of
+                // the issue:
+                if (resolver == null) {
+                    resolver = _providers.getContextResolver(CBORMapper.class, null);
+                }
+                if (resolver != null) {
+                    m = resolver.getContext(type);
                 }
             }
+            if (m == null) {
+                // If not, let's get the fallback default instance
+                m = _mapperConfig.getDefaultMapper();
+            }
         }
-        return null;
+        return m;
     }
 
     @Override

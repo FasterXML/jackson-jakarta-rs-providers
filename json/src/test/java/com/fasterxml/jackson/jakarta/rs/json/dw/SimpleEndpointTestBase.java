@@ -22,18 +22,12 @@ import org.junit.Assert;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -86,34 +80,35 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 	@JsonAutoDetect(fieldVisibility = Visibility.ANY, creatorVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 	protected static class PageImpl<E> extends Page<E> {
 
-		protected static class JsonLinkSerializer extends JsonSerializer<Link>
+		protected static class JsonLinkSerializer extends ValueSerializer<Link>
 		{
 			static final String HREF_PROPERTY = "href";
 
 			@Override
-			public void serialize(Link link, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
-					throws IOException {
-				jsonGenerator.writeStartObject();
-				jsonGenerator.writeStringField(HREF_PROPERTY, link.getUri().toString());
+			public void serialize(Link link, JsonGenerator g, SerializerProvider serializerProvider)
+			        throws JacksonException
+			{
+				g.writeStartObject();
+				g.writeStringProperty(HREF_PROPERTY, link.getUri().toString());
 				for (Entry<String, String> entry : link.getParams().entrySet()) {
-					jsonGenerator.writeStringField(entry.getKey(), entry.getValue());
+					g.writeStringProperty(entry.getKey(), entry.getValue());
 				}
-				jsonGenerator.writeEndObject();
+				g.writeEndObject();
 			}
-
 		}
 
-		protected static class JsonLinkDeserializer extends JsonDeserializer<Link>
+		protected static class JsonLinkDeserializer extends ValueDeserializer<Link>
 		{
 			@Override
-			public Link deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-					throws IOException {
+			public Link deserialize(JsonParser p, DeserializationContext ctxt)
+			        throws JacksonException
+			{
 				Link link = null;
-				JsonNode jsonNode = jsonParser.getCodec().<JsonNode> readTree(jsonParser);
+				JsonNode jsonNode = ctxt.readTree(p);
 				JsonNode hrefJsonNode = jsonNode.get(JsonLinkSerializer.HREF_PROPERTY);
 				if (hrefJsonNode != null) {
 					Link.Builder linkBuilder = Link.fromUri(hrefJsonNode.asText());
-					Iterator<String> fieldNamesIterator = jsonNode.fieldNames();
+					Iterator<String> fieldNamesIterator = jsonNode.propertyNames();
 					while (fieldNamesIterator.hasNext()) {
 						String fieldName = fieldNamesIterator.next();
 						if (!JsonLinkSerializer.HREF_PROPERTY.equals(fieldName)) {

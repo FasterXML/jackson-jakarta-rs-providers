@@ -9,10 +9,11 @@ import java.util.List;
 import jakarta.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DefaultTyping;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+
+import com.fasterxml.jackson.jakarta.rs.json.testutil.NoCheckSubTypeValidator;
 
 /**
  * Unit test to check that ProviderBase always writes its content, even if flush-after-write is off.
@@ -28,11 +29,12 @@ public class TestSerializeWithoutAutoflush extends JakartaRSTestBase
 
     public void testCanSerialize() throws IOException
     {
-        ObjectMapper mapper = JsonMapper.builder()
-                .activateDefaultTyping(new NoCheckSubTypeValidator(),
-                        ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY)
+        JsonMapper mapper = JsonMapper.builder()
                 .disable(SerializationFeature.FLUSH_AFTER_WRITE_VALUE)
+                .activateDefaultTyping(NoCheckSubTypeValidator.instance,
+                        DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY)
                 .build();
+
         JacksonJsonProvider provider = new JacksonJsonProvider(mapper);
 
         // construct test object
