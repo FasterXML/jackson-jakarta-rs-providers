@@ -17,7 +17,7 @@ data formats. They also contain SPI settings for auto-registration.
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
 
 (*) NOTE: Jakarta-RS is the package under `jakarta.ws.rs`, replacing older JAX-RS which lived
-under `javax.ws.rs`. For JAX-RS variant, see repo [../../../jackson-jaxrs-providers](jackson-jaxrs-providers)
+under `javax.ws.rs`. For JAX-RS variant, see repo [jackson-jaxrs-providers](../../../jackson-jaxrs-providers)
 
 ## Status
 
