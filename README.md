@@ -9,7 +9,7 @@ for following data formats:
 * [XML](https://github.com/FasterXML/jackson-dataformat-xml)
 * [YAML](https://github.com/FasterXML/jackson-dataformat-yaml)
 
-Providers implement JAX-RS `MessageBodyReader` and `MessageBodyWriter` handlers for specific
+Providers implement Jakarta-RS `MessageBodyReader` and `MessageBodyWriter` handlers for specific
 data formats. They also contain SPI settings for auto-registration.
 
 [![Build Status](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers.svg?branch=master)](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers)
@@ -17,7 +17,8 @@ data formats. They also contain SPI settings for auto-registration.
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
 
 (*) NOTE: Jakarta-RS is the package under `jakarta.ws.rs`, replacing older JAX-RS which lived
-under `javax.ws.rs`. For JAX-RS variant, see repo [jackson-jaxrs-providers](../../../jackson-jaxrs-providers)
+under `javax.ws.rs`.
+For JAX-RS variant, see repo [jackson-jaxrs-providers](../../../jackson-jaxrs-providers)
 
 ## Status
 
@@ -25,7 +26,7 @@ Module is fully functional and considered mature.
 
 ## Maven dependency
 
-To use JAX-RS on Maven-based projects, use dependencies like:
+To use Jakarta-RS on Maven-based projects, use dependencies like:
 
 ```xml
 <dependency>
@@ -40,9 +41,9 @@ To use JAX-RS on Maven-based projects, use dependencies like:
 ## Usage: registering providers
 
 Due to auto-registration, it should be possible to simply add Maven dependency
-(or include jar if using other build systems) and let JAX-RS implementation discover
+(or include jar if using other build systems) and let Jakarta-RS implementation discover
 provider.
-If this does not work you need to consult documentation of the JAX-RS implementation for details.  
+If this does not work you need to consult documentation of the Jakarta-RS implementation for details.  
 
 To use Jackson with Jersey see [their documentation](https://jersey.github.io/documentation/latest/media.html#json.jackson).
 
