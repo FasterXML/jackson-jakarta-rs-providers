@@ -9,6 +9,6 @@ module com.fasterxml.jackson.jaxrs.base {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
 
-    requires static jakarta.ws.rs;
-    requires static jakarta.ws.rs.api;
+    requires transitive jakarta.ws.rs;
+    requires transitive jakarta.ws.rs.api;
 }
