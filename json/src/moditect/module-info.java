@@ -10,7 +10,7 @@ module com.fasterxml.jackson.jakarta.rs.json {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.module.jakarta.xmlbind;
 
-    requires com.fasterxml.jackson.jaxrs.base;
+    requires com.fasterxml.jackson.jakarta.rs.base;
 
     requires static jakarta.ws.rs;
     requires static jakarta.ws.rs.api;

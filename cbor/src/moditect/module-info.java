@@ -9,7 +9,7 @@ module com.fasterxml.jackson.jakarta.rs.cbor {
     requires com.fasterxml.jackson.dataformat.cbor;
     requires com.fasterxml.jackson.module.jakarta.xmlbind;
 
-    requires com.fasterxml.jackson.jaxrs.base;
+    requires com.fasterxml.jackson.jakarta.rs.base;
 
     requires static jakarta.ws.rs;
 
