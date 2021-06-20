@@ -12,9 +12,6 @@ module com.fasterxml.jackson.jakarta.rs.json {
 
     requires com.fasterxml.jackson.jakarta.rs.base;
 
-    requires static jakarta.ws.rs;
-    requires static jakarta.ws.rs.api;
-
     provides jakarta.ws.rs.ext.MessageBodyReader with
         com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
     provides jakarta.ws.rs.ext.MessageBodyWriter with
