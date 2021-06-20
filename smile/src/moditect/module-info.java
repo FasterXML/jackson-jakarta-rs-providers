@@ -11,9 +11,6 @@ module com.fasterxml.jackson.jakarta.rs.smile {
 
     requires com.fasterxml.jackson.jakarta.rs.base;
 
-    requires static jakarta.ws.rs;
-    requires static jakarta.ws.rs.api;
-
     provides jakarta.ws.rs.ext.MessageBodyReader with
         com.fasterxml.jackson.jakarta.rs.smile.JacksonSmileProvider;
     provides jakarta.ws.rs.ext.MessageBodyWriter with

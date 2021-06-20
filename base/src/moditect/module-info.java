@@ -1,5 +1,5 @@
 // Originally generated using Moditect maven plugin, last mod 14-Oct-2020
-module com.fasterxml.jackson.jakarta.rs.base {
+module com.fasterxml.jackson.jaxrs.base {
     exports com.fasterxml.jackson.jakarta.rs.annotation;
     exports com.fasterxml.jackson.jakarta.rs.base;
     exports com.fasterxml.jackson.jakarta.rs.base.util;
