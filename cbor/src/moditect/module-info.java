@@ -11,8 +11,6 @@ module com.fasterxml.jackson.jakarta.rs.cbor {
 
     requires com.fasterxml.jackson.jakarta.rs.base;
 
-    requires static jakarta.ws.rs;
-
     provides jakarta.ws.rs.ext.MessageBodyReader with
         com.fasterxml.jackson.jakarta.rs.cbor.JacksonCBORProvider;
     provides jakarta.ws.rs.ext.MessageBodyWriter with
