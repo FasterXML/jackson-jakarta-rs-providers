@@ -1,5 +1,5 @@
 // Originally generated using Moditect maven plugin, last mod 14-Oct-2020
-module com.fasterxml.jackson.jaxrs.base {
+module com.fasterxml.jackson.jakarta.rs.base {
     exports com.fasterxml.jackson.jakarta.rs.annotation;
     exports com.fasterxml.jackson.jakarta.rs.base;
     exports com.fasterxml.jackson.jakarta.rs.base.util;
@@ -10,5 +10,4 @@ module com.fasterxml.jackson.jaxrs.base {
     requires com.fasterxml.jackson.databind;
 
     requires transitive jakarta.ws.rs;
-    requires transitive jakarta.ws.rs.api;
 }
