@@ -60,12 +60,14 @@
       <artifactId>resteasy-jackson2-provider</artifactId>
       <version>4.6.0.Final</version>
       <scope>test</scope>
+<!--
       <exclusions>
         <exclusion>
           <groupId>${project.groupId}</groupId>
           <artifactId>jackson-jaxrs-json-provider</artifactId>
         </exclusion>
       </exclusions>
+-->
     </dependency>
     <!-- 30-May-2021, tatu: This is now needed with Jakarta/2.13, as per
 https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injectionmanagerfactory-not-found
@@ -75,12 +77,14 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
       <artifactId>resteasy-client</artifactId>
       <version>4.6.0.Final</version>
       <scope>test</scope>
+<!--
       <exclusions>
         <exclusion>
           <groupId>${project.groupId}</groupId>
           <artifactId>jackson-jaxrs-json-provider</artifactId>
         </exclusion>
       </exclusions>
+-->
     </dependency>
   </dependencies>
   <build>
