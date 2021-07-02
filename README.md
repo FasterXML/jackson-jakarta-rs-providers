@@ -20,6 +20,11 @@ data formats. They also contain SPI settings for auto-registration.
 under `javax.ws.rs`.
 For JAX-RS variant, see repo [jackson-jaxrs-providers](../../../jackson-jaxrs-providers)
 
+## Build
+
+Usual Maven build like other Jackson repos, with one difference: requires JDK 11 to build
+(as opposed to JDK 8 for most other repos), as of Jackson 2.13
+
 ## Status
 
 Module is fully functional and considered mature.
