@@ -10,5 +10,6 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.13.0 (not yet released)
+2.13.0 (30-Sep-2021)
 
+* First publicly released version!
