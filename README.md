@@ -14,7 +14,7 @@ data formats. They also contain SPI settings for auto-registration.
 
 [![Build Status](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers.svg?branch=master)](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](https://www.javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
 
 (*) NOTE: Jakarta-RS is the package under `jakarta.ws.rs`, replacing older JAX-RS which lived
 under `javax.ws.rs`.
@@ -37,7 +37,7 @@ To use Jakarta-RS on Maven-based projects, use dependencies like:
 <dependency>
   <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-json-provider</artifactId>
-  <version>2.13.0</version>
+  <version>2.13.3</version>
 </dependency>
 ```
 
