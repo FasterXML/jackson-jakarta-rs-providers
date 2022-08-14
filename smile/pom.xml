@@ -7,7 +7,7 @@
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion> 
   <parent>
-    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+    <groupId>tools.jackson.jakarta.rs</groupId>
     <artifactId>jackson-jakarta-rs-providers</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
@@ -20,7 +20,7 @@
 
   <properties>
     <!-- Generate PackageVersion.java into this directory. -->
-    <packageVersion.dir>com/fasterxml/jackson/jakarta/rs/smile</packageVersion.dir>
+    <packageVersion.dir>tools/jackson/jakarta/rs/smile</packageVersion.dir>
     <packageVersion.package>${project.groupId}.smile</packageVersion.package>
     <osgi.export>${project.groupId}.smile.*;version=${project.version}</osgi.export>
     <!-- NOTE: JAXB annotations module is optional dependency, need to try to mark
@@ -29,7 +29,7 @@
     <osgi.import>jakarta.ws.rs;version="${jakarta.ws.rs.version}"
 ,jakarta.ws.rs.core;version="${jakarta.ws.rs.version}"
 ,jakarta.ws.rs.ext;version="${jakarta.ws.rs.version}"
-,com.fasterxml.jackson.module.jaxb;resolution:=optional
+,tools.jackson.module.jaxb;resolution:=optional
 ,*
 </osgi.import>
   </properties>
@@ -43,12 +43,12 @@
     </dependency>
     <!-- Extends Jackson core, mapper, and also (sort of optionally) on JAXB annotation handler -->
     <dependency>
-      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <groupId>tools.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-smile</artifactId>
     </dependency>
     <!-- may also need XmlBind annotation support -->
     <dependency> 
-      <groupId>com.fasterxml.jackson.module</groupId>
+      <groupId>tools.jackson.module</groupId>
       <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
     </dependency>
   </dependencies>
