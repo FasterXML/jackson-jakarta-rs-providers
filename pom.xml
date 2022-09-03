@@ -13,6 +13,13 @@
   <packaging>pom</packaging>
   <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <modules>
     <module>base</module>
@@ -22,12 +29,11 @@
     <module>xml</module>
     <module>yaml</module>
   </modules>
-  <url>http://github.com/FasterXML/jackson-jakarta-rs-providers</url>    
+  <url>https://github.com/FasterXML/jackson-jakarta-rs-providers</url>    
   <scm>
     <connection>scm:git:git@github.com:FasterXML/jackson-jakarta-rs-providers.git</connection>
     <developerConnection>scm:git:git@github.com:FasterXML/jackson-jakarta-rs-providers.git</developerConnection>
-    <url>http://github.com/FasterXML/jackson-jakarta-rs-providers</url>    
-    <tag>HEAD</tag>
+    <url>https://github.com/FasterXML/jackson-jakarta-rs-providers</url>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 

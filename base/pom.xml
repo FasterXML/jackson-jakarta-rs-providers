@@ -17,6 +17,13 @@
   <description>Pile of code that is shared by all Jackson-based Jakarta-RS
 providers.
   </description>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <properties>
     <osgi.export>
