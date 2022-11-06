@@ -1,0 +1,10 @@
+com.fasterxml.jackson.jakarta.rs.annotation
+com.fasterxml.jackson.jakarta.rs.base
+com.fasterxml.jackson.jakarta.rs.base.util
+com.fasterxml.jackson.jakarta.rs.cbor
+com.fasterxml.jackson.jakarta.rs.cfg
+com.fasterxml.jackson.jakarta.rs.json
+com.fasterxml.jackson.jakarta.rs.json.annotation
+com.fasterxml.jackson.jakarta.rs.smile
+com.fasterxml.jackson.jakarta.rs.xml
+com.fasterxml.jackson.jakarta.rs.yaml
