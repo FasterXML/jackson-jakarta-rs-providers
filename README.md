@@ -37,7 +37,7 @@ To use Jakarta-RS on Maven-based projects, use dependencies like:
 <dependency>
   <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-json-provider</artifactId>
-  <version>2.13.3</version>
+  <version>2.14.1</version>
 </dependency>
 ```
 
