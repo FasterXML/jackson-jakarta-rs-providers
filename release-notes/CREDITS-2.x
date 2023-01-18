@@ -4,3 +4,9 @@ Jakarta-RS providers module, version 2.x
 
 Tatu Saloranta, tatu.saloranta@iki.fi: author
 
+PJ Fanning (@pjfanning)
+
+* Contributed #12: Remove unnecessary synchronization from endpoint
+  reader/writer caches
+ (2.14.2)
+
