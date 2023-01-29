@@ -10,7 +10,7 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.14.2 (not yet released)
+2.14.2 (28-Jan-2023)
 
 #12: Remove unnecessary synchronization from endpoint reader/writer caches
  (contributed by @pjfanning)
