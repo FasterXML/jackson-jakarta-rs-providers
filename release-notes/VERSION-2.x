@@ -10,6 +10,10 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+Unreleased:
+
+#14: Add LICENSE and NOTICE files (to be included in artifacts)
+
 2.14.2 (28-Jan-2023)
 
 #12: Remove unnecessary synchronization from endpoint reader/writer caches
