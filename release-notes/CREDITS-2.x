@@ -10,3 +10,7 @@ PJ Fanning (@pjfanning)
   reader/writer caches
  (2.14.2)
 
+Steven Schlansker (@stevenschlansker)
+
+* Contributed #16: Add `JakartaRsFeature.READ_FULL_STREAM` to consume all content, on by default
+ (2.15.0)
