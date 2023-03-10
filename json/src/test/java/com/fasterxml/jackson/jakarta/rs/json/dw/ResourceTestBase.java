@@ -90,4 +90,15 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
         }
         return server;
     }
+
+    /*
+    /**********************************************************
+    /* Other helper methods
+    /**********************************************************
+     */
+    
+    protected String a2q(String json) {
+        return json.replace("'", "\"");
+    }
+
 }
