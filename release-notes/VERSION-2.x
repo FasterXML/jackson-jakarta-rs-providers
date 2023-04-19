@@ -14,6 +14,7 @@ Sub-modules:
 
 #16: Add `JakartaRsFeature.READ_FULL_STREAM` to consume all content, on by default
  (contributed by Steven S)
+* Upgrade Woodstox to 6.5.1
 
 2.14.2 (28-Jan-2023)
 
