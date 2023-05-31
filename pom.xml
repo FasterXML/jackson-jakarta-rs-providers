@@ -9,7 +9,7 @@
   <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-providers</artifactId>
   <name>Jackson modules: Jakarta-RS</name>
-  <version>2.15.2-SNAPSHOT</version>
+  <version>2.15.2</version>
   <packaging>pom</packaging>
   <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
@@ -34,7 +34,7 @@
     <connection>scm:git:git@github.com:FasterXML/jackson-jakarta-rs-providers.git</connection>
     <developerConnection>scm:git:git@github.com:FasterXML/jackson-jakarta-rs-providers.git</developerConnection>
     <url>https://github.com/FasterXML/jackson-jakarta-rs-providers</url>
-    <tag>HEAD</tag>
+    <tag>jackson-jakarta-rs-providers-2.15.2</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 

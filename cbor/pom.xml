@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
     <artifactId>jackson-jakarta-rs-providers</artifactId>
-    <version>2.15.2-SNAPSHOT</version>
+    <version>2.15.2</version>
   </parent>
   <artifactId>jackson-jakarta-rs-cbor-provider</artifactId>
   <name>Jackson Jakarta-RS: CBOR</name>
