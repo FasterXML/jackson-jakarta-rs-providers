@@ -1,6 +1,8 @@
 package com.fasterxml.jackson.jakarta.rs.base.cfg;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -86,6 +88,8 @@ public class AnnotationBundleKeyTest
         if (anns1.length == 0) {
             fail("Internal error: empty annotation array");
         }
+        Arrays.sort(anns1, Comparator.comparing(Annotation::toString));
+        Arrays.sort(anns2, Comparator.comparing(Annotation::toString));
         assertArrayEquals("Internal error: should never differ", anns1, anns2);
 
         AnnotationBundleKey b1 = new AnnotationBundleKey(anns1, Object.class);
