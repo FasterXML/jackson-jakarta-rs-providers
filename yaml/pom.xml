@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
     <artifactId>jackson-jakarta-rs-providers</artifactId>
-    <version>2.16.0-SNAPSHOT</version>
+    <version>2.16.0</version>
   </parent>
   <artifactId>jackson-jakarta-rs-yaml-provider</artifactId>
   <name>Jackson Jakarta-RS: YAML</name>
