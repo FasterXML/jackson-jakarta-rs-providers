@@ -13,8 +13,9 @@ import com.fasterxml.jackson.core.*;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.LRUMap;
+import com.fasterxml.jackson.databind.util.LookupCache;
 import com.fasterxml.jackson.jakarta.rs.base.util.ClassKey;
-import com.fasterxml.jackson.jakarta.rs.base.util.LRUMap;
 import com.fasterxml.jackson.jakarta.rs.cfg.*;
 
 public abstract class ProviderBase<
@@ -80,7 +81,7 @@ public abstract class ProviderBase<
     };
 
     protected final static int JAKARTA_RS_FEATURE_DEFAULTS = JakartaRSFeature.collectDefaults();
-    
+
     /*
     /**********************************************************************
     /* General configuration
@@ -92,7 +93,7 @@ public abstract class ProviderBase<
      * of {@link ObjectMapper}
      */
     protected final MAPPER_CONFIG _mapperConfig;
-    
+
     /**
      * Map that contains overrides to default list of untouchable
      * types: <code>true</code> meaning that entry is untouchable,
@@ -130,7 +131,7 @@ public abstract class ProviderBase<
      * View to use for writing if none defined for the end point.
      */
     protected Class<?> _defaultWriteView;
-    
+
     /*
     /**********************************************************************
     /* Excluded types
@@ -152,14 +153,12 @@ public abstract class ProviderBase<
     /**
      * Cache for resolved endpoint configurations when reading JSON data
      */
-    protected final LRUMap<AnnotationBundleKey, EP_CONFIG> _readers
-        = new LRUMap<AnnotationBundleKey, EP_CONFIG>(16, 120);
+    protected final LookupCache<AnnotationBundleKey, EP_CONFIG> _readers;
 
     /**
      * Cache for resolved endpoint configurations when writing JSON data
      */
-    protected final LRUMap<AnnotationBundleKey, EP_CONFIG> _writers
-        = new LRUMap<AnnotationBundleKey, EP_CONFIG>(16, 120);
+    protected final LookupCache<AnnotationBundleKey, EP_CONFIG> _writers;
 
     /*
     /**********************************************************************
@@ -168,8 +167,7 @@ public abstract class ProviderBase<
      */
 
     protected ProviderBase(MAPPER_CONFIG mconfig) {
-        _mapperConfig = mconfig;
-        _jakartaRSFeatures = JAKARTA_RS_FEATURE_DEFAULTS;
+        this(mconfig, new LRUMap<>(16, 120), new LRUMap<>(16, 120));
     }
 
     /**
@@ -180,8 +178,20 @@ public abstract class ProviderBase<
      */
     @Deprecated // just to denote it should NOT be directly called; will NOT be removed
     protected ProviderBase() {
-        _mapperConfig = null;
+        this(null);
+    }
+
+    /**
+     * @since 2.17
+     */
+    protected ProviderBase(MAPPER_CONFIG mconfig,
+            LookupCache<AnnotationBundleKey, EP_CONFIG> readerCache,
+            LookupCache<AnnotationBundleKey, EP_CONFIG> writerCache
+    ) {
+        _mapperConfig = mconfig;
         _jakartaRSFeatures = JAKARTA_RS_FEATURE_DEFAULTS;
+        _readers = readerCache;
+        _writers = writerCache;
     }
 
     /*
