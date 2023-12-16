@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       # 01-Jul-2021, tatu: Requires JDK 11 for build, due to Jetty dep (for testing)
       matrix:
-        java_version: ['11', '17']
+        java_version: ['11', '17', '21']
         os: ['ubuntu-20.04']
     env:
       JAVA_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
