@@ -13,8 +13,8 @@ import com.fasterxml.jackson.core.*;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.LRUMap;
 import com.fasterxml.jackson.jakarta.rs.base.util.ClassKey;
-import com.fasterxml.jackson.jakarta.rs.base.util.LRUMap;
 import com.fasterxml.jackson.jakarta.rs.cfg.*;
 
 public abstract class ProviderBase<
@@ -80,7 +80,7 @@ public abstract class ProviderBase<
     };
 
     protected final static int JAKARTA_RS_FEATURE_DEFAULTS = JakartaRSFeature.collectDefaults();
-    
+
     /*
     /**********************************************************************
     /* General configuration
@@ -92,7 +92,7 @@ public abstract class ProviderBase<
      * of {@link ObjectMapper}
      */
     protected final MAPPER_CONFIG _mapperConfig;
-    
+
     /**
      * Map that contains overrides to default list of untouchable
      * types: <code>true</code> meaning that entry is untouchable,
@@ -130,7 +130,7 @@ public abstract class ProviderBase<
      * View to use for writing if none defined for the end point.
      */
     protected Class<?> _defaultWriteView;
-    
+
     /*
     /**********************************************************************
     /* Excluded types
