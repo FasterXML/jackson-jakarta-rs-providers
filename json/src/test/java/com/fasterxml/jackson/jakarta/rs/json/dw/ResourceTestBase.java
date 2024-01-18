@@ -13,6 +13,9 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+
 import com.fasterxml.jackson.jakarta.rs.json.JakartaRSTestBase;
 import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 
@@ -43,10 +46,21 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
     protected static abstract class JsonApplicationWithJackson extends JsonApplication
     {
         public JsonApplicationWithJackson(Object resource) {
-            super(new JacksonJsonProvider(), resource);
+            super(new JacksonJsonProvider(createMapper()), resource);
+        }
+
+        static JsonMapper createMapper() {
+            // 17-Jan-2024, tatu: Need to configure slightly to change Jackson 3.0
+            //   defaults wrt:
+            //
+            //   - View handling (not to fail on properties missing from view)
+
+            return JsonMapper.builder()
+                    .disable(DeserializationFeature.FAIL_ON_UNEXPECTED_VIEW_PROPERTIES)
+                    .build();
         }
     }
-    
+
     /*
     /**********************************************************
     /* Abstract and overridable config methods
