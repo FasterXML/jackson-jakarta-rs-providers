@@ -7,13 +7,17 @@ import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
 import jakarta.ws.rs.core.Application;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
-import tools.jackson.jakarta.rs.json.JakartaRSTestBase;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+
+import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
+import tools.jackson.jakarta.rs.json.JakartaRSTestBase;
 
 /**
  * Intermediate base for tests that run actual full JAX-RS resource.
@@ -42,10 +46,21 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
     protected static abstract class JsonApplicationWithJackson extends JsonApplication
     {
         public JsonApplicationWithJackson(Object resource) {
-            super(new JacksonJsonProvider(), resource);
+            super(new JacksonJsonProvider(createMapper()), resource);
+        }
+
+        static JsonMapper createMapper() {
+            // 17-Jan-2024, tatu: Need to configure slightly to change Jackson 3.0
+            //   defaults wrt:
+            //
+            //   - View handling (not to fail on properties missing from view)
+
+            return JsonMapper.builder()
+                    .disable(DeserializationFeature.FAIL_ON_UNEXPECTED_VIEW_PROPERTIES)
+                    .build();
         }
     }
-    
+
     /*
     /**********************************************************
     /* Abstract and overridable config methods
@@ -89,15 +104,4 @@ public abstract class ResourceTestBase extends JakartaRSTestBase
         }
         return server;
     }
-
-    /*
-    /**********************************************************
-    /* Other helper methods
-    /**********************************************************
-     */
-    
-    protected String a2q(String json) {
-        return json.replace("'", "\"");
-    }
-
 }
