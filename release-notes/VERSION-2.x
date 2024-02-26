@@ -12,7 +12,7 @@ Sub-modules:
 
 2.17.0 (not yet released)
 
-* Upgrade Woodstox to 6.6.0
+* Upgrade Woodstox to 6.6.1
 
 2.16.1 (24-Dec-2023)
 
