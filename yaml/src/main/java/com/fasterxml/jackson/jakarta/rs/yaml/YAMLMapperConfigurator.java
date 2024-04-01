@@ -10,6 +10,7 @@ import com.fasterxml.jackson.jakarta.rs.cfg.MapperConfiguratorBase;
 import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Helper class used to encapsulate details of configuring an
@@ -18,6 +19,9 @@ import java.util.ArrayList;
  */
 public class YAMLMapperConfigurator
         extends MapperConfiguratorBase<YAMLMapperConfigurator, YAMLMapper> {
+
+    private ReentrantLock _lock = new ReentrantLock();
+
     /*
     /**********************************************************
     /* Construction
@@ -32,7 +36,7 @@ public class YAMLMapperConfigurator
      * Method that locates, configures and returns {@link YAMLMapper} to use
      */
     @Override
-    public synchronized YAMLMapper getConfiguredMapper() {
+    public YAMLMapper getConfiguredMapper() {
         /* important: should NOT call mapper(); needs to return null
          * if no instance has been passed or constructed
          */
@@ -40,10 +44,17 @@ public class YAMLMapperConfigurator
     }
 
     @Override
-    public synchronized YAMLMapper getDefaultMapper() {
+    public YAMLMapper getDefaultMapper() {
         if (_defaultMapper == null) {
-            _defaultMapper = new YAMLMapper(); //tarik: maybe there is better default config?
-            _setAnnotations(_defaultMapper, _defaultAnnotationsToUse);
+            _lock.lock();
+            try {
+                if (_defaultMapper == null) {
+                    _defaultMapper = new YAMLMapper();
+                    _setAnnotations(_defaultMapper, _defaultAnnotationsToUse);
+                }
+            } finally {
+                _lock.unlock();
+            }
         }
         return _defaultMapper;
     }
@@ -62,8 +73,15 @@ public class YAMLMapperConfigurator
     @Override
     protected YAMLMapper mapper() {
         if (_mapper == null) {
-            _mapper = new YAMLMapper();
-            _setAnnotations(_mapper, _defaultAnnotationsToUse);
+            _lock.lock();
+            try {
+                if (_mapper == null) {
+                    _mapper = new YAMLMapper();
+                    _setAnnotations(_mapper, _defaultAnnotationsToUse);
+                }
+            } finally {
+                _lock.unlock();
+            }
         }
         return _mapper;
     }
