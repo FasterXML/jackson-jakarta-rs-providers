@@ -9,6 +9,8 @@ PJ Fanning (@pjfanning)
 * Contributed #12: Remove unnecessary synchronization from endpoint
   reader/writer caches
  (2.14.2)
+* Contributed #26: Replace synchronized blocks with `ReentrantLock`s
+ (2.17.1)
 
 Steven Schlansker (@stevenschlansker)
 
