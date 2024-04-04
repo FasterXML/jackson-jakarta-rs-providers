@@ -14,6 +14,11 @@ Sub-modules:
 
 No changes since 2.17
 
+2.17.1 (not yet released)
+
+#26: Replace synchronized blocks with `ReentrantLock`s
+ (contributed by @pjfanning)
+
 2.17.0 (12-Mar-2024)
 
 * Upgrade Woodstox to 6.6.1

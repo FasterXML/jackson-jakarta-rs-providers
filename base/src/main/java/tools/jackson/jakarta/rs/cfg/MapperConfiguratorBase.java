@@ -2,6 +2,7 @@ package tools.jackson.jakarta.rs.cfg;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 import tools.jackson.databind.*;
 import tools.jackson.databind.cfg.MapperBuilder;
@@ -15,6 +16,8 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     MAPPER extends ObjectMapper
 >
 {
+    private final ReentrantLock _lock = new ReentrantLock();
+
     /*
     /**********************************************************************
     /* Configuration, simple features
@@ -85,10 +88,16 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
         _instropectorOverride = instropectorOverride;
     }
 
-    public synchronized MAPPER getDefaultMapper() {
+    public MAPPER getDefaultMapper() {
         if (_defaultMapper == null) {
-            _defaultMapper = _mapperWithConfiguration(mapperBuilder());
-        }
+            _lock.lock();
+            try {
+                if (_defaultMapper == null) {
+                    _defaultMapper = _mapperWithConfiguration(mapperBuilder());
+                }
+            } finally {
+                _lock.unlock();
+            }        }
         return _defaultMapper;
     }
 
@@ -100,7 +109,14 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     protected MAPPER mapper()
     {
         if (_mapper == null) {
-            _mapper = _mapperWithConfiguration(mapperBuilder());
+            _lock.lock();
+            try {
+                if (_mapper == null) {
+                    _mapper = _mapperWithConfiguration(mapperBuilder());
+                }
+            } finally {
+                _lock.unlock();
+            }
         }
         return _mapper;
     }
@@ -125,17 +141,17 @@ public abstract class MapperConfiguratorBase<IMPL extends MapperConfiguratorBase
     /**
      * Method that locates, configures and returns {@link ObjectMapper} to use
      */
-    public synchronized MAPPER getConfiguredMapper() {
+    public MAPPER getConfiguredMapper() {
         // important: should NOT call mapper(); needs to return null
         // if no instance has been passed or constructed
         return _mapper;
     }
 
-    public synchronized final void setMapper(MAPPER m) {
+    public final void setMapper(MAPPER m) {
         _mapper = m;
     }
 
-    public synchronized final void setAnnotationIntrospector(AnnotationIntrospector aiOverride) {
+    public final void setAnnotationIntrospector(AnnotationIntrospector aiOverride) {
         _instropectorOverride = aiOverride;
     }
 
