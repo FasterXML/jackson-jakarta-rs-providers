@@ -11,6 +11,8 @@ PJ Fanning (@pjfanning)
  (2.14.2)
 * Contributed #26: Replace synchronized blocks with `ReentrantLock`s
  (2.17.1)
+* Contributed #28: Mark variables as volatile for safe concurrent access
+ (2.17.1)
 
 Steven Schlansker (@stevenschlansker)
 
