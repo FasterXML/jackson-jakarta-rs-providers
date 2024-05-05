@@ -10,7 +10,7 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.17.1 (not yet released)
+2.17.1 (04-May-2024)
 
 #26: Replace synchronized blocks with `ReentrantLock`s
  (contributed by @pjfanning)
