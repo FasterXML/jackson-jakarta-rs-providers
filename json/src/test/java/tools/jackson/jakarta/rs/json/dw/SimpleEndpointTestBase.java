@@ -62,18 +62,16 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 		public static final String PREV_PAGE_REL = "prev";
 		public static final String NEXT_PAGE_REL = "next";
 
-		public final Link getPreviousPageLink() {
+		public Link getPreviousPageLink() {
 			return getLink(PREV_PAGE_REL);
 		}
 
-		public final Link getNextPageLink() {
+		public Link getNextPageLink() {
 			return getLink(NEXT_PAGE_REL);
 		}
 
 		public abstract List<E> getEntities();
-
 		public abstract Link getLink(String rel);
-
 	}
 
 	@JsonPropertyOrder({ "entities", "links" })
@@ -122,15 +120,16 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
 		}
 
-		private final List<E> entities;
-		@JsonSerialize(contentUsing = JsonLinkSerializer.class)
-		@JsonDeserialize(contentUsing = JsonLinkDeserializer.class)
-		private final List<Link> links;
 
-		protected PageImpl() {
-			this.entities = new ArrayList<>();
-			this.links = new ArrayList<>();
-		}
+        private List<E> entities;
+        @JsonSerialize(contentUsing = JsonLinkSerializer.class)
+        @JsonDeserialize(contentUsing = JsonLinkDeserializer.class)
+        private List<Link> links;
+
+        protected PageImpl() {
+            this.entities = new ArrayList<>();
+            this.links = new ArrayList<>();
+        }
 
 		public void addEntities(E... entities) {
 			Collections.addAll(this.entities, entities);
