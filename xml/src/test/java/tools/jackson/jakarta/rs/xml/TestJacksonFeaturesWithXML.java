@@ -12,7 +12,6 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.exc.UnrecognizedPropertyException;
 import tools.jackson.jakarta.rs.annotation.JacksonFeatures;
-import tools.jackson.jakarta.rs.xml.JacksonXMLProvider;
 
 /**
  * Tests for addition of {@link JacksonFeatures}.
@@ -25,8 +24,9 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
 
     @JacksonFeatures(serializationEnable={ SerializationFeature.WRAP_ROOT_VALUE })
     public void writeConfig() { }
-        
-    @JacksonFeatures(deserializationDisable={ DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES })
+
+    // Config defaults changed in Jackson 3.x to disable by default, so:
+    @JacksonFeatures(deserializationEnable={ DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES })
     public void readConfig() { }
 
     // Also, let's check that we can bundle annotations
@@ -92,25 +92,27 @@ public class TestJacksonFeaturesWithXML extends JakartaRSTestBase
         JacksonFeatures feats = m.getAnnotation(JacksonFeatures.class);
         assertNotNull(feats); // just a sanity check
 
-        // ok: here let's verify that we can disable exception throwing unrecognized things
+        // ok: here let's verify that we can enable exception throwing for
+        // unrecognized properties
         @SuppressWarnings("unchecked")
-        Class<Object> raw = (Class<Object>)(Class<?>)Bean.class;
-        Object ob = prov.readFrom(raw, raw,
+        final Class<Object> raw = (Class<Object>)(Class<?>)Bean.class;
+
+        try {
+            /*Object ob =*/ prov.readFrom(raw, raw,
                 new Annotation[] { feats },
                 MediaType.APPLICATION_JSON_TYPE, null,
                 new ByteArrayInputStream("<Bean><foobar>3</foobar></Bean>".getBytes("UTF-8")));
-        assertNotNull(ob);
-
-        // but without setting, get the exception
-        try {
-            prov.readFrom(raw, raw,
-                    new Annotation[] { },
-                    MediaType.APPLICATION_JSON_TYPE, null,
-                    new ByteArrayInputStream("<Bean><foobar>3</foobar></Bean>".getBytes("UTF-8")));
             fail("Should have caught an exception");
         } catch (UnrecognizedPropertyException e) {
             verifyException(e, "Unrecognized property \"foobar\"");
         }
+
+        // but without setting, no exception
+        Object ob = prov.readFrom(raw, raw,
+                new Annotation[] { },
+                MediaType.APPLICATION_JSON_TYPE, null,
+                new ByteArrayInputStream("<Bean><foobar>3</foobar></Bean>".getBytes("UTF-8")));
+        assertNotNull(ob);
     }
 
     protected Exception _unwrap(Exception e) {

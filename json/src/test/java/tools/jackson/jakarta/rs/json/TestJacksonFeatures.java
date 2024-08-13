@@ -12,7 +12,6 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.exc.UnrecognizedPropertyException;
 import tools.jackson.jakarta.rs.annotation.JacksonFeatures;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 /**
  * Tests for addition of {@link JacksonFeatures}.
@@ -25,8 +24,9 @@ public class TestJacksonFeatures extends JakartaRSTestBase
 
     @JacksonFeatures(serializationEnable={ SerializationFeature.WRAP_ROOT_VALUE })
     public void writeConfig() { }
-        
-    @JacksonFeatures(deserializationDisable={ DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES })
+
+    // Config state changed in Jackson 3.x to disable by default, so:
+    @JacksonFeatures(deserializationEnable={ DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES })
     public void readConfig() { }
 
     // Also, let's check that we can bundle annotations
@@ -77,7 +77,7 @@ public class TestJacksonFeatures extends JakartaRSTestBase
                 MediaType.APPLICATION_JSON_TYPE, null, out);
         assertEquals("{\"Bean\":{\"a\":3}}", out.toString("UTF-8"));
     }
-    
+
     // [Issue-2], deserialization
     public void testReadConfigs() throws Exception
     {
@@ -88,23 +88,24 @@ public class TestJacksonFeatures extends JakartaRSTestBase
 
         // ok: here let's verify that we can disable exception throwing unrecognized things
         @SuppressWarnings("unchecked")
-        Class<Object> raw = (Class<Object>)(Class<?>)Bean.class;
-        Object ob = prov.readFrom(raw, raw,
+        final Class<Object> raw = (Class<Object>)(Class<?>)Bean.class;
+
+        // ok: here let's verify that we can enable exception throwing unrecognized things
+        try {
+            /*Object ob =*/ prov.readFrom(raw, raw,
                 new Annotation[] { feats },
                 MediaType.APPLICATION_JSON_TYPE, null,
                 new ByteArrayInputStream("{ \"foobar\" : 3 }".getBytes("UTF-8")));
-        assertNotNull(ob);
-
-        // but without setting, get the exception
-        try {
-            prov.readFrom(raw, raw,
-                    new Annotation[] { },
-                    MediaType.APPLICATION_JSON_TYPE, null,
-                    new ByteArrayInputStream("{ \"foobar\" : 3 }".getBytes("UTF-8")));
             fail("Should have caught an exception");
         } catch (UnrecognizedPropertyException e) {
             verifyException(e, "Unrecognized property");
         }
+
+        // but without setting, no exception
+        Object ob = prov.readFrom(raw, raw,
+                    new Annotation[] { },
+                    MediaType.APPLICATION_JSON_TYPE, null,
+                    new ByteArrayInputStream("{ \"foobar\" : 3 }".getBytes("UTF-8")));
+        assertNotNull(ob);
     }
-    
 }
