@@ -24,7 +24,8 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  */
 @Provider
 @Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" variants
-@Produces(MediaType.WILDCARD)
+//https://datatracker.ietf.org/doc/html/rfc8949
+@Produces({ "application/cbor", MediaType.WILDCARD })
 public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
 {
     /**
