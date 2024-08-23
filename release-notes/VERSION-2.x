@@ -12,6 +12,8 @@ Sub-modules:
 
 2.18.0 (not yet released)
 
+#30: `JacksonJaxbJsonProvider` has @Produces(MediaType.WILDCARD) but
+  hasMatchingMediaType(MediaType.WILDCARD) return false
 * Woodstox dependency now 7.0.0
 
 2.17.2 (05-Jul-2024)

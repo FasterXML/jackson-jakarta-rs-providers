@@ -45,8 +45,9 @@ import tools.jackson.jakarta.rs.cbor.PackageVersion;
  * @author Tatu Saloranta
  */
 @Provider
-@Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" JSON variants
-@Produces(MediaType.WILDCARD)
+@Consumes(MediaType.WILDCARD)
+//https://datatracker.ietf.org/doc/html/rfc8949
+@Produces({ "application/cbor", MediaType.WILDCARD })
 public class JacksonCBORProvider
 extends ProviderBase<JacksonCBORProvider,
     CBORMapper,

@@ -26,8 +26,8 @@ import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector
  * in sync if changed.
  */
 @Provider
-@Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" format variants
-@Produces(MediaType.WILDCARD)
+@Consumes(MediaType.WILDCARD)
+@Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML, MediaType.WILDCARD })
 public class JacksonXmlBindXMLProvider extends JacksonXMLProvider
 {
     /**

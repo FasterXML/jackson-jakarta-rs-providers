@@ -46,8 +46,8 @@ import tools.jackson.jakarta.rs.base.ProviderBase;
  * @author Tatu Saloranta
  */
 @Provider
-@Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" JSON variants
-@Produces(MediaType.WILDCARD)
+@Consumes(MediaType.WILDCARD)
+@Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML, MediaType.WILDCARD })
 public class JacksonXMLProvider
     extends ProviderBase<JacksonXMLProvider,
         XmlMapper,
