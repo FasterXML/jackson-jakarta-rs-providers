@@ -23,8 +23,9 @@ import jakarta.ws.rs.ext.Provider;
  * in sync if changed.
  */
 @Provider
-@Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" type variants
-@Produces(MediaType.WILDCARD)
+@Consumes(MediaType.WILDCARD)
+// As per https://www.rfc-editor.org/rfc/rfc9512.html
+@Produces({ "application/yaml", MediaType.WILDCARD })
 public class JacksonXmlBindYAMLProvider extends JacksonYAMLProvider
 {
     /**

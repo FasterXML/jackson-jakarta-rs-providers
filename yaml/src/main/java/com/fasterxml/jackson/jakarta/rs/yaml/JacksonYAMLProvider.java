@@ -49,8 +49,9 @@ import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
  * (base class when used as-is defaults to using just Jackson annotations)
  */
 @Provider
-@Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" variants
-@Produces(MediaType.WILDCARD)
+@Consumes(MediaType.WILDCARD)
+// As per https://www.rfc-editor.org/rfc/rfc9512.html
+@Produces({ "application/yaml", MediaType.WILDCARD })
 public class JacksonYAMLProvider
         extends ProviderBase<JacksonYAMLProvider,
         YAMLMapper,
