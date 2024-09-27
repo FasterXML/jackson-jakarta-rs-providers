@@ -10,7 +10,11 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.18.0 (not yet released)
+2.19.0 (not yet released)
+
+-
+
+2.18.0 (26-Sep-2024)
 
 #30: `JacksonJaxbJsonProvider` has @Produces(MediaType.WILDCARD) but
   hasMatchingMediaType(MediaType.WILDCARD) return false
