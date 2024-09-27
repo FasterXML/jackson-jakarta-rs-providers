@@ -10,7 +10,7 @@
   <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-providers</artifactId>
   <name>Jackson modules: Jakarta-RS</name>
-  <version>2.18.0</version>
+  <version>2.18.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
