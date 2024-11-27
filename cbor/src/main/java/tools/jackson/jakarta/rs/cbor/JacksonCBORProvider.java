@@ -12,7 +12,6 @@ import tools.jackson.databind.*;
 
 import tools.jackson.dataformat.cbor.databind.CBORMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
-import tools.jackson.jakarta.rs.cbor.PackageVersion;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
