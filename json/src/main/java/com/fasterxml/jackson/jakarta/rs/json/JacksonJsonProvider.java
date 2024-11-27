@@ -8,6 +8,7 @@ import jakarta.ws.rs.ext.*;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.jakarta.rs.base.ProviderBase;
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 
@@ -184,30 +185,20 @@ public class JacksonJsonProvider
                    || "x-json".equals(subtype) // [Issue#40]
                    ;
         }
-        /* Not sure if this can happen; but it seems reasonable
-         * that we can at least produce JSON without media type?
-         */
+        // Not sure if this can happen; but it seems reasonable
+        // that we can at least produce JSON without media type?
         return true;
     }
 
     @Override
     protected ObjectMapper _locateMapperViaProvider(Class<?> type, MediaType mediaType)
     {
-        if (_providers != null) {
-            ContextResolver<ObjectMapper> resolver = _providers.getContextResolver(ObjectMapper.class, mediaType);
-            /* Above should work as is, but due to this bug
-             *   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
-             * in Jersey, it doesn't. But this works until resolution of
-             * the issue:
-             */
-            if (resolver == null) {
-                resolver = _providers.getContextResolver(ObjectMapper.class, null);
-            }
-            if (resolver != null) {
-                return resolver.getContext(type);
-            }
+        // 26-Nov-2024, tatu: [jakarta-rs#36] Look for JsonMapper primarily
+        ObjectMapper m =_locateMapperViaProvider(type, mediaType, JsonMapper.class, _providers);
+        if (m == null) {
+            m =_locateMapperViaProvider(type, mediaType, ObjectMapper.class, _providers);        
         }
-        return null;
+        return m;
     }
 
     @Override

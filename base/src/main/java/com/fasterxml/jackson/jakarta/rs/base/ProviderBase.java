@@ -6,8 +6,10 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.MessageBodyReader;
 import jakarta.ws.rs.ext.MessageBodyWriter;
+import jakarta.ws.rs.ext.Providers;
 
 import com.fasterxml.jackson.core.*;
 
@@ -934,6 +936,24 @@ public abstract class ProviderBase<
     /* Private/sub-class helper methods
     /**********************************************************************
      */
+
+    // @since 2.19
+    protected <OM extends ObjectMapper> OM _locateMapperViaProvider(Class<?> type, MediaType mediaType,
+            Class<OM> mapperType, Providers providers) {
+        if (providers != null) {
+            ContextResolver<OM> resolver = providers.getContextResolver(mapperType, mediaType);
+            // Above should work as is, but due to this bug
+            //   [https://jersey.dev.java.net/issues/show_bug.cgi?id=288]
+            // in Jersey, it doesn't. But this works until resolution of the issue:
+            if (resolver == null) {
+                resolver = providers.getContextResolver(mapperType, null);
+            }
+            if (resolver != null) {
+                return resolver.getContext(type);
+            }
+        }
+        return null;
+    }
 
     protected static boolean _containedIn(Class<?> mainType, HashSet<ClassKey> set)
     {
