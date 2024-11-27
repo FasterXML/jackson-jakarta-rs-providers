@@ -9,7 +9,7 @@ import tools.jackson.jakarta.rs.cbor.JacksonCBORProvider;
 /**
  * Unit test to check [JACKSON-540]
  */
-public class TestCanDeserialize extends JakartaRSTestBase
+public class TestCanDeserializeCBOR extends JakartaRSTestBase
 {
     static class Bean {
         public int x;
