@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
@@ -43,7 +43,7 @@ public class JsonMapperConfigurator
             _lock.lock();
             try {
                 if (_defaultMapper == null) {
-                    _defaultMapper = new ObjectMapper();
+                    _defaultMapper = new JsonMapper();
                     _setAnnotations(_defaultMapper, _defaultAnnotationsToUse);
                 }
             } finally {
@@ -71,7 +71,7 @@ public class JsonMapperConfigurator
             _lock.lock();
             try {
                 if (_mapper == null) {
-                    _mapper = new ObjectMapper();
+                    _mapper = new JsonMapper();
                     _setAnnotations(_mapper, _defaultAnnotationsToUse);
                 }
             } finally {

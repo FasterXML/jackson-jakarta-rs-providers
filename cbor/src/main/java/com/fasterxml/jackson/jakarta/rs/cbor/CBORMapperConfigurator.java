@@ -5,8 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-
+import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
 import com.fasterxml.jackson.jakarta.rs.cfg.Annotations;
 import com.fasterxml.jackson.jakarta.rs.cfg.MapperConfiguratorBase;
 
@@ -43,7 +42,7 @@ public class CBORMapperConfigurator
             _lock.lock();
             try {
                 if (_defaultMapper == null) {
-                    _defaultMapper = new ObjectMapper(new CBORFactory());
+                    _defaultMapper = new CBORMapper();
                     _setAnnotations(_defaultMapper, _defaultAnnotationsToUse);
                 }
             } finally {
@@ -71,7 +70,7 @@ public class CBORMapperConfigurator
             _lock.lock();
             try {
                 if (_mapper == null) {
-                    _mapper = new ObjectMapper(new CBORFactory());
+                    _mapper = new CBORMapper();
                     _setAnnotations(_mapper, _defaultAnnotationsToUse);
                 }
             } finally {
