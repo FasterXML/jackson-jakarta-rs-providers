@@ -18,3 +18,9 @@ Steven Schlansker (@stevenschlansker)
 
 * Contributed #16: Add `JakartaRsFeature.READ_FULL_STREAM` to consume all content, on by default
  (2.15.0)
+
+Kevin Wooten (@kdubb)
+
+* Suggested #36: Narrow types to format specific (e.g. CBORMapper) when resolving
+  via JAX-RS Providers	
+ (2.19.0)
