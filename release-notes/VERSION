@@ -12,5 +12,6 @@ Sub-modules:
 
 3.0.0 (not yet released)
 
+- Minimum Java baseline: Java 17
 - Remove `Annotations` enum abstraction, replace with direct `AnnotationIntrospector`
   configuration.
