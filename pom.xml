@@ -36,7 +36,7 @@
     <javac.src.version>17</javac.src.version>
     <javac.target.version>17</javac.target.version>
 
-    <version.jersey>3.1.9</version.jersey>
+    <version.jersey>3.0.16</version.jersey>
     <version.jetty>11.0.24</version.jetty>
 
     <version.servlet>5.0.0</version.servlet>
