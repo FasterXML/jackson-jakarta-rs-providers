@@ -32,10 +32,11 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
 
+    <!-- [databind#4820]: Java 17 baseline -->
+    <javac.src.version>17</javac.src.version>
+    <javac.target.version>17</javac.target.version>
+
     <version.jersey>3.0.16</version.jersey>
-    <!-- 29-May-2021, tatu: Jetty 10 and above require Java 11 (ugh!)
-        Which means we must build with JDK 11 from now now on (2.13+)
-      -->
     <version.jetty>11.0.24</version.jetty>
 
     <version.servlet>5.0.0</version.servlet>
