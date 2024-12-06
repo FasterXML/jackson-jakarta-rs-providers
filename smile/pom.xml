@@ -47,9 +47,11 @@
       <artifactId>jackson-dataformat-smile</artifactId>
     </dependency>
     <!-- may also need XmlBind annotation support -->
+    <!-- 05-Dec-2024, tatu: But make optional -->
     <dependency> 
       <groupId>tools.jackson.module</groupId>
       <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <build>
