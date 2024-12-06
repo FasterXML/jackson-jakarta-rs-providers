@@ -23,8 +23,8 @@
     <packageVersion.dir>tools/jackson/jakarta/rs/json</packageVersion.dir>
     <packageVersion.package>${project.groupId}.json</packageVersion.package>
     <osgi.export>${project.groupId}.json.*;version=${project.version}</osgi.export>
-    <!-- NOTE: Jakarta XmlBind annotations module is optional dependency, need to try to mark
-         as such here.
+    <!-- NOTE: Jakarta XmlBind annotations module is optional dependency,
+         need to try to mark as such here.
       -->
     <osgi.import>jakarta.ws.rs;version="${jakarta.ws.rs.version}"
 ,jakarta.ws.rs.core;version="${jakarta.ws.rs.version}"
@@ -42,9 +42,11 @@
       <version>${project.version}</version>
     </dependency>
     <!-- also need Jakarta XmlBind annotation support -->
+    <!-- 05-Dec-2024, tatu: But make optional -->
     <dependency> 
       <groupId>tools.jackson.module</groupId>
       <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <!-- test deps should mostly come from parent, including jersey,

@@ -15,3 +15,4 @@ Sub-modules:
 - Minimum Java baseline: Java 17
 - Remove `Annotations` enum abstraction, replace with direct `AnnotationIntrospector`
   configuration.
+- Make Jakarta XML Bind dependency (Maven) optional

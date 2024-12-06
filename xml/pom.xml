@@ -44,10 +44,12 @@
       <groupId>tools.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-xml</artifactId>
     </dependency>
-    <!-- may also need JAXB annotation support -->
+    <!-- may also need XmlBind annotation support -->
+    <!-- 05-Dec-2024, tatu: But make optional -->
     <dependency> 
       <groupId>tools.jackson.module</groupId>
       <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+      <optional>true</optional>
     </dependency>
     <!--  But Stax2 API must be included -->
     <dependency>
