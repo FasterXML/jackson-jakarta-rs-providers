@@ -95,31 +95,28 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             }
         }
 
-		protected static class JsonLinkDeserializer extends ValueDeserializer<Link>
-		{
-			@Override
-			public Link deserialize(JsonParser p, DeserializationContext ctxt)
-			        throws JacksonException
-			{
-				Link link = null;
-				JsonNode jsonNode = ctxt.readTree(p);
-				JsonNode hrefJsonNode = jsonNode.get(JsonLinkSerializer.HREF_PROPERTY);
-				if (hrefJsonNode != null) {
-					Link.Builder linkBuilder = Link.fromUri(hrefJsonNode.asText());
-					Iterator<String> fieldNamesIterator = jsonNode.propertyNames();
-					while (fieldNamesIterator.hasNext()) {
-						String fieldName = fieldNamesIterator.next();
-						if (!JsonLinkSerializer.HREF_PROPERTY.equals(fieldName)) {
-							linkBuilder.param(fieldName, jsonNode.get(fieldName).asText());
-						}
-					}
-					link = linkBuilder.build();
-				}
-				return link;
-			}
+        protected static class JsonLinkDeserializer extends ValueDeserializer<Link>
+        {
+            @Override
+            public Link deserialize(JsonParser p, DeserializationContext ctxt)
+                    throws JacksonException
+            {
+                Link link = null;
+                JsonNode jsonNode = ctxt.readTree(p);
+                JsonNode hrefJsonNode = jsonNode.get(JsonLinkSerializer.HREF_PROPERTY);
+                if (hrefJsonNode != null) {
+                    Link.Builder linkBuilder = Link.fromUri(hrefJsonNode.asText());
 
-		}
-
+                    for (Map.Entry<String, JsonNode> entry : jsonNode.properties()) {
+                        if (!JsonLinkSerializer.HREF_PROPERTY.equals(entry.getKey())) {
+                            linkBuilder.param(entry.getKey(), entry.getValue().asText());
+                        }
+                    }
+                    link = linkBuilder.build();
+                }
+                return link;
+            }
+        }
 
         private List<E> entities;
         @JsonSerialize(contentUsing = JsonLinkSerializer.class)
