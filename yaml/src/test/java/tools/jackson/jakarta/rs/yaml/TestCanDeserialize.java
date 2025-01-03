@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 
-import tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider;
-
 public class TestCanDeserialize extends JakartaRSTestBase
 {
     static class Bean {

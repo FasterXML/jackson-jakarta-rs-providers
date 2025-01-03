@@ -8,10 +8,6 @@ import java.util.*;
 
 import org.junit.Assert;
 
-import tools.jackson.databind.JavaType;
-import tools.jackson.databind.cfg.MapperConfig;
-import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
-
 public abstract class JakartaRSTestBase
     extends junit.framework.TestCase
 {

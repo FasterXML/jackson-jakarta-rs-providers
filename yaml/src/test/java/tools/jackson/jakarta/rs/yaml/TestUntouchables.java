@@ -6,7 +6,6 @@ import java.util.HashSet;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.StreamingOutput;
-import tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider;
 
 /**
  * Unit tests for verifying that certain JDK base types will be

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import jakarta.ws.rs.core.MediaType;
 import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 public class TestCanDeserialize extends JakartaRSTestBase
 {

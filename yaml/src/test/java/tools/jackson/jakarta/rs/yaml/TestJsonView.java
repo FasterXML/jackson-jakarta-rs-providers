@@ -5,7 +5,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider;
 
 import com.fasterxml.jackson.annotation.JsonView;
 

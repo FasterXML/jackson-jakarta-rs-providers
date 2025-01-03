@@ -10,7 +10,6 @@ import tools.jackson.core.*;
 import tools.jackson.databind.*;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
-import tools.jackson.jakarta.rs.json.PackageVersion;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},

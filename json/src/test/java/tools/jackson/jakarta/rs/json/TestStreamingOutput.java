@@ -5,7 +5,6 @@ import java.lang.annotation.Annotation;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.StreamingOutput;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 public class TestStreamingOutput extends JakartaRSTestBase
 {

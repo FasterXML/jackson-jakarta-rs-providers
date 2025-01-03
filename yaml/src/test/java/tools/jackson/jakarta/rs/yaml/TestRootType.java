@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider;
 
 public class TestRootType
     extends JakartaRSTestBase

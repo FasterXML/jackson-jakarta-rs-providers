@@ -5,7 +5,6 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.xml.JacksonXMLProvider;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;

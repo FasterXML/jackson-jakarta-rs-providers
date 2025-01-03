@@ -9,10 +9,10 @@ import java.util.List;
 import jakarta.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 import tools.jackson.jakarta.rs.json.testutil.NoCheckSubTypeValidator;
 
 /**

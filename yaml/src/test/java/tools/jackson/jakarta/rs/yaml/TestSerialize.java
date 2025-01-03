@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;

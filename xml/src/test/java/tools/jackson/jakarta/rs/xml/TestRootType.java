@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.jakarta.rs.xml.JacksonXMLProvider;
 
 public class TestRootType
     extends JakartaRSTestBase

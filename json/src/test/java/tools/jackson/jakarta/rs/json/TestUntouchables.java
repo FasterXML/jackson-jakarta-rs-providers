@@ -6,7 +6,6 @@ import java.util.*;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.StreamingOutput;
-import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 /**
  * Unit tests for verifying that certain JDK base types will be

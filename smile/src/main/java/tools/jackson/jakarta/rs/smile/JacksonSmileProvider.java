@@ -19,7 +19,6 @@ import tools.jackson.databind.ObjectWriter;
 
 import tools.jackson.dataformat.smile.databind.SmileMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
-import tools.jackson.jakarta.rs.smile.PackageVersion;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@code MessageBodyReader},

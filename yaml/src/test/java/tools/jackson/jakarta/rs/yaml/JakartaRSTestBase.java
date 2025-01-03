@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.yaml.YAMLMediaTypes;
 
 import org.junit.Assert;
 

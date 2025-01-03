@@ -4,11 +4,7 @@ import java.io.*;
 import java.lang.annotation.Annotation;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.cbor.JacksonCBORProvider;
 
-/**
- * Unit test to check [JACKSON-540]
- */
 public class TestCanDeserializeCBOR extends JakartaRSTestBase
 {
     static class Bean {

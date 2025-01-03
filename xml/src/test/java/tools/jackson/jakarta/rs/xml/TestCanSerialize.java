@@ -4,7 +4,6 @@ import java.io.*;
 import java.lang.annotation.Annotation;
 
 import jakarta.ws.rs.core.MediaType;
-import tools.jackson.jakarta.rs.xml.JacksonXMLProvider;
 
 public class TestCanSerialize extends JakartaRSTestBase
 {
