@@ -15,6 +15,8 @@ Sub-modules:
 #36: Narrow types to format specific (e.g. CBORMapper) when resolving
   via JAX-RS Providers
  (suggested by Kevin W)
+#41: Configure `PrettyPrinter` not correctly propagated to underlying
+  `JsonGenerator`
 * Woodstox dependency now 7.1.0
 
 2.18.2 (27-Nov-2024)
