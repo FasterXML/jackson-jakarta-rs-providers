@@ -1,12 +1,12 @@
-// Jakarta-RS Smile module-info for (unit) Tests
-module tools.jackson.jakarta.rs.smile
+// Jakarta-RS XML module-info for (unit) Tests
+module tools.jackson.jakarta.rs.xml
 {
     // Since we are not split from Main artifact, will not
     // need to depend on Main artifact -- but need its dependencies
 
     requires tools.jackson.core;
     requires tools.jackson.databind;
-    requires tools.jackson.dataformat.smile;
+    requires tools.jackson.dataformat.xml;
     requires tools.jackson.module.jakarta.xmlbind;
     requires tools.jackson.jakarta.rs.base;
 
@@ -19,7 +19,7 @@ module tools.jackson.jakarta.rs.smile
     requires org.eclipse.jetty.servlet;
 
     // Further, need to open up test packages for JUnit et al
-    opens tools.jackson.jakarta.rs.smile;
-    opens tools.jackson.jakarta.rs.smile.dw;
-    opens tools.jackson.jakarta.rs.smile.jersey;
+    opens tools.jackson.jakarta.rs.xml;
+    opens tools.jackson.jakarta.rs.xml.dw;
+    opens tools.jackson.jakarta.rs.xml.jersey;
 }
