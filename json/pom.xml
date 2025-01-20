@@ -123,11 +123,6 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-      </plugin>
-
     </plugins>
   </build>
 </project>
