@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-cbor-provider</artifactId>
   <name>Jackson Jakarta-RS: CBOR</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Functionality to handle CBOR encoded input/output for Jakarta-RS implementations
 (like Jersey and RESTeasy) using standard Jackson data binding.
   </description>

@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-xml-provider</artifactId>
   <name>Jackson Jakarta-RS: XML</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Functionality to handle XML input/output for Jakarta-RS implementations
 (like Jersey and RESTeasy) using standard Jackson data binding.
   </description>

@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-base</artifactId>
   <name>Jackson Jakarta-RS: base</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Pile of code that is shared by all Jackson-based Jakarta-RS
 providers.
   </description>
