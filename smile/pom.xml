@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-smile-provider</artifactId>
   <name>Jackson Jakarta-RS: Smile</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Functionality to handle Smile (binary JSON) input/output for Jakarta-RS implementations
 (like Jersey and RESTeasy) using standard Jackson data binding.
   </description>
@@ -88,11 +88,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-      </plugin>
-
     </plugins>
   </build>
 </project>

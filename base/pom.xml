@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-base</artifactId>
   <name>Jackson Jakarta-RS: base</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Pile of code that is shared by all Jackson-based Jakarta-RS
 providers.
   </description>
@@ -44,14 +44,4 @@ ${project.groupId}.annotation.*;version=${project.version}
     </dependency>
     <!-- test deps should come from parent -->
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-      </plugin>
-
-    </plugins>
-  </build>
 </project>

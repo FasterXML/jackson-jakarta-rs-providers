@@ -13,7 +13,7 @@
   </parent>
   <artifactId>jackson-jakarta-rs-json-provider</artifactId>
   <name>Jackson Jakarta-RS: JSON</name>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <description>Functionality to handle JSON input/output for Jakarta-RS implementations
 (like Jersey and RESTeasy) using standard Jackson data binding.
   </description>
@@ -123,11 +123,6 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-      </plugin>
-
     </plugins>
   </build>
 </project>

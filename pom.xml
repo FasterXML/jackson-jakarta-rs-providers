@@ -63,7 +63,7 @@
     <dependency>
       <groupId>jakarta.ws.rs</groupId>
       <artifactId>jakarta.ws.rs-api</artifactId>
-      <version>3.0.0</version>
+      <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -177,16 +177,6 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
           </executions>
         </plugin>
 
-        <plugin>
-          <groupId>org.moditect</groupId>
-          <artifactId>moditect-maven-plugin</artifactId>
-          <!-- 20-Feb-2021, tatu: For Jackson 2.x, put `module-info.class` under location
-                  only visible to JDK 11+ (to avoid issues with older pre-Java9 frameworks?)
-            -->
-          <configuration>
-            <jvmVersion>11</jvmVersion>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
 
