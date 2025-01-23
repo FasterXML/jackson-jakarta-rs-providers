@@ -10,7 +10,8 @@ import tools.jackson.core.*;
 
 import tools.jackson.databind.*;
 
-import tools.jackson.dataformat.cbor.databind.CBORMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
+
 import tools.jackson.jakarta.rs.base.ProviderBase;
 
 /**

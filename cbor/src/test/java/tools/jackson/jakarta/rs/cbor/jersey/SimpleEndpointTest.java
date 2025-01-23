@@ -1,6 +1,7 @@
 package tools.jackson.jakarta.rs.cbor.jersey;
 
 import jakarta.servlet.Servlet;
+
 import tools.jackson.jakarta.rs.cbor.dw.SimpleEndpointTestBase;
 
 import org.glassfish.jersey.servlet.ServletContainer;

@@ -7,7 +7,7 @@ import jakarta.ws.rs.ext.Provider;
 
 import tools.jackson.databind.AnnotationIntrospector;
 
-import tools.jackson.dataformat.smile.databind.SmileMapper;
+import tools.jackson.dataformat.smile.SmileMapper;
 
 import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector;
 

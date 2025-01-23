@@ -15,8 +15,10 @@ import org.junit.Assert;
 
 import tools.jackson.databind.ObjectMapper;
 
-import tools.jackson.dataformat.smile.databind.SmileMapper;
+import tools.jackson.dataformat.smile.SmileMapper;
+
 import tools.jackson.dataformat.yaml.YAMLMapper;
+
 import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 import tools.jackson.jakarta.rs.smile.JacksonSmileProvider;
 import tools.jackson.jakarta.rs.smile.SmileMediaTypes;

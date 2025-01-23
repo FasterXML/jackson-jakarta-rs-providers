@@ -12,7 +12,7 @@ import org.junit.Assert;
 
 import tools.jackson.databind.ObjectMapper;
 
-import tools.jackson.dataformat.cbor.databind.CBORMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 import tools.jackson.jakarta.rs.cbor.CBORMediaTypes;
 
 public abstract class SimpleEndpointTestBase extends ResourceTestBase
