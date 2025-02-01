@@ -5,12 +5,17 @@ import java.lang.annotation.Annotation;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestCanDeserialize extends JakartaRSTestBase
 {
     static class Bean {
         public int x;
     }
     
+    @Test
     public void testCanSerialize() throws IOException
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();
@@ -23,6 +28,7 @@ public class TestCanDeserialize extends JakartaRSTestBase
     }
 
     // [Issue#4]: exception for no content
+    @Test
     public void testCanSerializeEmpty() throws IOException
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();

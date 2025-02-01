@@ -9,11 +9,16 @@ import java.util.Map;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.jakarta.rs.cfg.JakartaRSFeature;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCanDeserialize extends JakartaRSTestBase
 {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
 	public void testCanDeserialize() throws IOException {
 		Map<String, Object> object = new LinkedHashMap<String, Object>();
 		JacksonJsonProvider prov = new JacksonJsonProvider();
@@ -28,6 +33,7 @@ public class TestCanDeserialize extends JakartaRSTestBase
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
 	public void testCanDeserializeEmpty() throws IOException {
 		JacksonJsonProvider prov = new JacksonJsonProvider();
 
@@ -43,7 +49,8 @@ public class TestCanDeserialize extends JakartaRSTestBase
 	/**
 	 * Unit test for verifying functioning of {@link JakartaRSFeature#ALLOW_EMPTY_INPUT}.
 	 */
-     public void testFailingDeserializeEmpty() throws IOException {
+     @Test
+    public void testFailingDeserializeEmpty() throws IOException {
          JacksonJsonProvider prov = new JacksonJsonProvider();
          prov.disable(JakartaRSFeature.ALLOW_EMPTY_INPUT);
 

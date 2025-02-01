@@ -3,9 +3,13 @@ package com.fasterxml.jackson.jakarta.rs.json.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.jakarta.rs.cfg.AnnotationBundleKey;
 import com.fasterxml.jackson.jakarta.rs.json.JakartaRSTestBase;
 import com.fasterxml.jackson.jakarta.rs.json.annotation.JSONP;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestAnnotationBundleKey extends JakartaRSTestBase
 {
@@ -21,6 +25,7 @@ public class TestAnnotationBundleKey extends JakartaRSTestBase
     /**********************************************************
      */
 
+    @Test
     public void testKeys() throws Exception
     {
        Method m1 = getClass().getDeclaredMethod("annotated1");

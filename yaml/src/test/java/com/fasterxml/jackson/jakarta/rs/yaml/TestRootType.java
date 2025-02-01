@@ -7,12 +7,16 @@ import java.util.List;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRootType
     extends JakartaRSTestBase
@@ -23,6 +27,7 @@ public class TestRootType
         public int a = 3;
     }
     
+    @Test
     public void testRootType() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
