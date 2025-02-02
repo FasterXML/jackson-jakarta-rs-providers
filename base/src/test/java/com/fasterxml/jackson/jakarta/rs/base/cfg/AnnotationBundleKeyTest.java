@@ -4,14 +4,15 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.jakarta.rs.base.BaseTestBase;
 import com.fasterxml.jackson.jakarta.rs.cfg.AnnotationBundleKey;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 // for [jaxrs-providers#111]
 public class AnnotationBundleKeyTest
@@ -42,11 +43,13 @@ public class AnnotationBundleKeyTest
         public void setX(@JsonProperty("x") int x) { }
     }
 
+    @Test
     public void testWithClassAnnotations() throws Exception
     {
         _checkWith(Helper.class.getAnnotations(), Helper.class.getAnnotations());
     }
 
+    @Test
     public void testWithMethodAnnotationEquals() throws Exception
     {
         // First, same method parameters definitely should match
@@ -58,6 +61,7 @@ public class AnnotationBundleKeyTest
                 Helper.class.getDeclaredMethod("altX").getAnnotations());
     }
 
+    @Test
     public void testWithMethodAnnotationDifferent() throws Exception
     {
         // However: not so with actually differing annotations
@@ -65,18 +69,21 @@ public class AnnotationBundleKeyTest
                 Helper.class.getDeclaredMethod("notX").getAnnotations());
     }
 
+    @Test
     public void testWithMethodParameterAnnotation() throws Exception
     {
         _checkWith(Helper.class.getDeclaredMethod("setX", Integer.TYPE).getParameterAnnotations()[0],
                 Helper.class.getDeclaredMethod("setX", Integer.TYPE).getParameterAnnotations()[0]);
     }
 
+    @Test
     public void testWithConstructorAnnotation() throws Exception
     {
         _checkWith(Helper.class.getConstructor(Integer.TYPE).getAnnotations(),
                 Helper.class.getConstructor(Integer.TYPE).getAnnotations());
     }
     
+    @Test
     public void testWithConstructorParameterAnnotation() throws Exception
     {
         _checkWith(Helper.class.getConstructor(Integer.TYPE).getParameterAnnotations()[0],
@@ -90,14 +97,13 @@ public class AnnotationBundleKeyTest
         }
         Arrays.sort(anns1, Comparator.comparing(Annotation::toString));
         Arrays.sort(anns2, Comparator.comparing(Annotation::toString));
-        assertArrayEquals("Internal error: should never differ", anns1, anns2);
+        assertArrayEquals(anns1, anns2, "Internal error: should never differ");
 
         AnnotationBundleKey b1 = new AnnotationBundleKey(anns1, Object.class);
         AnnotationBundleKey b2 = new AnnotationBundleKey(anns2, Object.class);
 
         if (!b1.equals(b2) || !b2.equals(b1)) {
-            assertEquals(String.format("Implementations over %s backed annotations differ", anns1[0].getClass()),
-                    b1, b2);
+            assertEquals(b1, b2,String.format("Implementations over %s backed annotations differ", anns1[0].getClass()));
         }
     }
 
@@ -106,8 +112,8 @@ public class AnnotationBundleKeyTest
         AnnotationBundleKey b2 = new AnnotationBundleKey(anns2, Object.class);
 
         if (b1.equals(b2) || b2.equals(b1)) {
-            assertNotEquals(String.format("Implementations over %s backed annotations SHOULD differ but won't", anns1[0].getClass()),
-                    b1, b2);
+            assertNotEquals(b1, b2,
+                    String.format("Implementations over %s backed annotations SHOULD differ but won't", anns1[0].getClass()));
         }
     }
 }

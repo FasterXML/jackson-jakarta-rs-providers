@@ -8,10 +8,9 @@ import java.util.Arrays;
 
 import jakarta.ws.rs.core.MediaType;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class JakartaRSTestBase
-    extends junit.framework.TestCase
 {
     public static final MediaType YAML_MEDIA_TYPE = YAMLMediaTypes.APPLICATION_JACKSON_YAML_TYPE;
 
@@ -47,7 +46,7 @@ public abstract class JakartaRSTestBase
 
     protected void _verifyBytes(byte[] actBytes, byte... expBytes)
     {
-        Assert.assertArrayEquals(expBytes, actBytes);
+        assertArrayEquals(expBytes, actBytes);
     }
 
     /*

@@ -6,10 +6,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class JakartaRSTestBase
-    extends junit.framework.TestCase
 {
     /*
     /**********************************************************************
@@ -43,7 +42,7 @@ public abstract class JakartaRSTestBase
     
     protected void _verifyBytes(byte[] actBytes, byte... expBytes)
     {
-        Assert.assertArrayEquals(expBytes, actBytes);
+        assertArrayEquals(expBytes, actBytes);
     }
 
     /*
