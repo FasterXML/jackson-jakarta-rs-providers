@@ -17,6 +17,7 @@ Sub-modules:
  (suggested by Kevin W)
 #41: Configure `PrettyPrinter` not correctly propagated to underlying
   `JsonGenerator`
+#45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
 2.18.2 (27-Nov-2024)
