@@ -7,8 +7,12 @@ import java.util.List;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSerialize extends JakartaRSTestBase
 {
@@ -48,6 +52,7 @@ public class TestSerialize extends JakartaRSTestBase
      */
     
     // [Issue-1]
+    @Test
     public void testSimpleWriteTo() throws Exception
     {
         Messages msgs = new Messages();

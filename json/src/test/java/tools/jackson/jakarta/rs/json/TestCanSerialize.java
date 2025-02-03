@@ -3,12 +3,16 @@ package tools.jackson.jakarta.rs.json;
 import java.io.*;
 import java.util.*;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.jakarta.rs.json.testutil.NoCheckSubTypeValidator;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCanSerialize extends JakartaRSTestBase
 {
@@ -19,6 +23,7 @@ public class TestCanSerialize extends JakartaRSTestBase
         public void setList(List<String> l) { list = l; }
     }
 
+    @Test
     public void testCanSerialize() throws IOException
     {
         ObjectMapper mapper = JsonMapper.builder()

@@ -1,5 +1,7 @@
 package tools.jackson.jakarta.rs.json.resteasy;
 
+import org.junit.jupiter.api.Test;
+
 import org.jboss.resteasy.plugins.providers.jackson.ResteasyJackson2Provider;
 
 import tools.jackson.jakarta.rs.json.JakartaRSTestBase;
@@ -9,6 +11,7 @@ import tools.jackson.jakarta.rs.json.JakartaRSTestBase;
 //   catch some specific issues.
 public class RestEasyProviderLoadingTest extends JakartaRSTestBase
 {
+    @Test
     public void testLoading() throws Exception
     {
      // 13-Aug-2022, tatu: Won't work with Jackson 3.x, so comment out

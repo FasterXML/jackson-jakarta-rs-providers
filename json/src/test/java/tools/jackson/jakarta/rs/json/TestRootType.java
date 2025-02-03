@@ -7,11 +7,15 @@ import java.util.List;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import tools.jackson.core.type.TypeReference;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRootType
     extends JakartaRSTestBase
@@ -28,6 +32,7 @@ public class TestRootType
     /**********************************************************************
      */
     
+    @Test
     public void testRootType() throws Exception
     {
         JacksonJsonProvider prov = new JacksonJsonProvider();

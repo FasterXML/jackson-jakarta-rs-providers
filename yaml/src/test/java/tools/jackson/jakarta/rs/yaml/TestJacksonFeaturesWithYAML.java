@@ -7,12 +7,16 @@ import java.lang.reflect.Method;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.exc.UnrecognizedPropertyException;
 import tools.jackson.jakarta.rs.annotation.JacksonFeatures;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for addition of {@link JacksonFeatures}.
@@ -46,6 +50,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
     /**********************************************************************
      */
 
+    @Test
     public void testWriteConfigs() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
@@ -70,6 +75,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
         assertEquals("---\na: 3\n", out.toString("UTF-8"));
     }
     
+    @Test
     public void testWriteConfigsViaBundle() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
@@ -83,6 +89,7 @@ public class TestJacksonFeaturesWithYAML extends JakartaRSTestBase
         assertEquals("---\nBean:\n  a: 3\n", out.toString("UTF-8"));
     }
 
+    @Test
     public void testReadConfigs() throws Exception
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();

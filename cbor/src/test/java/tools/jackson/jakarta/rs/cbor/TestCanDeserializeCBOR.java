@@ -3,7 +3,11 @@ package tools.jackson.jakarta.rs.cbor;
 import java.io.*;
 import java.lang.annotation.Annotation;
 
+import org.junit.jupiter.api.Test;
+
 import jakarta.ws.rs.core.MediaType;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCanDeserializeCBOR extends JakartaRSTestBase
 {
@@ -12,6 +16,7 @@ public class TestCanDeserializeCBOR extends JakartaRSTestBase
     }
 
     // [Issue#1]: exception for no content
+    @Test
     public void testCanSerializeEmpty() throws IOException
     {
         JacksonCBORProvider prov = new JacksonCBORProvider();

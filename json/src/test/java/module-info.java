@@ -11,9 +11,10 @@ module tools.jackson.jakarta.rs.json
     requires tools.jackson.jakarta.rs.base;
 
     // Additional test lib/framework dependencies
-    requires junit; // JUnit 4
+    requires org.junit.jupiter.api;
 
     // Other test deps
+    requires jersey.container.servlet.core;
     requires jetty.servlet.api;
     requires org.eclipse.jetty.server;
     requires org.eclipse.jetty.servlet;

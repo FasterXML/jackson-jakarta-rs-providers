@@ -5,6 +5,10 @@ import java.util.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.StreamingOutput;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Unit tests for verifying that certain JDK base types will be
  * ignored by default Jackson JAX-RS conversion provider.
@@ -30,6 +34,7 @@ public class TestUntouchables
     /**********************************************************
      */
     
+    @Test
     public void testDefaultUntouchables() throws Exception
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();
@@ -45,6 +50,7 @@ public class TestUntouchables
         assertFalse(prov.isReadable(byte[].class, getClass(), null, null));
     }
 
+    @Test
     public void testCustomUntouchables() throws Exception
     {
         JacksonXMLProvider prov = new JacksonXMLProvider();        

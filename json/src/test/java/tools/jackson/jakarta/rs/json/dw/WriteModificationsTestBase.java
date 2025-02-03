@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.net.*;
 
 import jakarta.servlet.*;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
+
+import org.junit.jupiter.api.Test;
 
 import org.eclipse.jetty.server.Server;
 
@@ -17,6 +16,8 @@ import tools.jackson.databind.ObjectWriter;
 import tools.jackson.jakarta.rs.cfg.EndpointConfigBase;
 import tools.jackson.jakarta.rs.cfg.ObjectWriterInjector;
 import tools.jackson.jakarta.rs.cfg.ObjectWriterModifier;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class WriteModificationsTestBase extends ResourceTestBase
 {
@@ -162,6 +163,7 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
      * Test in which writer/generator modification is handled by
      * changing state from Servlet Filter.
      */
+    @Test
     public void testIndentationWithFilter() throws Exception
     {
         // We need a filter to inject modifier that enables
@@ -182,6 +184,7 @@ public abstract class WriteModificationsTestBase extends ResourceTestBase
      * Test in which output writer/generator is modified by assignment from
      * resource method itself.
      */
+    @Test
     public void testIndentationWithResource() throws Exception
     {
         // We need a filter to inject modifier that enables

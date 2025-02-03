@@ -6,7 +6,11 @@ import java.lang.reflect.Method;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JsonView;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestJsonView extends JakartaRSTestBase
 {
@@ -30,7 +34,7 @@ public class TestJsonView extends JakartaRSTestBase
     /**********************************************************
      */
 
-    // [JACKSON-578]
+    @Test
     public void testViews() throws Exception
     {
         JacksonJsonProvider prov = new JacksonJsonProvider();
@@ -45,6 +49,7 @@ public class TestJsonView extends JakartaRSTestBase
     }
 
     // [Issue#24]
+    @Test
     public void testDefaultView() throws Exception
     {
         JacksonJsonProvider prov = new JacksonJsonProvider();

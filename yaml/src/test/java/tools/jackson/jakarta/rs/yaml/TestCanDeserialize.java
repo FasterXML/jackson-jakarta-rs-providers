@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestCanDeserialize extends JakartaRSTestBase
 {
     static class Bean {
         public int x;
     }
     
+    @Test
     public void testCanSerialize() throws IOException
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
@@ -22,7 +27,7 @@ public class TestCanDeserialize extends JakartaRSTestBase
         assertEquals(3, b.x);
     }
 
-    // [Issue#4]: exception for no content
+    @Test
     public void testCanSerializeEmpty() throws IOException
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();

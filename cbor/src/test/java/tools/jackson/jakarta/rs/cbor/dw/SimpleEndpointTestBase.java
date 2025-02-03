@@ -8,12 +8,15 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
 import org.eclipse.jetty.server.Server;
-import org.junit.Assert;
+
+import org.junit.jupiter.api.Test;
 
 import tools.jackson.databind.ObjectMapper;
 
 import tools.jackson.dataformat.cbor.CBORMapper;
 import tools.jackson.jakarta.rs.cbor.CBORMediaTypes;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class SimpleEndpointTestBase extends ResourceTestBase
 {
@@ -73,6 +76,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     /**********************************************************************
      */
 
+    @Test
     public void testSimpleObject() throws Exception
     {
         final ObjectMapper mapper = new CBORMapper();
@@ -97,6 +101,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(2, p.y);
     }
 
+    @Test
     public void testCustomMediaTypeWithCborExtension() throws Exception
     {
         final ObjectMapper mapper = new CBORMapper();
@@ -121,6 +126,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     }
 
     // [Issue#34] Verify that Untouchables act the way as they should
+    @Test
     public void testUntouchables() throws Exception
     {
         Server server = startServer(TEST_PORT, SimpleRawApp.class);
@@ -129,7 +135,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             _verifyResponse(conn);
             try (InputStream in = url.openStream()) {
-                Assert.assertArrayEquals(UNTOUCHABLE_RESPONSE, readAll(in));
+                assertArrayEquals(UNTOUCHABLE_RESPONSE, readAll(in));
             }
         } finally {
             server.stop();

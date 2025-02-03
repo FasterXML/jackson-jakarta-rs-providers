@@ -67,6 +67,19 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- Test dependencies -->
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
@@ -119,13 +132,6 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
       <groupId>ch.qos.logback </groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- 17-Jun-2024 : JUnit4 no longer from jackson-base, so: -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

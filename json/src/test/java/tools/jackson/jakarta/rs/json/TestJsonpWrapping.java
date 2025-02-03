@@ -5,9 +5,14 @@ import java.lang.annotation.Annotation;
 
 import jakarta.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestJsonpWrapping
     extends JakartaRSTestBase
 {
+    @Test
     public void testSimple() throws Exception
     {
         JacksonJsonProvider prov = new JacksonJsonProvider();
