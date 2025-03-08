@@ -20,6 +20,7 @@ Sub-modules:
 #45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
+2.18.3 (28-Feb-2025)
 2.18.2 (27-Nov-2024)
 2.18.1 (28-Oct-2024)
 
