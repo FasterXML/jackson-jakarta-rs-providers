@@ -10,7 +10,7 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.19.0 (not yet released)
+2.19.0-rc2 (07-Apr-2025)
 
 #36: Narrow types to format specific (e.g. CBORMapper) when resolving
   via JAX-RS Providers
