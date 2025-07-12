@@ -24,3 +24,10 @@ Kevin Wooten (@kdubb)
 * Suggested #36: Narrow types to format specific (e.g. CBORMapper) when resolving
   via JAX-RS Providers	
  (2.19.0)
+
+Amir Avidan (@amiravi)
+* Reported #41: `UTF8JsonGenerator` copies the static singleton of DEFAULT_PRETTY_PRINTER,
+  then uses it during the JSON serialization.
+ (2.19.2)
+
+
