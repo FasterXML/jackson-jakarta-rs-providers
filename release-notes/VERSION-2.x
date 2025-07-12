@@ -14,6 +14,12 @@ Sub-modules:
 
 - Generate SBOMs [JSTEP-14]
 
+2.19.2 (not yet released)
+
+#41: `UTF8JsonGenerator` copies the static singleton of DEFAULT_PRETTY_PRINTER,
+   then uses it during the JSON serialization.
+ (reported by Amir A)
+
 2.19.1 (13-Jun-2025)
 
 - Add explicit version for Woodstox, stax2-api (no longer managed via jackson-bom)
