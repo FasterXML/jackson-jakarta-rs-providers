@@ -12,7 +12,7 @@ import jakarta.ws.rs.ext.MessageBodyWriter;
 import jakarta.ws.rs.ext.Providers;
 
 import com.fasterxml.jackson.core.*;
-
+import com.fasterxml.jackson.core.util.Instantiatable;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.LRUMap;
@@ -565,9 +565,13 @@ public abstract class ProviderBase<
         try {
             // Want indentation?
             if (writer.isEnabled(SerializationFeature.INDENT_OUTPUT)) {
-                PrettyPrinter defaultPrettyPrinter = writer.getConfig().getDefaultPrettyPrinter();
-                if (defaultPrettyPrinter != null) {
-                    g.setPrettyPrinter(defaultPrettyPrinter);
+                PrettyPrinter defaultPP = writer.getConfig().getDefaultPrettyPrinter();
+                if (defaultPP != null) {
+                    // 11-Jul-2025, tatu: As per [jakarta-rs-providers#54], need to:
+                    if (defaultPP instanceof Instantiatable<?>) {
+                        defaultPP = (PrettyPrinter) ((Instantiatable<?>) defaultPP).createInstance();
+                    }
+                    g.setPrettyPrinter(defaultPP);
                 } else {
                     g.useDefaultPrettyPrinter();
                 }
