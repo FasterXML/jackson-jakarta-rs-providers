@@ -14,7 +14,7 @@ Sub-modules:
 
 - Generate SBOMs [JSTEP-14]
 
-2.19.2 (not yet released)
+2.19.2 (18-Jul-2025)
 
 #41: `UTF8JsonGenerator` copies the static singleton of DEFAULT_PRETTY_PRINTER,
    then uses it during the JSON serialization.
