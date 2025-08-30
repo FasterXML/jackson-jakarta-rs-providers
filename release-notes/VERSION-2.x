@@ -10,7 +10,11 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.20.0-rc1 (04-Aug-2025)
+2.21.0 (not yet released)
+
+No changes since 2.20
+
+2.20.0 (28-Aug-2025)
 
 - Generate SBOMs [JSTEP-14]
 
