@@ -1,6 +1,13 @@
 Here are people who have contributed to development Jackson JSON processor
 Jakarta-RS providers module, version 3.x
 (version numbers in brackets indicate release in which the problem was fixed)
+(for Jackson 2.x credits, see CREDITS-2.x)
 
 Tatu Saloranta, tatu.saloranta@iki.fi: author
 
+----------------------------------------------------------------------------
+
+Andriy Redko (@reta)
+
+* Contributed #57: Fix ServiceLoader manifests due to 3.0 package changes
+ [3.0.1]

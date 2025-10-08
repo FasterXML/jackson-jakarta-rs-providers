@@ -1,2 +1,2 @@
-com.fasterxml.jackson.jakarta.rs.yaml.JacksonYAMLProvider
+tools.jackson.jakarta.rs.yaml.JacksonYAMLProvider
 

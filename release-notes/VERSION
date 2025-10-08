@@ -10,6 +10,11 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+3.0.1 (not yet released)
+
+#57: Fix ServiceLoader manifests due to 3.0 package changes
+ (contributed by Andriy R)
+
 3.0.0 (03-Oct-2025)
 
 #43: Change 3.0 to use `module-info.java` directly [JSTEP-11]
