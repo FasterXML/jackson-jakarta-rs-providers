@@ -27,4 +27,8 @@ module tools.jackson.jakarta.rs.json
     opens tools.jackson.jakarta.rs.json.resteasy;
     opens tools.jackson.jakarta.rs.json.testutil;
     opens tools.jackson.jakarta.rs.json.util;
+
+    // ServiceLoader tests
+    uses jakarta.ws.rs.ext.MessageBodyWriter;
+    uses jakarta.ws.rs.ext.MessageBodyReader;
 }

@@ -28,4 +28,8 @@ module tools.jackson.jakarta.rs.yaml
     opens tools.jackson.jakarta.rs.yaml;
     opens tools.jackson.jakarta.rs.yaml.dw;
     opens tools.jackson.jakarta.rs.yaml.jersey;
+
+    // ServiceLoader tests
+    uses jakarta.ws.rs.ext.MessageBodyWriter;
+    uses jakarta.ws.rs.ext.MessageBodyReader;
 }

@@ -23,4 +23,8 @@ module tools.jackson.jakarta.rs.smile
     opens tools.jackson.jakarta.rs.smile;
     opens tools.jackson.jakarta.rs.smile.dw;
     opens tools.jackson.jakarta.rs.smile.jersey;
+
+    // ServiceLoader tests
+    uses jakarta.ws.rs.ext.MessageBodyWriter;
+    uses jakarta.ws.rs.ext.MessageBodyReader;
 }
