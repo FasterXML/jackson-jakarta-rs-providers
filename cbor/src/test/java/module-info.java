@@ -24,4 +24,8 @@ module tools.jackson.jakarta.rs.cbor
     opens tools.jackson.jakarta.rs.cbor;
     opens tools.jackson.jakarta.rs.cbor.dw;
     opens tools.jackson.jakarta.rs.cbor.jersey;
+
+    // ServiceLoader tests
+    uses jakarta.ws.rs.ext.MessageBodyWriter;
+    uses jakarta.ws.rs.ext.MessageBodyReader;
 }

@@ -23,4 +23,8 @@ module tools.jackson.jakarta.rs.xml
     opens tools.jackson.jakarta.rs.xml;
     opens tools.jackson.jakarta.rs.xml.dw;
     opens tools.jackson.jakarta.rs.xml.jersey;
+
+    // ServiceLoader tests
+    uses jakarta.ws.rs.ext.MessageBodyWriter;
+    uses jakarta.ws.rs.ext.MessageBodyReader;
 }
