@@ -10,7 +10,7 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-3.0.1 (not yet released)
+3.0.1 (21-Oct-2025)
 
 #57: Fix ServiceLoader manifests due to 3.0 package changes
  (contributed by Andriy R)
