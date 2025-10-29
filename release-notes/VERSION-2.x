@@ -18,6 +18,10 @@ No changes since 2.20
 
 - Generate SBOMs [JSTEP-14]
 
+2.19.3 (29-Oct-2025)
+
+No changes since 2.19.2
+
 2.19.2 (18-Jul-2025)
 
 #41: `UTF8JsonGenerator` copies the static singleton of DEFAULT_PRETTY_PRINTER,
@@ -38,6 +42,7 @@ No changes since 2.20
 #45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
+2.18.5 (27-Oct-2025)
 2.18.4 (06-May-2025)
 2.18.3 (28-Feb-2025)
 2.18.2 (27-Nov-2024)
