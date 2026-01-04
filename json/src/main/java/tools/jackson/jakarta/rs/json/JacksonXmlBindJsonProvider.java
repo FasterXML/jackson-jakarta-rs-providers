@@ -51,6 +51,7 @@ public class JacksonXmlBindJsonProvider extends JacksonJsonProvider
     /**
      * Constructor for use with a custom mapperConfigurator (usually implementing
      * some methods from MapperConfiguratorBase)
+     * @since 3.1
      */
     public JacksonXmlBindJsonProvider(JsonMapperConfigurator mapperConfigurator) {
         super(mapperConfigurator);

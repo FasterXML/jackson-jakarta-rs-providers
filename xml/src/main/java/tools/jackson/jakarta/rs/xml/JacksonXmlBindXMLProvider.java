@@ -50,6 +50,7 @@ public class JacksonXmlBindXMLProvider extends JacksonXMLProvider
     /**
      * Constructor for use with a custom mapperConfigurator (usually implementing
      * some methods from MapperConfiguratorBase)
+     * @since 3.1
      */
     public JacksonXmlBindXMLProvider(XMLMapperConfigurator mapperConfigurator) {
         super(mapperConfigurator);

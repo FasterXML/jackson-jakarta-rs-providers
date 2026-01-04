@@ -54,6 +54,7 @@ public class JacksonXmlBindCBORProvider extends JacksonCBORProvider
     /**
      * Constructor for use with a custom mapperConfigurator (usually implementing
      * some methods from MapperConfiguratorBase)
+     * @since 3.1
      */
     public JacksonXmlBindCBORProvider(CBORMapperConfigurator mapperConfigurator) {
         super(mapperConfigurator);

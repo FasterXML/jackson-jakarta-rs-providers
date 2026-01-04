@@ -51,6 +51,7 @@ public class JacksonXmlBindYAMLProvider extends JacksonYAMLProvider
     /**
      * Constructor for use with a custom mapperConfigurator (usually implementing
      * some methods from MapperConfiguratorBase)
+     * @since 3.1
      */
     public JacksonXmlBindYAMLProvider(YAMLMapperConfigurator mapperConfigurator) {
         super(mapperConfigurator);
