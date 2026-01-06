@@ -10,6 +10,11 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+3.1.0 (not yet released)
+
+#63: Add constructors accepting `[Format]MapperConfigurator` to providers
+ (contributed by Jens-Otto L)
+
 3.0.3 (28-Nov-2025)
 3.0.2 (07-Nov-2025)
 
