@@ -14,6 +14,7 @@ import tools.jackson.databind.*;
 import tools.jackson.dataformat.xml.JacksonXmlAnnotationIntrospector;
 import tools.jackson.dataformat.xml.XmlMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
+import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -151,10 +152,9 @@ public class JacksonXMLProvider
             String subtype = mediaType.getSubtype();
             return "xml".equalsIgnoreCase(subtype) || subtype.endsWith("+xml");
         }
-        /* Not sure if this can happen; but it seems reasonable
-         * that we can at least produce XML without media type?
-         */
-        return true;
+        // [jakarta-rs-providers#64]: Without a media type, may or may not match
+        // (if not, let JAX-RS deal with mapping if it can)
+        return isEnabled(JakartaRSFeature.MATCH_ALL_IF_NO_MEDIA_TYPE);
     }
 
     /**

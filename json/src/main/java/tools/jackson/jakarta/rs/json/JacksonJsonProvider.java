@@ -10,6 +10,8 @@ import tools.jackson.core.*;
 import tools.jackson.databind.*;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
+import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
+import tools.jackson.jaxrs.cfg.JaxRSFeature;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -177,9 +179,9 @@ public class JacksonJsonProvider
                    || "x-json".equals(subtype) // [Issue#40]
                    ;
         }
-        // Not sure if this can happen; but it seems reasonable
-        // that we can at least produce JSON without media type?
-        return true;
+        // [jakarta-rs-providers#64]: Without a media type, may or may not match
+        // (if not, let JAX-RS deal with mapping if it can)
+        return isEnabled(JakartaRSFeature.MATCH_ALL_IF_NO_MEDIA_TYPE);
     }
 
     @Override

@@ -13,6 +13,7 @@ import tools.jackson.databind.*;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
 import tools.jackson.jakarta.rs.base.ProviderBase;
+import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
@@ -147,10 +148,9 @@ extends ProviderBase<JacksonCBORProvider,
             return CBORMediaTypes.APPLICATION_JACKSON_CBOR_TYPE.getSubtype().equalsIgnoreCase(subtype) || 
                     "cbor".equalsIgnoreCase(subtype) || subtype.endsWith("+cbor");
         }
-        /* Not sure if this can happen; but it seems reasonable
-         * that we can at least produce CBOR without media type?
-         */
-        return true;
+        // [jakarta-rs-providers#64]: Without a media type, may or may not match
+        // (if not, let JAX-RS deal with mapping if it can)
+        return isEnabled(JakartaRSFeature.MATCH_ALL_IF_NO_MEDIA_TYPE);
     }
 
     /**
