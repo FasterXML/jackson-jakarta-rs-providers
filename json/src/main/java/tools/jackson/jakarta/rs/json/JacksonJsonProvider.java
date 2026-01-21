@@ -11,7 +11,6 @@ import tools.jackson.databind.*;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.jakarta.rs.base.ProviderBase;
 import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
-import tools.jackson.jaxrs.cfg.JaxRSFeature;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@link MessageBodyReader},
