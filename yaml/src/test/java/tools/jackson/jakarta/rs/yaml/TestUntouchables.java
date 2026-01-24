@@ -1,5 +1,6 @@
 package tools.jackson.jakarta.rs.yaml;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUntouchables
     extends JakartaRSTestBase
 {
+    private final static MediaType YAML_TYPE = YAMLMediaTypes.APPLICATION_JACKSON_YAML_TYPE;
+
     /**
      * Test type added for [JACKSON-460]... just to ensure that "isYAMLType"
      * remains overridable.
@@ -41,15 +44,20 @@ public class TestUntouchables
     {
         JacksonYAMLProvider prov = new JacksonYAMLProvider();
         // By default, no reason to exclude, say, this test class...
-        assertTrue(prov.isReadable(getClass(), getClass(), null, null));
-        assertTrue(prov.isWriteable(getClass(), getClass(), null, null));
+        assertTrue(prov.isReadable(getClass(), getClass(),
+                new Annotation[0], YAML_TYPE));
+        assertTrue(prov.isWriteable(getClass(), getClass(),
+                new Annotation[0], YAML_TYPE));
 
         // but some types should be ignored (set of ignorable may change over time tho!)
-        assertFalse(prov.isWriteable(StreamingOutput.class, StreamingOutput.class, null, null));
+        assertFalse(prov.isWriteable(StreamingOutput.class, StreamingOutput.class,
+                new Annotation[0], YAML_TYPE));
 
         // and then on-the-fence things (see [Issue-1])
-        assertFalse(prov.isReadable(String.class, getClass(), null, null));
-        assertFalse(prov.isReadable(byte[].class, getClass(), null, null));
+        assertFalse(prov.isReadable(String.class, getClass(),
+                new Annotation[0], YAML_TYPE));
+        assertFalse(prov.isReadable(byte[].class, getClass(),
+                new Annotation[0], YAML_TYPE));
     }
 
     @Test
@@ -59,13 +67,17 @@ public class TestUntouchables
         // can mark this as ignorable...
         prov.addUntouchable(getClass());
         // and then it shouldn't be processable
-        assertFalse(prov.isReadable(getClass(), getClass(), null, null));
-        assertFalse(prov.isWriteable(getClass(), getClass(), null, null));
+        assertFalse(prov.isReadable(getClass(), getClass(),
+                new Annotation[0], YAML_TYPE));
+        assertFalse(prov.isWriteable(getClass(), getClass(),
+                new Annotation[0], YAML_TYPE));
 
         // Same for interfaces, like:
         prov.addUntouchable(Collection.class);
-        assertFalse(prov.isReadable(ArrayList.class, ArrayList.class, null, null));
-        assertFalse(prov.isWriteable(HashSet.class, HashSet.class, null, null));
+        assertFalse(prov.isReadable(ArrayList.class, ArrayList.class,
+                new Annotation[0], YAML_TYPE));
+        assertFalse(prov.isWriteable(HashSet.class, HashSet.class,
+                new Annotation[0], YAML_TYPE));
     }
 }
     

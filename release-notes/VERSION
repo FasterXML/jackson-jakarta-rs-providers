@@ -14,6 +14,7 @@ Sub-modules:
 
 #63: Add constructors accepting `[Format]MapperConfigurator` to providers
  (contributed by Jens-Otto L)
+#64: Fix errant “accept anything” handling of providers
 
 3.0.4 (26-Jan-2026)
 3.0.3 (28-Nov-2025)

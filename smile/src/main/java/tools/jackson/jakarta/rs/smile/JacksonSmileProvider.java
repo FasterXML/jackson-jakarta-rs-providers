@@ -20,6 +20,7 @@ import tools.jackson.databind.ObjectWriter;
 import tools.jackson.dataformat.smile.SmileMapper;
 
 import tools.jackson.jakarta.rs.base.ProviderBase;
+import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
 
 /**
  * Basic implementation of Jakarta-RS abstractions ({@code MessageBodyReader},
@@ -153,10 +154,9 @@ extends ProviderBase<JacksonSmileProvider,
             return SmileMediaTypes.APPLICATION_JACKSON_SMILE_TYPE.getSubtype().equalsIgnoreCase(subtype) || 
                     "smile".equalsIgnoreCase(subtype) || subtype.endsWith("+smile");
         }
-        /* Not sure if this can happen; but it seems reasonable
-         * that we can at least produce smile without media type?
-         */
-        return true;
+        // [jakarta-rs-providers#64]: Without a media type, may or may not match
+        // (if not, let JAX-RS deal with mapping if it can)
+        return isEnabled(JakartaRSFeature.MATCH_ALL_IF_NO_MEDIA_TYPE);
     }
 
     /**
