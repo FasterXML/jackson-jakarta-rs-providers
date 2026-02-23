@@ -10,10 +10,12 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+2.21.1 (22-Feb-2026)
 2.21.0 (18-Jan-2026)
 
 No changes since 2.20
 
+2.20.2 (19-Jan-2026)
 2.20.1 (30-Oct-2025)
 
 No changes since 2.20.0
@@ -47,6 +49,7 @@ No changes since 2.19.2
 #45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
+2.18.6 (22-Feb-2026)
 2.18.5 (27-Oct-2025)
 2.18.4 (06-May-2025)
 2.18.3 (28-Feb-2025)
