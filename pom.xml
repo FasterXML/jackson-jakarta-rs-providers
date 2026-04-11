@@ -4,7 +4,7 @@
   <parent>
     <groupId>tools.jackson</groupId>
     <artifactId>jackson-base</artifactId>
-    <version>3.1.2</version>
+    <version>3.1.3-SNAPSHOT</version>
   </parent>
   <groupId>tools.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-providers</artifactId>
@@ -13,7 +13,6 @@
   <packaging>pom</packaging>
   <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
-
   <modules>
     <module>base</module>
     <module>cbor</module>
