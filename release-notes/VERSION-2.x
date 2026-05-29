@@ -51,6 +51,7 @@ No changes since 2.19.2
 #45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
+2.18.8 (28-May-2026)
 2.18.7 (24-Apr-2026)
 2.18.6 (22-Feb-2026)
 2.18.5 (27-Oct-2025)
