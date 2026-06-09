@@ -4,12 +4,12 @@
   <parent>
     <groupId>tools.jackson</groupId>
     <artifactId>jackson-base</artifactId>
-    <version>3.2.1-SNAPSHOT</version>
+    <version>3.3.0-SNAPSHOT</version>
   </parent>
   <groupId>tools.jackson.jakarta.rs</groupId>
   <artifactId>jackson-jakarta-rs-providers</artifactId>
   <name>Jackson modules: Jakarta-RS</name>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>3.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Parent for Jackson Jakarta-RS (jakarta.ws.rs) providers
   </description>
