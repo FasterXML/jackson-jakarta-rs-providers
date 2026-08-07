@@ -484,6 +484,44 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(4, p.y);
     }
 
+    /*
+        @Path("/max")
+        @POST
+        @Produces(MediaType.APPLICATION_JSON)
+        public Point maxPoint(MappingIterator<Point> points) throws IOException
+        {
+     */
+
+    @Test
+    public void testMappingIteratorArray() throws Exception
+    {
+        final ObjectMapper mapper = new JsonMapper();
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        Point p;
+
+        try {
+            URL url = new URL("http://localhost:"+TEST_PORT+"/point/max");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            OutputStream out = conn.getOutputStream();
+            out.write(a2q("[{'x':1,'y':1},{'y':4,'x':-4},{'x':2,'y':5}]"
+            ).getBytes("UTF-8"));
+            out.close();
+            InputStream in = conn.getInputStream();
+            p = mapper.readValue(in, Point.class);
+            in.close();
+        } finally {
+            server.stop();
+        }
+        // ensure we got a valid Point
+        assertNotNull(p);
+        assertEquals(-4, p.x);
+        assertEquals(4, p.y);
+    }
+
     // [jakarta-rs-providers#16]
     @Test
     public void testPointNoTrailingContent() throws Exception
