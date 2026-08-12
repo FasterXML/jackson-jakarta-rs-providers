@@ -16,3 +16,8 @@ Jens-Otto Larsen (@jolarsen)
 
 * Contributed #63: Add constructors accepting `[Format]MapperConfigurator` to providers
  [3.1.0]
+
+James R. Perkins (@jamezp)
+* Contributed #69: `ProviderBase.readFrom()` fails to advance past `START_ARRAY` for
+  `MappingIterator` with JSON array input
+ [3.1.0]

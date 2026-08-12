@@ -12,7 +12,9 @@ Sub-modules:
 
 3.3.0 (not yet released)
 
-No changes since 3.2
+#69: `ProviderBase.readFrom()` fails to advance past `START_ARRAY` for
+  `MappingIterator` with JSON array input
+ (contributed by James P)
 
 3.2.1 (10-Jul-2026)
 
