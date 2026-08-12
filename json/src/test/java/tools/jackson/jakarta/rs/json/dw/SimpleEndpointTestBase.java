@@ -522,6 +522,32 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(4, p.y);
     }
 
+    @Test
+    public void testMappingIteratorEmptyArray() throws Exception
+    {
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        int responseCode;
+
+        try {
+            URL url = new URL("http://localhost:"+TEST_PORT+"/point/max");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            OutputStream out = conn.getOutputStream();
+            out.write("[ ]".getBytes("UTF-8"));
+            out.close();
+            responseCode = conn.getResponseCode();
+            conn.disconnect();
+        } finally {
+            server.stop();
+        }
+        // Empty array means no values to iterate over; endpoint returns `null`
+        // which Jakarta-RS maps to 204. Important part is that binding does NOT fail.
+        assertEquals(HttpURLConnection.HTTP_NO_CONTENT, responseCode);
+    }
+
     // [jakarta-rs-providers#16]
     @Test
     public void testPointNoTrailingContent() throws Exception

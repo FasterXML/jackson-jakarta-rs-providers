@@ -718,10 +718,12 @@ public abstract class ProviderBase<
         }
         
         if (multiValued) {
-            // Advance past START_ARRAY so MappingIterator sees the first element token.
+            // Clear START_ARRAY so MappingIterator will bind the array contents:
             // readValues(JsonParser) uses managedParser=false, which does not auto-skip it.
+            // NOTE: must clear, not advance -- `MappingIterator` only detects END_ARRAY
+            // (that is, empty array) if the current token has been cleared.
             if (p.currentToken() == JsonToken.START_ARRAY) {
-                p.nextToken();
+                p.clearCurrentToken();
             }
             return reader.readValues(p);
         }

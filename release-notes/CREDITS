@@ -18,6 +18,7 @@ Jens-Otto Larsen (@jolarsen)
  [3.1.0]
 
 James R. Perkins (@jamezp)
+
 * Contributed #69: `ProviderBase.readFrom()` fails to advance past `START_ARRAY` for
   `MappingIterator` with JSON array input
- [3.1.0]
+ [3.3.0]
