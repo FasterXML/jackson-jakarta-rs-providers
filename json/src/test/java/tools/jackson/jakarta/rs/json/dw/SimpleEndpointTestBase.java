@@ -218,6 +218,39 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             return new Point(count, sum);
         }
 
+        // Binary values are bound from JSON Strings, so wrapper array is to be
+        // unwrapped despite `byte[]` being an array type
+        @Path("/binary")
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Point sumBinary(MappingIterator<byte[]> values) throws IOException
+        {
+            int count = 0;
+            int length = 0;
+            while (values.hasNextValue()) {
+                ++count;
+                length += values.nextValue().length;
+            }
+            return new Point(count, length);
+        }
+
+        // Same as "/sums" but with `Collection`-shaped, not array-shaped, values
+        @Path("/lists")
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Point countPointLists(MappingIterator<List<Point>> values) throws IOException
+        {
+            int count = 0;
+            int points = 0;
+            while (values.hasNextValue()) {
+                ++count;
+                points += values.nextValue().size();
+            }
+            return new Point(count, points);
+        }
+
         @Path("/echo")
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
@@ -465,14 +498,6 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         }
     }
 
-    /*
-        @Path("/max")
-        @POST
-        @Produces(MediaType.APPLICATION_JSON)
-        public Point maxPoint(MappingIterator<Point> points) throws IOException
-        {
-     */
-
     @Test
     public void testMappingIterator() throws Exception
     {
@@ -502,14 +527,6 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(-4, p.x);
         assertEquals(4, p.y);
     }
-
-    /*
-        @Path("/max")
-        @POST
-        @Produces(MediaType.APPLICATION_JSON)
-        public Point maxPoint(MappingIterator<Point> points) throws IOException
-        {
-     */
 
     @Test
     public void testMappingIteratorArray() throws Exception
@@ -596,6 +613,69 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertNotNull(p);
         assertEquals(2, p.x);
         assertEquals(10, p.y);
+    }
+
+    // Binary values bind from JSON String, so wrapper array is to be unwrapped
+    @Test
+    public void testMappingIteratorOfBinary() throws Exception
+    {
+        final ObjectMapper mapper = new JsonMapper();
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        Point p;
+
+        try {
+            URL url = new URL("http://localhost:"+TEST_PORT+"/point/binary");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            OutputStream out = conn.getOutputStream();
+            // 2 Base64-encoded values, 3 bytes each
+            out.write(a2q("['AAEC','AwQF']").getBytes("UTF-8"));
+            out.close();
+            InputStream in = conn.getInputStream();
+            p = mapper.readValue(in, Point.class);
+            in.close();
+        } finally {
+            server.stop();
+        }
+        // 2 values, 6 bytes total
+        assertNotNull(p);
+        assertEquals(2, p.x);
+        assertEquals(6, p.y);
+    }
+
+    // Sequence of `Collection`-shaped values: leading START_ARRAY starts the
+    // first value and may not be skipped as a wrapper array
+    @Test
+    public void testMappingIteratorOfLists() throws Exception
+    {
+        final ObjectMapper mapper = new JsonMapper();
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        Point p;
+
+        try {
+            URL url = new URL("http://localhost:"+TEST_PORT+"/point/lists");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            OutputStream out = conn.getOutputStream();
+            out.write(a2q("[{'x':1,'y':1},{'x':2,'y':2}][{'x':3,'y':3}]"
+                    ).getBytes("UTF-8"));
+            out.close();
+            InputStream in = conn.getInputStream();
+            p = mapper.readValue(in, Point.class);
+            in.close();
+        } finally {
+            server.stop();
+        }
+        // 2 values (Lists), 3 Points total
+        assertNotNull(p);
+        assertEquals(2, p.x);
+        assertEquals(3, p.y);
     }
 
     // [jakarta-rs-providers#16]

@@ -885,8 +885,17 @@ public abstract class ProviderBase<
      * wrapper array.
      */
     protected boolean _isArrayShaped(JavaType valueType) {
-        return (valueType != null)
-                && (valueType.isArrayType() || valueType.isCollectionLikeType());
+        if (valueType == null) {
+            return false;
+        }
+        if (valueType.isArrayType()) {
+            // ... except that "binary" arrays are bound from JSON String (Base64-encoded),
+            // and `char[]` likewise from JSON String, and not from JSON Array
+            JavaType contentType = valueType.getContentType();
+            return !contentType.hasRawClass(Byte.TYPE)
+                    && !contentType.hasRawClass(Character.TYPE);
+        }
+        return valueType.isCollectionLikeType();
     }
 
     /*
