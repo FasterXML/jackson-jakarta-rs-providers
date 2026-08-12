@@ -701,10 +701,11 @@ public abstract class ProviderBase<
 
         // 09-Jul-2015, tatu: As per [jaxrs-providers#69], handle MappingIterator too
         boolean multiValued = (rawType == MappingIterator.class);
-        
+        JavaType valueType = null;
+
         if (multiValued) {
             JavaType[] contents = tf.findTypeParameters(resolvedType, MappingIterator.class);
-            JavaType valueType = (contents == null || contents.length == 0)
+            valueType = (contents == null || contents.length == 0)
                     ? tf.constructType(Object.class) : contents[0];
             reader = reader.forType(valueType);
         } else {
@@ -718,11 +719,17 @@ public abstract class ProviderBase<
         }
         
         if (multiValued) {
-            // Clear START_ARRAY so MappingIterator will bind the array contents:
-            // readValues(JsonParser) uses managedParser=false, which does not auto-skip it.
-            // NOTE: must clear, not advance -- `MappingIterator` only detects END_ARRAY
-            // (that is, empty array) if the current token has been cleared.
-            if (p.currentToken() == JsonToken.START_ARRAY) {
+            // Clear START_ARRAY so MappingIterator will bind contents of the array,
+            // and not the array itself: `readValues(JsonParser)` requires caller to
+            // position parser past the wrapper array (it does not auto-skip it).
+            // NOTE: must clear, and not advance, token: `MappingIterator` only detects
+            // END_ARRAY (that is, empty array) if the current token has been cleared.
+            //
+            // But: leading START_ARRAY is ambiguous if values themselves are array-shaped
+            // (like "[1,2][3,4]" for `MappingIterator<int[]>`), in which case it starts
+            // the first value and must NOT be consumed.
+            if (!_isArrayShaped(valueType)
+                    && (p.currentToken() == JsonToken.START_ARRAY)) {
                 p.clearCurrentToken();
             }
             return reader.readValues(p);
@@ -869,6 +876,17 @@ public abstract class ProviderBase<
 
     protected NoContentException _createNoContentException() {
         return new NoContentException(NO_CONTENT_MESSAGE);
+    }
+
+    /**
+     * Overridable helper method called to check whether values of given type are
+     * themselves bound from JSON Arrays: if so, leading <code>START_ARRAY</code>
+     * of a value sequence starts the first value and may not be consumed as a
+     * wrapper array.
+     */
+    protected boolean _isArrayShaped(JavaType valueType) {
+        return (valueType != null)
+                && (valueType.isArrayType() || valueType.isCollectionLikeType());
     }
 
     /*

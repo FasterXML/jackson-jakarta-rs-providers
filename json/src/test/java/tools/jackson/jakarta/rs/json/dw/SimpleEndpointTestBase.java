@@ -199,6 +199,25 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             return max;
         }
 
+        // Values that are themselves array-shaped: leading START_ARRAY starts
+        // the first value, and must not be consumed as a wrapper array
+        @Path("/sums")
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Point sumPoints(MappingIterator<int[]> values) throws IOException
+        {
+            int count = 0;
+            int sum = 0;
+            while (values.hasNextValue()) {
+                ++count;
+                for (int value : values.nextValue()) {
+                    sum += value;
+                }
+            }
+            return new Point(count, sum);
+        }
+
         @Path("/echo")
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
@@ -546,6 +565,37 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         // Empty array means no values to iterate over; endpoint returns `null`
         // which Jakarta-RS maps to 204. Important part is that binding does NOT fail.
         assertEquals(HttpURLConnection.HTTP_NO_CONTENT, responseCode);
+    }
+
+    // Sequence of array-shaped values: leading START_ARRAY starts the first
+    // value and may not be skipped as a wrapper array
+    @Test
+    public void testMappingIteratorOfArrays() throws Exception
+    {
+        final ObjectMapper mapper = new JsonMapper();
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        Point p;
+
+        try {
+            URL url = new URL("http://localhost:"+TEST_PORT+"/point/sums");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            OutputStream out = conn.getOutputStream();
+            out.write("[1,2][3,4]".getBytes("UTF-8"));
+            out.close();
+            InputStream in = conn.getInputStream();
+            p = mapper.readValue(in, Point.class);
+            in.close();
+        } finally {
+            server.stop();
+        }
+        // 2 values, sum of 10
+        assertNotNull(p);
+        assertEquals(2, p.x);
+        assertEquals(10, p.y);
     }
 
     // [jakarta-rs-providers#16]
