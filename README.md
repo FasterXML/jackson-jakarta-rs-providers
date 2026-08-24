@@ -12,9 +12,9 @@ for following data formats:
 Providers implement Jakarta-RS `MessageBodyReader` and `MessageBodyWriter` handlers for specific
 data formats. They also contain SPI settings for auto-registration.
 
-[![Build Status](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers.svg?branch=master)](https://travis-ci.org/FasterXML/jackson-jakarta-rs-providers)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/badge.svg)](https://www.javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
+[![Build Status](https://api.travis-ci.com/FasterXML/jackson-jakarta-rs-providers.svg?branch=master)](https://app.travis-ci.com/FasterXML/jackson-jakarta-rs-providers)
+[![Maven Central](https://img.shields.io/maven-central/v/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)](https://central.sonatype.com/artifact/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
+[![Javadoc](https://javadoc.io/badge2/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider/javadoc.svg)](https://javadoc.io/doc/com.fasterxml.jackson.jakarta.rs/jackson-jakarta-rs-json-provider)
 
 (*) NOTE: Jakarta-RS is the package under `jakarta.ws.rs`, replacing older JAX-RS which lived
 under `javax.ws.rs`.
@@ -50,7 +50,7 @@ Due to auto-registration, it should be possible to simply add Maven dependency
 provider.
 If this does not work you need to consult documentation of the Jakarta-RS implementation for details.  
 
-To use Jackson with Jersey see [their documentation](https://jersey.github.io/documentation/latest/media.html#json.jackson).
+To use Jackson with Jersey see [their documentation](https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest3x/media.html#json.jackson).
 
 ### Annotations on resources
 
