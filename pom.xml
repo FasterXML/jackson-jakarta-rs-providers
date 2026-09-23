@@ -36,7 +36,7 @@
     <javac.src.version>17</javac.src.version>
     <javac.target.version>17</javac.target.version>
 
-    <version.jersey>3.0.18</version.jersey>
+    <version.jersey>3.1.12</version.jersey>
     <version.jetty>11.0.26</version.jetty>
 
     <!-- OSGi import range for jakarta.ws.rs: Jakarta REST 3.x (EE 9/10) and 4.x (EE 11) -->
