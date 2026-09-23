@@ -16,3 +16,8 @@ Jens-Otto Larsen (@jolarsen)
 
 * Contributed #63: Add constructors accepting `[Format]MapperConfigurator` to providers
  [3.1.0]
+
+Reuben Rowell (@rjrowell-ibm)
+
+* Contributed #74: Widen `jakarta.ws.rs` OSGi import range for Jakarta EE 11 / Jakarta REST 4.x
+ [3.1.7]
