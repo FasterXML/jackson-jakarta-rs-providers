@@ -129,7 +129,7 @@ https://stackoverflow.com/questions/44088493/jersey-stopped-working-with-injecti
     <dependency>
       <groupId>ch.qos.logback </groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.3.16</version>
+      <version>1.5.38</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
