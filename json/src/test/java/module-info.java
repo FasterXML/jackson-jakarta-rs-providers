@@ -18,13 +18,11 @@ module tools.jackson.jakarta.rs.json
     requires jetty.servlet.api;
     requires org.eclipse.jetty.server;
     requires org.eclipse.jetty.servlet;
-    // Shouldn't we have "requires" on resteasy too?
     
     // Further, need to open up test packages for JUnit et al
     opens tools.jackson.jakarta.rs.json;
     opens tools.jackson.jakarta.rs.json.dw;
     opens tools.jackson.jakarta.rs.json.jersey;
-    opens tools.jackson.jakarta.rs.json.resteasy;
     opens tools.jackson.jakarta.rs.json.testutil;
     opens tools.jackson.jakarta.rs.json.util;
 
