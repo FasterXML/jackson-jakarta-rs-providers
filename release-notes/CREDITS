@@ -20,4 +20,4 @@ Jens-Otto Larsen (@jolarsen)
 Reuben Rowell (@rjrowell-ibm)
 
 * Contributed #74: Widen `jakarta.ws.rs` OSGi import range for Jakarta EE 11 / Jakarta REST 4.x
- [3.1.7]
+ [3.1.8]
