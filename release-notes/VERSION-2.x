@@ -21,7 +21,7 @@ Sub-modules:
 
 No changes since 2.21
 
-2.21.8 (not yet released)
+2.21.8 (17-Oct-2026)
 
 #74: Widen jakarta.ws.rs OSGi import range for Jakarta EE 11 / Jakarta REST 4.x
 
@@ -70,6 +70,7 @@ No changes since 2.19.2
 #45: Unify testing structure/tools [JSTEP-10]
 * Woodstox dependency now 7.1.0
 
+2.18.12 (17-Oct-2026)
 2.18.11 (20-Sep-2026)
 2.18.10 (15-Aug-2026)
 2.18.9 (07-Jul-2026)
