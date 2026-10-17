@@ -10,7 +10,7 @@ Sub-modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.22.4 (not yet released)
+2.22.4 (17-Oct-2026)
 
 #74: Widen jakarta.ws.rs OSGi import range for Jakarta EE 11 / Jakarta REST 4.x
 
