@@ -12,6 +12,10 @@ Sub-modules:
 
 3.3.0 (not yet released)
 
+#69: `ProviderBase.readFrom()` fails to advance past `START_ARRAY` for
+  `MappingIterator` with JSON array input
+  (adds `JakartaRSFeature.UNWRAP_ROOT_ARRAY_FOR_ITERATOR`, enabled by default)
+ (contributed by James P)
 #78: Update test dependencies: Jersey 3.1 (Jakarta EE 10), remove obsolete RESTeasy
   test dependency
 

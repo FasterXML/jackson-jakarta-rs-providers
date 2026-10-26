@@ -701,7 +701,7 @@ public abstract class ProviderBase<
 
         // 09-Jul-2015, tatu: As per [jaxrs-providers#69], handle MappingIterator too
         boolean multiValued = (rawType == MappingIterator.class);
-        
+
         if (multiValued) {
             JavaType[] contents = tf.findTypeParameters(resolvedType, MappingIterator.class);
             JavaType valueType = (contents == null || contents.length == 0)
@@ -718,6 +718,17 @@ public abstract class ProviderBase<
         }
         
         if (multiValued) {
+            // 25-Oct-2026, tatu: [jakarta-rs-providers#69] Unlike `readValues(InputStream)`,
+            //   `readValues(JsonParser)` does not unwrap root-level Array, so need to do it
+            //   here, using same rule as databind: root START_ARRAY is always a wrapper,
+            //   regardless of value type. Must clear (not advance) the token since
+            //   `MappingIterator` only detects END_ARRAY (empty array) that way.
+            //   Use of `isExpectedStartArrayToken()` (and not just START_ARRAY check)
+            //   is needed for XML where root-level lists are exposed as START_OBJECT.
+            if (JakartaRSFeature.UNWRAP_ROOT_ARRAY_FOR_ITERATOR.enabledIn(_jakartaRSFeatures)
+                    && p.isExpectedStartArrayToken()) {
+                p.clearCurrentToken();
+            }
             return reader.readValues(p);
         }
         return reader.readValue(p);
