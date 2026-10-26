@@ -537,7 +537,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         // Empty array means no values to iterate over; endpoint returns `null`
         // which Jakarta-RS maps to 204. Important part is that binding does NOT fail.
         assertEquals(HttpURLConnection.HTTP_NO_CONTENT,
-                _postForResponseCode(SimpleResourceApp.class, "/point/max", "[ ]"));
+                _post(SimpleResourceApp.class, "/point/max", "[ ]").code());
     }
 
     // [jakarta-rs-providers#69]: root-level Array is always a wrapper, even if
@@ -598,7 +598,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(3, p.y);
     }
 
-    private final static ObjectMapper POST_MAPPER = new JsonMapper();
+    private final static ObjectMapper POST_MAPPER = JsonApplicationWithJackson.createMapper();
 
     // Response of `_post()`: status code and (possibly empty) body
     private record PostResponse(int code, byte[] body) { }
@@ -618,20 +618,13 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         return POST_MAPPER.readValue(resp.body(), Point.class);
     }
 
-    // Helper for POSTing given JSON to an endpoint, returning just the response code
-    private int _postForResponseCode(Class<? extends Application> appClass,
-            String path, String json) throws Exception
-    {
-        return _post(appClass, path, json).code();
-    }
-
     // Core helper: starts server with given app, POSTs given JSON, stops server
     private PostResponse _post(Class<? extends Application> appClass,
             String path, String json) throws Exception
     {
         Server server = startServer(TEST_PORT, appClass);
         try {
-            HttpURLConnection conn = _post(path, json);
+            HttpURLConnection conn = _openPost(path, json);
             try {
                 int code = conn.getResponseCode();
                 InputStream in = (code < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -650,7 +643,8 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         }
     }
 
-    private HttpURLConnection _post(String path, String json) throws IOException
+    // Low-level helper: opens connection and sends POST (server must be running)
+    private HttpURLConnection _openPost(String path, String json) throws IOException
     {
         URL url = new URL("http://localhost:"+TEST_PORT+path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
