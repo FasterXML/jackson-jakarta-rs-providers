@@ -131,9 +131,6 @@ public enum JakartaRSFeature implements ConfigFeature
      * (since XML has no separate Array construct), and is then unwrapped.
      *<p>
      * Feature is enabled by default.
-     *<p>
-     * NOTE: declared last (and not with other input handling features) so as
-     * not to change bitmasks of earlier features.
      *
      * @since 3.3
      */
