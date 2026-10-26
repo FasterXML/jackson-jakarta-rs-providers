@@ -38,6 +38,24 @@ public enum JakartaRSFeature implements ConfigFeature
      */
     READ_FULL_STREAM(true),
 
+    /**
+     * Feature that determines whether a root-level JSON Array is unwrapped when
+     * binding a {@link tools.jackson.databind.MappingIterator} endpoint parameter:
+     * if enabled, elements of the root-level Array are iterated over (same as
+     * {@code ObjectReader.readValues(InputStream)} does); if disabled, root-level
+     * values (including Arrays) are iterated over as-is.
+     *<p>
+     * Note that when enabled, a root-level Array is always considered a wrapper,
+     * regardless of value type: so a sequence of array-shaped values (like
+     * {@code [1,2][3,4]} for {@code MappingIterator<int[]>}) needs to either be
+     * wrapped in an Array ({@code [[1,2],[3,4]]}) or this feature disabled.
+     *<p>
+     * Feature is enabled by default.
+     *
+     * @since 3.3
+     */
+    UNWRAP_ROOT_ARRAY_FOR_ITERATOR(true),
+
     /*
     /**********************************************************************
     /* HTTP headers

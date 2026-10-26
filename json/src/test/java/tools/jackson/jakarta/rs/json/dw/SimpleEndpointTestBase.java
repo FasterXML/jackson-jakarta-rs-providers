@@ -32,6 +32,7 @@ import tools.jackson.databind.*;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.jakarta.rs.cfg.JakartaRSFeature;
 import tools.jackson.jakarta.rs.json.JacksonJsonProvider;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -199,8 +200,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             return max;
         }
 
-        // Values that are themselves array-shaped: leading START_ARRAY starts
-        // the first value, and must not be consumed as a wrapper array
+        // Values that are themselves array-shaped
         @Path("/sums")
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
@@ -218,8 +218,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             return new Point(count, sum);
         }
 
-        // Binary values are bound from JSON Strings, so wrapper array is to be
-        // unwrapped despite `byte[]` being an array type
+        // Binary values are bound from JSON Strings
         @Path("/binary")
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
@@ -235,7 +234,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
             return new Point(count, length);
         }
 
-        // Same as "/sums" but with `Collection`-shaped, not array-shaped, values
+        // Same as "/sums" but with `Collection`-shaped values
         @Path("/lists")
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
@@ -267,6 +266,16 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
 
     public static class SimpleResourceApp extends JsonApplicationWithJackson {
         public SimpleResourceApp() { super(new SimpleResource()); }
+    }
+
+    // [jakarta-rs-providers#69]: same as above, but without unwrapping of root-level
+    // Array for `MappingIterator`
+    public static class SimpleNoUnwrapApp extends JsonApplication {
+        public SimpleNoUnwrapApp() {
+            super(new JacksonJsonProvider(JsonApplicationWithJackson.createMapper())
+                    .disable(JakartaRSFeature.UNWRAP_ROOT_ARRAY_FOR_ITERATOR),
+                    new SimpleResource());
+        }
     }
 
     private final static String UNTOUCHABLE_RESPONSE = "[1]";
@@ -531,20 +540,30 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
                 _postForResponseCode("/point/max", "[ ]"));
     }
 
-    // [jakarta-rs-providers#69]: Sequence of array-shaped values: leading START_ARRAY
-    // starts the first value and may not be skipped as a wrapper array
+    // [jakarta-rs-providers#69]: root-level Array is always a wrapper, even if
+    // values are themselves array-shaped
     @Test
     public void testMappingIteratorOfArrays() throws Exception
     {
-        Point p = _postForPoint("/point/sums", "[1,2][3,4]");
+        Point p = _postForPoint("/point/sums", "[[1,2],[3,4]]");
         // 2 values, sum of 10
         assertNotNull(p);
         assertEquals(2, p.x);
         assertEquals(10, p.y);
     }
 
-    // [jakarta-rs-providers#69]: Binary values bind from JSON String, so wrapper
-    // array is to be unwrapped
+    // [jakarta-rs-providers#69]: but sequence of arrays works if unwrapping disabled
+    @Test
+    public void testMappingIteratorOfArraysNoUnwrap() throws Exception
+    {
+        Point p = _postForPoint(SimpleNoUnwrapApp.class, "/point/sums", "[1,2][3,4]");
+        // 2 values, sum of 10
+        assertNotNull(p);
+        assertEquals(2, p.x);
+        assertEquals(10, p.y);
+    }
+
+    // [jakarta-rs-providers#69]
     @Test
     public void testMappingIteratorOfBinary() throws Exception
     {
@@ -556,12 +575,22 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(6, p.y);
     }
 
-    // [jakarta-rs-providers#69]: Sequence of `Collection`-shaped values: leading
-    // START_ARRAY starts the first value and may not be skipped as a wrapper array
+    // [jakarta-rs-providers#69]: same as with arrays, for `Collection`-shaped values
     @Test
     public void testMappingIteratorOfLists() throws Exception
     {
         Point p = _postForPoint("/point/lists",
+                a2q("[[{'x':1,'y':1},{'x':2,'y':2}],[{'x':3,'y':3}]]"));
+        // 2 values (Lists), 3 Points total
+        assertNotNull(p);
+        assertEquals(2, p.x);
+        assertEquals(3, p.y);
+    }
+
+    @Test
+    public void testMappingIteratorOfListsNoUnwrap() throws Exception
+    {
+        Point p = _postForPoint(SimpleNoUnwrapApp.class, "/point/lists",
                 a2q("[{'x':1,'y':1},{'x':2,'y':2}][{'x':3,'y':3}]"));
         // 2 values (Lists), 3 Points total
         assertNotNull(p);
@@ -569,11 +598,17 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(3, p.y);
     }
 
-    // Helper for POSTing given JSON to an endpoint of `SimpleResourceApp`,
-    // reading the response as `Point`
+    // Helpers for POSTing given JSON to an endpoint (of `SimpleResourceApp`
+    // by default), reading the response as `Point`
     private Point _postForPoint(String path, String json) throws Exception
     {
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        return _postForPoint(SimpleResourceApp.class, path, json);
+    }
+
+    private Point _postForPoint(Class<? extends Application> appClass,
+            String path, String json) throws Exception
+    {
+        Server server = startServer(TEST_PORT, appClass);
         try {
             HttpURLConnection conn = _post(path, json);
             try (InputStream in = conn.getInputStream()) {
