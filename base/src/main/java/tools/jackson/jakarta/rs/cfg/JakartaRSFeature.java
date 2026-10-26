@@ -130,6 +130,10 @@ public enum JakartaRSFeature implements ConfigFeature
      * Note, too, that for XML any root element may be exposed as an Array
      * (since XML has no separate Array construct), and is then unwrapped.
      *<p>
+     * Unwrapping is done after any {@link ObjectReaderModifier} has been called,
+     * so modifiers should not skip the wrapper Array themselves while this
+     * feature is enabled.
+     *<p>
      * Feature is enabled by default.
      *
      * @since 3.3
