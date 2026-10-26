@@ -719,7 +719,8 @@ public abstract class ProviderBase<
         }
         
         if (multiValued) {
-            // Clear START_ARRAY so MappingIterator will bind contents of the array,
+            // 25-Oct-2026, tatu: [jakarta-rs-providers#69] Clear START_ARRAY so
+            //   MappingIterator will bind contents of the array,
             // and not the array itself: `readValues(JsonParser)` requires caller to
             // position parser past the wrapper array (it does not auto-skip it).
             // NOTE: must clear, and not advance, token: `MappingIterator` only detects

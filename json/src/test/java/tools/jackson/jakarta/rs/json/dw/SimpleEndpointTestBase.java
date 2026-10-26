@@ -501,181 +501,120 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     @Test
     public void testMappingIterator() throws Exception
     {
-        final ObjectMapper mapper = new JsonMapper();
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        Point p;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/max");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            out.write(a2q("{'x':1,'y':1}\n{'y':4,'x':-4}{'x':2,'y':5}"
-                    ).getBytes("UTF-8"));
-            out.close();
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
-        } finally {
-            server.stop();
-        }
+        Point p = _postForPoint("/point/max",
+                a2q("{'x':1,'y':1}\n{'y':4,'x':-4}{'x':2,'y':5}"));
         // ensure we got a valid Point
         assertNotNull(p);
         assertEquals(-4, p.x);
         assertEquals(4, p.y);
     }
 
+    // [jakarta-rs-providers#69]: wrapper array to be unwrapped
     @Test
     public void testMappingIteratorArray() throws Exception
     {
-        final ObjectMapper mapper = new JsonMapper();
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        Point p;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/max");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            out.write(a2q("[{'x':1,'y':1},{'y':4,'x':-4},{'x':2,'y':5}]"
-            ).getBytes("UTF-8"));
-            out.close();
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
-        } finally {
-            server.stop();
-        }
+        Point p = _postForPoint("/point/max",
+                a2q("[{'x':1,'y':1},{'y':4,'x':-4},{'x':2,'y':5}]"));
         // ensure we got a valid Point
         assertNotNull(p);
         assertEquals(-4, p.x);
         assertEquals(4, p.y);
     }
 
+    // [jakarta-rs-providers#69]
     @Test
     public void testMappingIteratorEmptyArray() throws Exception
     {
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        int responseCode;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/max");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            out.write("[ ]".getBytes("UTF-8"));
-            out.close();
-            responseCode = conn.getResponseCode();
-            conn.disconnect();
-        } finally {
-            server.stop();
-        }
         // Empty array means no values to iterate over; endpoint returns `null`
         // which Jakarta-RS maps to 204. Important part is that binding does NOT fail.
-        assertEquals(HttpURLConnection.HTTP_NO_CONTENT, responseCode);
+        assertEquals(HttpURLConnection.HTTP_NO_CONTENT,
+                _postForResponseCode("/point/max", "[ ]"));
     }
 
-    // Sequence of array-shaped values: leading START_ARRAY starts the first
-    // value and may not be skipped as a wrapper array
+    // [jakarta-rs-providers#69]: Sequence of array-shaped values: leading START_ARRAY
+    // starts the first value and may not be skipped as a wrapper array
     @Test
     public void testMappingIteratorOfArrays() throws Exception
     {
-        final ObjectMapper mapper = new JsonMapper();
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        Point p;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/sums");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            out.write("[1,2][3,4]".getBytes("UTF-8"));
-            out.close();
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
-        } finally {
-            server.stop();
-        }
+        Point p = _postForPoint("/point/sums", "[1,2][3,4]");
         // 2 values, sum of 10
         assertNotNull(p);
         assertEquals(2, p.x);
         assertEquals(10, p.y);
     }
 
-    // Binary values bind from JSON String, so wrapper array is to be unwrapped
+    // [jakarta-rs-providers#69]: Binary values bind from JSON String, so wrapper
+    // array is to be unwrapped
     @Test
     public void testMappingIteratorOfBinary() throws Exception
     {
-        final ObjectMapper mapper = new JsonMapper();
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        Point p;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/binary");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            // 2 Base64-encoded values, 3 bytes each
-            out.write(a2q("['AAEC','AwQF']").getBytes("UTF-8"));
-            out.close();
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
-        } finally {
-            server.stop();
-        }
+        // 2 Base64-encoded values, 3 bytes each
+        Point p = _postForPoint("/point/binary", a2q("['AAEC','AwQF']"));
         // 2 values, 6 bytes total
         assertNotNull(p);
         assertEquals(2, p.x);
         assertEquals(6, p.y);
     }
 
-    // Sequence of `Collection`-shaped values: leading START_ARRAY starts the
-    // first value and may not be skipped as a wrapper array
+    // [jakarta-rs-providers#69]: Sequence of `Collection`-shaped values: leading
+    // START_ARRAY starts the first value and may not be skipped as a wrapper array
     @Test
     public void testMappingIteratorOfLists() throws Exception
     {
-        final ObjectMapper mapper = new JsonMapper();
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        Point p;
-
-        try {
-            URL url = new URL("http://localhost:"+TEST_PORT+"/point/lists");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
-            conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream out = conn.getOutputStream();
-            out.write(a2q("[{'x':1,'y':1},{'x':2,'y':2}][{'x':3,'y':3}]"
-                    ).getBytes("UTF-8"));
-            out.close();
-            InputStream in = conn.getInputStream();
-            p = mapper.readValue(in, Point.class);
-            in.close();
-        } finally {
-            server.stop();
-        }
+        Point p = _postForPoint("/point/lists",
+                a2q("[{'x':1,'y':1},{'x':2,'y':2}][{'x':3,'y':3}]"));
         // 2 values (Lists), 3 Points total
         assertNotNull(p);
         assertEquals(2, p.x);
         assertEquals(3, p.y);
+    }
+
+    // Helper for POSTing given JSON to an endpoint of `SimpleResourceApp`,
+    // reading the response as `Point`
+    private Point _postForPoint(String path, String json) throws Exception
+    {
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        try {
+            HttpURLConnection conn = _post(path, json);
+            try (InputStream in = conn.getInputStream()) {
+                return new JsonMapper().readValue(in, Point.class);
+            } finally {
+                conn.disconnect();
+            }
+        } finally {
+            server.stop();
+        }
+    }
+
+    // Helper for POSTing given JSON to an endpoint of `SimpleResourceApp`,
+    // returning just the response code
+    private int _postForResponseCode(String path, String json) throws Exception
+    {
+        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
+        try {
+            HttpURLConnection conn = _post(path, json);
+            try {
+                return conn.getResponseCode();
+            } finally {
+                conn.disconnect();
+            }
+        } finally {
+            server.stop();
+        }
+    }
+
+    private HttpURLConnection _post(String path, String json) throws IOException
+    {
+        URL url = new URL("http://localhost:"+TEST_PORT+path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+        conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        try (OutputStream out = conn.getOutputStream()) {
+            out.write(json.getBytes("UTF-8"));
+        }
+        return conn;
     }
 
     // [jakarta-rs-providers#16]
