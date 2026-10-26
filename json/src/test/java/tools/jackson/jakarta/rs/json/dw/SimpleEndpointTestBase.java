@@ -537,7 +537,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         // Empty array means no values to iterate over; endpoint returns `null`
         // which Jakarta-RS maps to 204. Important part is that binding does NOT fail.
         assertEquals(HttpURLConnection.HTTP_NO_CONTENT,
-                _postForResponseCode("/point/max", "[ ]"));
+                _postForResponseCode(SimpleResourceApp.class, "/point/max", "[ ]"));
     }
 
     // [jakarta-rs-providers#69]: root-level Array is always a wrapper, even if
@@ -598,6 +598,11 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         assertEquals(3, p.y);
     }
 
+    private final static ObjectMapper POST_MAPPER = new JsonMapper();
+
+    // Response of `_post()`: status code and (possibly empty) body
+    private record PostResponse(int code, byte[] body) { }
+
     // Helpers for POSTing given JSON to an endpoint (of `SimpleResourceApp`
     // by default), reading the response as `Point`
     private Point _postForPoint(String path, String json) throws Exception
@@ -608,28 +613,35 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     private Point _postForPoint(Class<? extends Application> appClass,
             String path, String json) throws Exception
     {
+        PostResponse resp = _post(appClass, path, json);
+        assertEquals(HttpURLConnection.HTTP_OK, resp.code());
+        return POST_MAPPER.readValue(resp.body(), Point.class);
+    }
+
+    // Helper for POSTing given JSON to an endpoint, returning just the response code
+    private int _postForResponseCode(Class<? extends Application> appClass,
+            String path, String json) throws Exception
+    {
+        return _post(appClass, path, json).code();
+    }
+
+    // Core helper: starts server with given app, POSTs given JSON, stops server
+    private PostResponse _post(Class<? extends Application> appClass,
+            String path, String json) throws Exception
+    {
         Server server = startServer(TEST_PORT, appClass);
         try {
             HttpURLConnection conn = _post(path, json);
-            try (InputStream in = conn.getInputStream()) {
-                return new JsonMapper().readValue(in, Point.class);
-            } finally {
-                conn.disconnect();
-            }
-        } finally {
-            server.stop();
-        }
-    }
-
-    // Helper for POSTing given JSON to an endpoint of `SimpleResourceApp`,
-    // returning just the response code
-    private int _postForResponseCode(String path, String json) throws Exception
-    {
-        Server server = startServer(TEST_PORT, SimpleResourceApp.class);
-        try {
-            HttpURLConnection conn = _post(path, json);
             try {
-                return conn.getResponseCode();
+                int code = conn.getResponseCode();
+                InputStream in = (code < 400) ? conn.getInputStream() : conn.getErrorStream();
+                byte[] body = new byte[0];
+                if (in != null) {
+                    try (InputStream in2 = in) {
+                        body = readAll(in2);
+                    }
+                }
+                return new PostResponse(code, body);
             } finally {
                 conn.disconnect();
             }

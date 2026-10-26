@@ -38,24 +38,6 @@ public enum JakartaRSFeature implements ConfigFeature
      */
     READ_FULL_STREAM(true),
 
-    /**
-     * Feature that determines whether a root-level JSON Array is unwrapped when
-     * binding a {@link tools.jackson.databind.MappingIterator} endpoint parameter:
-     * if enabled, elements of the root-level Array are iterated over (same as
-     * {@code ObjectReader.readValues(InputStream)} does); if disabled, root-level
-     * values (including Arrays) are iterated over as-is.
-     *<p>
-     * Note that when enabled, a root-level Array is always considered a wrapper,
-     * regardless of value type: so a sequence of array-shaped values (like
-     * {@code [1,2][3,4]} for {@code MappingIterator<int[]>}) needs to either be
-     * wrapped in an Array ({@code [[1,2],[3,4]]}) or this feature disabled.
-     *<p>
-     * Feature is enabled by default.
-     *
-     * @since 3.3
-     */
-    UNWRAP_ROOT_ARRAY_FOR_ITERATOR(true),
-
     /*
     /**********************************************************************
     /* HTTP headers
@@ -130,7 +112,32 @@ public enum JakartaRSFeature implements ConfigFeature
      *
      * @since 3.1
      */
-    MATCH_ALL_IF_NO_MEDIA_TYPE(false)
+    MATCH_ALL_IF_NO_MEDIA_TYPE(false),
+
+    /**
+     * [jakarta-rs-providers#69]: Feature that determines whether a root-level Array
+     * (logical Array for all formats, not just JSON) is unwrapped when binding a
+     * {@link tools.jackson.databind.MappingIterator} endpoint parameter:
+     * if enabled, elements of the root-level Array are iterated over (same as
+     * {@code ObjectReader.readValues(InputStream)} does); if disabled, root-level
+     * values (including Arrays) are iterated over as-is.
+     *<p>
+     * Note that when enabled, a root-level Array is always considered a wrapper,
+     * regardless of value type: so a sequence of array-shaped values (like
+     * {@code [1,2][3,4]} for {@code MappingIterator<int[]>}) needs to either be
+     * wrapped in an Array ({@code [[1,2],[3,4]]}) or this feature disabled.
+     *<p>
+     * Note, too, that for XML any root element may be exposed as an Array
+     * (since XML has no separate Array construct), and is then unwrapped.
+     *<p>
+     * Feature is enabled by default.
+     *<p>
+     * NOTE: declared last (and not with other input handling features) so as
+     * not to change bitmasks of earlier features.
+     *
+     * @since 3.3
+     */
+    UNWRAP_ROOT_ARRAY_FOR_ITERATOR(true)
     ;
 
     private final boolean _defaultState;
