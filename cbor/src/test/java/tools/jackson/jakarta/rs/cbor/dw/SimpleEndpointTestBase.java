@@ -82,7 +82,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         final ObjectMapper mapper = new CBORMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
-        final URL url = new URL("http://localhost:"+TEST_PORT+"/point");
+        final URL url = URI.create("http://localhost:"+TEST_PORT+"/point").toURL();
 
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -107,7 +107,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         final ObjectMapper mapper = new CBORMapper();
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
-        final URL url = new URL("http://localhost:" + TEST_PORT + "/point/custom");
+        final URL url = URI.create("http://localhost:" + TEST_PORT + "/point/custom").toURL();
 
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -130,7 +130,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     public void testUntouchables() throws Exception
     {
         Server server = startServer(TEST_PORT, SimpleRawApp.class);
-        final URL url = new URL("http://localhost:"+TEST_PORT+"/raw/bytes");
+        final URL url = URI.create("http://localhost:"+TEST_PORT+"/raw/bytes").toURL();
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             _verifyResponse(conn);
