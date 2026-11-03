@@ -3,6 +3,7 @@ package com.fasterxml.jackson.jakarta.rs.yaml.dw;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import jakarta.ws.rs.GET;
@@ -115,7 +116,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         Server server = startServer(TEST_PORT, SimpleResourceApp.class);
         Point p;
         String yaml = null;
-        final URL url = new URL("http://localhost:" + TEST_PORT + "/point");
+        final URL url = URI.create("http://localhost:" + TEST_PORT + "/point").toURL();
 
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -144,7 +145,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
         Point p;
 
         try {
-            final URL url = new URL("http://localhost:" + TEST_PORT + "/point/custom");
+            final URL url = URI.create("http://localhost:" + TEST_PORT + "/point/custom").toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Accept", "application/vnd.com.example.v1+yaml");
             InputStream in = conn.getInputStream();
@@ -165,7 +166,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     public void testMultipleMediaTypes() throws Exception
     {
         Server server = startServer(TEST_PORT, MultiMediaTypeResourceApp.class);
-        final URL url = new URL("http://localhost:" + TEST_PORT + "/point");
+        final URL url = URI.create("http://localhost:" + TEST_PORT + "/point").toURL();
         Point p;
 
         final ObjectMapper yamlMapper = new YAMLMapper();
@@ -262,7 +263,7 @@ public abstract class SimpleEndpointTestBase extends ResourceTestBase
     {
         Server server = startServer(TEST_PORT, SimpleRawApp.class);
         try {
-            InputStream in = new URL("http://localhost:"+TEST_PORT+"/raw/bytes").openStream();
+            InputStream in = URI.create("http://localhost:"+TEST_PORT+"/raw/bytes").toURL().openStream();
             assertArrayEquals(UNTOUCHABLE_RESPONSE, readAll(in));
         } finally {
             server.stop();
